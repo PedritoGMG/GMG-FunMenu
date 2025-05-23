@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainController">
+   <children>
+      <VBox fx:id="leftBar" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="240.0" styleClass="leftBar" stylesheets="@styles.css">
+         <children>
+            <AnchorPane fx:id="side_menu" prefHeight="500.0" prefWidth="236.0" styleClass="side_menu" stylesheets="@styles.css">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="173.0" prefWidth="236.0">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="43.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="43.0" AnchorPane.topAnchor="12.0">
+                                 <image>
+                                    <Image url="@../icon.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <Button fx:id="btnMain" mnemonicParsing="false" onAction="#pageMain" styleClass="button-menu" text="Main" textAlignment="RIGHT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
+                                 <image>
+                                    <Image url="@../icons/home-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnCommands" mnemonicParsing="false" onAction="#pageCommands" styleClass="button-menu" text="Commands">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
+                                 <image>
+                                    <Image url="@../icons/puzzle-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnBinds" mnemonicParsing="false" onAction="#pageBinds" styleClass="button-menu" text="Binds">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
+                                 <image>
+                                    <Image url="@../icons/thunder-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnConsole" mnemonicParsing="false" onAction="#pageConsole" styleClass="button-menu" text="Console">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
+                                 <image>
+                                    <Image url="@../icons/terminal-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#pageSettings" styleClass="button-menu" text="Settings">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
+                                 <image>
+                                    <Image url="@../icons/settings-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="118.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow" />
+                  <Text fx:id="versionText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="VERSION">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <fill>
+                        <LinearGradient cycleMethod="REFLECT" endX="0.909952606635071" endY="0.5071090047393365" startX="0.7298578199052133" startY="0.7819905213270142">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color green="0.5686274766921997" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color green="1.0" blue="0.6000000238418579" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="716.0" prefWidth="1045.0">
+         <children>
+            <AnchorPane fx:id="topBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMouseDraggedTopBar" onMousePressed="#onMousePressedTopBar" prefHeight="40.0">
+               <children>
+                  <HBox alignment="TOP_RIGHT" prefWidth="1036.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button fx:id="minimizeBtn1" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#minimize" prefHeight="45.0" prefWidth="90.0" style="-fx-border-radius: 0 0 0 15; -fx-background-radius: 0 0 0 15;" styleClass="title-button" text="—" />
+                        <Button fx:id="closeBtn1" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#close" prefHeight="45.0" prefWidth="90.0" style="-fx-background-radius: 0 15 0 0;" styleClass="title-button" text="✕" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="831.0" prefWidth="1036.0">
+               <children>
+                  <StackPane fx:id="stackPaneMain" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</HBox>

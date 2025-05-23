@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PageMainController">
+   <styleClass>
+      <String fx:value="subPanel" />
+      <String fx:value="shadow" />
+   </styleClass>
+   <children>
+      <VBox alignment="CENTER" layoutX="55.0" layoutY="3.9375" spacing="10.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Welcome!" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+               <fill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color green="1.0" blue="0.6000000238418579" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color green="0.5686274766921997" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Text>
+            <Canvas fx:id="audioCanvas" height="150.0" width="890.0" />
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <TextField fx:id="fileText" editable="false" onMouseClicked="#clickSelectFile" prefHeight="36.0" prefWidth="350.0" promptText="Click here to select a file to read..." />
+                  <ToggleButton fx:id="toggleButton" mnemonicParsing="false" style="-fx-font-size: 25;" text="ToggleButton" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Line endX="100.0" layoutX="745.0" layoutY="325.0" startX="-591.0" stroke="WHITE" />
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="366.0" prefHeight="225.0" prefWidth="880.0" spacing="15.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="366.0">
+         <children>
+            <VBox alignment="CENTER" spacing="30.0" styleClass="volume-control">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="25.0">
+                     <children>
+                        <Pane prefHeight="109.0" prefWidth="115.0" styleClass="volume-icon">
+                           <children>
+                              <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="8.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/tts-b.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text to Speech" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/volume-c.png" />
+                           </image>
+                        </ImageView>
+                        <Slider fx:id="sliderTTS" prefHeight="36.0" prefWidth="396.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="7.0">
+                     <children>
+                        <Button fx:id="playTTS" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/play-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="resumeTTS" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/pause-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="stopTTS" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/stop-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="addTTS" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/add-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="30.0" styleClass="volume-control">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="25.0">
+                     <children>
+                        <Pane prefHeight="109.0" prefWidth="115.0" styleClass="volume-icon">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/music-b.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Music" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/volume-c.png" />
+                           </image>
+                        </ImageView>
+                        <Slider fx:id="sliderMusic" prefHeight="36.0" prefWidth="396.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="7.0">
+                     <children>
+                        <Button fx:id="playMusic" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/play-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="resumeMusic" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/pause-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="stopMusic" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/stop-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="addMusic" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/add-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="30.0" styleClass="volume-control">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="25.0">
+                     <children>
+                        <Pane prefHeight="109.0" prefWidth="115.0" styleClass="volume-icon">
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/bell-b.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Sounds" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/volume-c.png" />
+                           </image>
+                        </ImageView>
+                        <Slider fx:id="sliderAudio" prefHeight="36.0" prefWidth="396.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="7.0">
+                     <children>
+                        <Button fx:id="playAudio" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/play-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="resumeAudio" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/pause-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="stopAudio" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/stop-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="addAudio" mnemonicParsing="false" styleClass="control-btn">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/add-b.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="750.0" layoutY="20.0" spacing="25.0" style="-fx-padding: 10;" styleClass="volume-control">
+         <children>
+            <Button fx:id="btnGuide" mnemonicParsing="false" onAction="#OnGuide" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+               <graphic>
+                  <VBox>
+                     <children>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/question-b.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnMicrophoneSettings" mnemonicParsing="false" onAction="#OnMicrophoneSettings" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/microphone-b.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

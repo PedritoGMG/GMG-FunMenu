@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PageSettingsController">
+   <styleClass>
+      <String fx:value="subPanel" />
+      <String fx:value="shadow" />
+   </styleClass>
+   <children>
+      <AnchorPane layoutX="445.0" layoutY="324.0">
+         <children>
+            <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="305.0" prefWidth="244.0" spacing="5.0" styleClass="fancy-panel">
+               <children>
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" vbarPolicy="ALWAYS">
+                     <content>
+                        <VBox fx:id="adminContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding></VBox>
+                     </content>
+                  </ScrollPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Admins List" wrappingWidth="225.2265625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Text>
+               </children>
+            </VBox>
+            <Button fx:id="addAdmin" layoutX="190.0" layoutY="228.0" mnemonicParsing="false" onAction="#OnAddAdmin" styleClass="control-btn">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/add-b.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Line endX="100.0" endY="-48.414215087890625" layoutX="177.0" layoutY="322.0" startX="100.0" startY="-277.0" stroke="#ffffffbf" strokeWidth="2.0" />
+            <VBox alignment="BOTTOM_LEFT" layoutX="297.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="305.0" prefWidth="244.0" spacing="5.0" styleClass="fancy-panel">
+               <children>
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" vbarPolicy="ALWAYS">
+                     <content>
+                        <VBox fx:id="banContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding></VBox>
+                     </content>
+                  </ScrollPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Banned List" wrappingWidth="225.2265625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Text>
+               </children>
+            </VBox>
+            <Button fx:id="addBan" layoutX="477.0" layoutY="228.0" mnemonicParsing="false" onAction="#OnAddBan" styleClass="control-btn">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/add-b.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <VBox layoutX="14.0" layoutY="274.0" spacing="10.0">
+         <children>
+            <VBox spacing="5.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Request Duration" wrappingWidth="225.2265625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum allowed request length (shown as hh:mm:ss).">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Spinner fx:id="requestDuration" editable="true" />
+               </children>
+            </VBox>
+            <Line endX="100.0" endY="-48.414215087890625" startX="459.0" startY="-48.4141845703125" stroke="#ffffffbf" strokeWidth="2.0" />
+            <VBox spacing="5.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="TTS Queue Limit" wrappingWidth="225.2265625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum number of text-to-speech requests allowed.">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Spinner fx:id="ttsLimit" editable="true" />
+               </children>
+            </VBox>
+            <Line endX="100.0" endY="-48.414215087890625" startX="459.0" startY="-48.4141845703125" stroke="#ffffffbf" strokeWidth="2.0" />
+            <VBox spacing="5.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Music Queue Limit" wrappingWidth="225.2265625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum number of music requests allowed.">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Spinner fx:id="musicLimit" editable="true" />
+               </children>
+            </VBox>
+            <Line endX="100.0" endY="-48.414215087890625" startX="459.0" startY="-48.4141845703125" stroke="#ffffffbf" strokeWidth="2.0" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="241.0" layoutY="15.0" prefHeight="120.0" prefWidth="519.0" spacing="5.0" styleClass="volume-control">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Game Configuration!" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+               <fill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color green="1.0" blue="0.6000000238418579" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color green="0.5686274766921997" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+            </Text>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="487.0" spacing="15.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Type of Game:" wrappingWidth="236.0">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Text>
+                        <ComboBox fx:id="gameTypeCB" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" promptText="-- Select game type --">
+                           <tooltip>
+                              <Tooltip autoHide="true" contentDisplay="TOP" text="Empty Tooltip" />
+                           </tooltip></ComboBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="115.0" prefWidth="236.0" spacing="5.0">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Base:" wrappingWidth="236.0">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Text>
+                        <ComboBox fx:id="gameSelectorCB" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" promptText="-- Select base game --" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox alignment="BOTTOM_LEFT" prefHeight="76.0" prefWidth="486.0" spacing="5.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Folder:" wrappingWidth="236.0">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="customInstallDir" editable="false" onMouseClicked="#onSelectCustomInstallDir" prefHeight="36.0" prefWidth="497.0" promptText="Select the game folder containing the cfg folder (e.g. Team Fortress 2\tf)" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <Button fx:id="btnHelp" layoutX="707.0" layoutY="26.0" mnemonicParsing="false" onAction="#OnHelp" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/question-b.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>
