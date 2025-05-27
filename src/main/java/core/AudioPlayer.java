@@ -2,91 +2,65 @@ package core;
 
 import javax.sound.sampled.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AudioPlayer {
-	
-	private SourceDataLine line;
+
+    private SourceDataLine line;
     private FloatControl volumeControl;
-    private volatile boolean playing = true;
+    private volatile boolean playing = false;
+    private volatile boolean paused = false;
+    private final Object pauseLock = new Object();
+
     private AudioListener listener;
     private Mixer mixer;
-    
-    private AudioInputStream din;        // Stream decodificado (PCM)
-    private File audioFile;              // Archivo original
-    private long audioFileLength;        // tamaño en bytes del archivo original
-    private AudioFormat decodedFormat;   // formato PCM usado
-    private volatile long bytesReadTotal; // bytes leídos desde inicio
 
+    private AudioInputStream din;
+    private File audioFile;
+    private AudioFormat decodedFormat;
+    private volatile long bytesReadTotal;
+
+    private Thread playbackThread;
+    
+    private float currentVolume = 0.8f;
 
     public AudioPlayer(String mixerName) throws LineUnavailableException {
         Mixer.Info mixerInfo = getMixerInfoByName(mixerName);
         if (mixerInfo == null) {
-            throw new IllegalArgumentException("Mixer no encontrado: " + mixerName);
+            throw new IllegalArgumentException("Mixer not found: " + mixerName + "\nMake sure you have downloaded: VB-Audio Virtual");
         }
         mixer = AudioSystem.getMixer(mixerInfo);
     }
-    
+
     public void playMp3(File mp3File) throws Exception {
+        stopPlayback();
+
         this.audioFile = mp3File;
 
         AudioInputStream in = AudioSystem.getAudioInputStream(mp3File);
         AudioFormat baseFormat = in.getFormat();
 
         this.decodedFormat = new AudioFormat(
-            AudioFormat.Encoding.PCM_SIGNED,
-            baseFormat.getSampleRate(),
-            16,
-            baseFormat.getChannels(),
-            baseFormat.getChannels() * 2,
-            baseFormat.getSampleRate(),
-            false);
+                AudioFormat.Encoding.PCM_SIGNED,
+                baseFormat.getSampleRate(),
+                16,
+                baseFormat.getChannels(),
+                baseFormat.getChannels() * 2,
+                baseFormat.getSampleRate(),
+                false);
 
         this.din = AudioSystem.getAudioInputStream(decodedFormat, in);
 
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, decodedFormat);
-        line = (SourceDataLine) mixer.getLine(info);
-        line.open(decodedFormat);
+        openLine();
 
-        if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            volumeControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
-        }
-
-        line.start();
         playing = true;
+        paused = false;
         bytesReadTotal = 0;
 
-        new Thread(() -> {
-            try {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-
-                while (playing && (bytesRead = din.read(buffer, 0, buffer.length)) != -1) {
-                    line.write(buffer, 0, bytesRead);
-                    bytesReadTotal += bytesRead;
-                }
-
-                line.drain();
-                line.stop();
-                line.close();
-                din.close();
-                in.close();
-
-                if (listener != null) listener.onAudioFinished();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        startPlaybackThread();
     }
 
     public void seek(float seconds) throws Exception {
-        if (line != null && line.isOpen()) {
-            line.stop();
-            line.close();
-        }
-        if (din != null) din.close();
+        stopPlayback();
 
         AudioInputStream in = AudioSystem.getAudioInputStream(audioFile);
 
@@ -110,77 +84,137 @@ public class AudioPlayer {
             actuallySkipped += skippedNow;
         }
 
+        openLine();
+
+        playing = true;
+        paused = false;
+        bytesReadTotal = actuallySkipped;
+
+        startPlaybackThread();
+    }
+
+    private void openLine() throws LineUnavailableException {
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, decodedFormat);
         line = (SourceDataLine) mixer.getLine(info);
         line.open(decodedFormat);
 
         if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             volumeControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
+            setVolume(currentVolume);
         }
 
         line.start();
-        playing = true;
-        bytesReadTotal = actuallySkipped;
+    }
 
-        new Thread(() -> {
+    private void startPlaybackThread() {
+        playbackThread = new Thread(() -> {
             try {
                 byte[] buffer = new byte[4096];
                 int bytesRead;
 
                 while (playing && (bytesRead = din.read(buffer, 0, buffer.length)) != -1) {
+
+                    synchronized (pauseLock) {
+                        while (paused) {
+                            pauseLock.wait();
+                        }
+                    }
+
                     line.write(buffer, 0, bytesRead);
                     bytesReadTotal += bytesRead;
                 }
 
-                line.drain();
-                line.stop();
-                line.close();
-                din.close();
-                in.close();
+                cleanupAfterPlayback();
 
                 if (listener != null) listener.onAudioFinished();
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        playbackThread.start();
     }
 
+    private void cleanupAfterPlayback() throws Exception {
+        line.drain();
+        line.stop();
+        line.close();
+        din.close();
+    }
 
-    // Cambiar volumen en vivo, volumen de 0.0f a 1.0f
+    public void stop() {
+        stopPlayback();
+    }
+
+    private void stopPlayback() {
+        playing = false;
+        resume(); // en caso de que esté pausado, para desbloquear hilo
+
+        try {
+            if (playbackThread != null) playbackThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (line != null && line.isOpen()) {
+                line.stop();
+                line.close();
+            }
+            if (din != null) {
+                din.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pause() {
+        if (playing && !paused) {
+            paused = true;
+        }
+    }
+
+    public void resume() {
+        if (paused) {
+            synchronized (pauseLock) {
+                paused = false;
+                pauseLock.notifyAll();
+            }
+        }
+    }
+
     public void setVolume(float volume) {
+    	currentVolume = Math.max(0f, Math.min(1f, volume));
         if (volumeControl != null) {
             float min = volumeControl.getMinimum();
             float max = volumeControl.getMaximum();
-            float gain = min + (max - min) * volume;
+            float gain = min + (max - min) * currentVolume;
             volumeControl.setValue(gain);
         }
     }
 
-    // Parar la reproducción
-    public void stop() {
-        playing = false;
+    public float getVolume() {
+        return currentVolume;
     }
-    
+
     public float getPositionSeconds() {
         if (decodedFormat == null || bytesReadTotal == 0) return 0f;
         float frameSize = decodedFormat.getFrameSize();
         float frameRate = decodedFormat.getFrameRate();
         return bytesReadTotal / (frameSize * frameRate);
     }
-    
+
     public static Mixer.Info getMixerInfoByName(String name) {
-	    for (Mixer.Info info : AudioSystem.getMixerInfo()) {
-	        if (info.getName().contains(name) && !info.getName().contains("Port")) {
-	            return info;
-	        }
-	    }
-	    return null;
-	}
-    
-    
+        for (Mixer.Info info : AudioSystem.getMixerInfo()) {
+            if (info.getName().contains(name) && !info.getName().contains("Port")) {
+                return info;
+            }
+        }
+        return null;
+    }
+
     public void setAudioListener(AudioListener listener) {
         this.listener = listener;
     }
-
 }

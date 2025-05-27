@@ -1,88 +1,61 @@
 package ui;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import javax.sound.sampled.LineUnavailableException;
 
 import core.AudioPlayer;
 import core.TTS;
+import core.Toast;
 import core.YoutubeAudioDownloader;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
-public class MainController {
+public class MainController implements Initializable{
 	
 	private double xOffset = 0;
     private double yOffset = 0;
-
-    @FXML
-    private TextField ttsText, filePath, ytText;
-
-    @FXML
-    private Button btnEnviarTTS, btnSeleccionarArchivo, btnYT;
 
     @FXML
     private Button closeBtn, minimizeBtn;
     
     @FXML
     private AnchorPane topBar;
-
-
     
     @FXML
-    private void onSelectFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selecciona un archivo MP3");
+    private StackPane stackPaneMain;
 
-        // Filtrar solo archivos .mp3
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Archivos MP3 (*.mp3)", "*.mp3");
-        fileChooser.getExtensionFilters().add(extFilter);
 
-        Stage stage = (Stage) filePath.getScene().getWindow();
-        var selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            filePath.setText(selectedFile.getAbsolutePath());
-        }
-    }
-    
-    @FXML
-    private void sendTTS() {
-        String texto = ttsText.getText();
-        // Aquí llamas al código que haga el TTS con "texto"
-        System.out.println("Enviar TTS: " + texto);
-        try {
-			AudioPlayer playerTTS = new AudioPlayer("CABLE Input");
-			playerTTS.playMp3(TTS.fetchAudioToFile(texto));
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+    @Override
+	public void initialize(URL location, ResourceBundle resources) {
+		try {
+			pageMain(null);
+			Toast.showIn(stackPaneMain, "Hola buenos dias", 8000);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
-    
-    @FXML
-    private void sendYTURL() {
-        String texto = ytText.getText();
-        System.out.println("Enviar YT: " + texto);
-        try {
-			AudioPlayer playerTTS = new AudioPlayer("CABLE Input");
-			playerTTS.playMp3(YoutubeAudioDownloader.downloadAudioSegment(texto, 0, 300));
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+		
+	}
     
     @FXML
     private void close() {
@@ -90,7 +63,7 @@ public class MainController {
     }
     @FXML
     private void minimize() {
-    	Stage stage = (Stage) filePath.getScene().getWindow();
+    	Stage stage = (Stage) topBar.getScene().getWindow();
     	stage.setIconified(true);
     }
     @FXML
@@ -105,4 +78,36 @@ public class MainController {
         stage.setX(event.getScreenX() - xOffset);
         stage.setY(event.getScreenY() - yOffset);
     }
+    
+    @FXML
+    private void pageMain(ActionEvent actionEvent) throws IOException {
+    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageMain.fxml"));
+        stackPaneMain.getChildren().removeAll();
+        stackPaneMain.getChildren().setAll(fxml);
+    }
+    @FXML
+    private void pagePlugins(ActionEvent actionEvent) throws IOException {
+    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pagePlugins.fxml"));
+        stackPaneMain.getChildren().removeAll();
+        stackPaneMain.getChildren().setAll(fxml);
+    }
+    @FXML
+    private void pageBindsTriggers(ActionEvent actionEvent) throws IOException {
+    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageBindsTriggers.fxml"));
+        stackPaneMain.getChildren().removeAll();
+        stackPaneMain.getChildren().setAll(fxml);
+    }
+    @FXML
+    private void pageConsole(ActionEvent actionEvent) throws IOException {
+    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageConsole.fxml"));
+        stackPaneMain.getChildren().removeAll();
+        stackPaneMain.getChildren().setAll(fxml);
+    }
+    @FXML
+    private void pageSettings(ActionEvent actionEvent) throws IOException {
+    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageSettings.fxml"));
+        stackPaneMain.getChildren().removeAll();
+        stackPaneMain.getChildren().setAll(fxml);
+    }
+	
 }

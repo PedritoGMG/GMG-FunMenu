@@ -10,14 +10,28 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Main extends Application {
+	
+	public static String audioDevice = "CABLE Input";
+	public static AudioPlayerQueue playerTTS;
+	public static AudioPlayerQueue playerMusic;
+	public static AudioPlayer playerAudio;
 
     public static void main(String[] args) {
-        launch(args); // Esto lanza la aplicación JavaFX
+    	
+    	try {
+			playerTTS = new AudioPlayerQueue(audioDevice);
+			playerMusic = new AudioPlayerQueue(audioDevice);
+			playerAudio = new AudioPlayer(audioDevice);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+    	
+        launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml")); // Carga el FXML
+        Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml"));
         Scene scene = new Scene(root);
         
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));

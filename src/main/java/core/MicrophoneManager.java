@@ -65,7 +65,6 @@ public class MicrophoneManager {
 
         try {
             if (os.contains("win")) {
-                // Abre la pestaña "Grabación" (micrófonos) del panel clásico de sonido
                 Runtime.getRuntime().exec("control mmsys.cpl,,1");
                 System.out.println("Opening Windows microphone recording tab...");
             } else if (os.contains("linux")) {

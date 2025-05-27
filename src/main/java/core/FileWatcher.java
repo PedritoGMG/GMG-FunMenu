@@ -21,7 +21,7 @@ public class FileWatcher {
 
             @Override
             public void fileNotFound() {
-                System.err.println("Archivo no encontrado: " + file.getAbsolutePath());
+                System.err.println("File not found: " + file.getAbsolutePath());
             }
 
             @Override

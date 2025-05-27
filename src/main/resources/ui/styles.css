@@ -8,6 +8,16 @@
     -fx-border-style: solid;
 }
 
+.subPanel {
+    -fx-background-color: #272727;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #3d3d3d;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+
+}
+
 .text-field {
     -fx-background-color: white;
     -fx-text-fill: black;
@@ -27,6 +37,32 @@
     -fx-border-width: 0 0 1px 0;
     -fx-border-color: #000000;
 }
+
+.toggle-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.3, 0, 2);
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.toggle-button.start {
+    -fx-background-color: 
+        linear-gradient(to bottom, #0090FF, #005FCC),
+        linear-gradient(to bottom, #0071FF, #0055CC);
+    -fx-background-insets: 0, 1;
+}
+
+.toggle-button.stop {
+    -fx-background-color: 
+        linear-gradient(to bottom, #FF5E5E, #CC2020),
+        linear-gradient(to bottom, #FF3B3B, #B22222);
+    -fx-background-insets: 0, 1;
+}
+
 
 .title-button {
     -fx-background-color: linear-gradient(to top, #0071FF, #00FF99);
@@ -70,6 +106,45 @@
     -fx-border-radius: 15 0 0 15;
     -fx-background-radius: 15 0 0 15;
 }
+
+.menu_icon {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.3, 0, 2);
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-pref-height: 25px;
+}
+
+/* Botón del Menu */
+.button-menu {
+    -fx-background-color: linear-gradient(to bottom, #404040, #2F2F2F); /* degradado sutil */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.3, 0, 4);
+    -fx-cursor: hand;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 45px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-alignment: CENTER_LEFT; /* mejor alineación si usas íconos */
+    -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 10px;
+}
+
+.button-menu:hover {
+    -fx-background-color: linear-gradient(to bottom, #5A5A5A, #3E3E3E);
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.25), 12, 0.4, 0, 6);
+}
+
+.button-menu:pressed {
+    -fx-background-color: #1F1F1F;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 6, 0.2, 0, 2);
+}
+
 
 /* Botón principal azul degradado */
 .button-primary {
@@ -203,3 +278,69 @@
     -fx-padding: 5 10 5 10;
 }
 
+.slider {
+    -fx-pref-width: 250px;
+    -fx-padding: 10px;
+}
+
+/* Fondo completo con degradado que cubre TODO el track */
+.slider .track {
+    -fx-background-color: linear-gradient(to right, #00FF99 0%, #0071FF 50%, white 50%, white 100%);
+    -fx-background-radius: 4px;
+    -fx-pref-height: 10px;
+}
+
+/* Thumb */
+.slider .thumb {
+    -fx-background-color: white;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 4, 0.3, 0, 1);
+}
+
+.volume-icon {
+    -fx-pref-width: 60px;
+    -fx-pref-height: 60px;
+    -fx-min-width: 60px;
+    -fx-min-height: 60px;
+    -fx-max-width: 60px;
+    -fx-max-height: 60px;
+    
+    -fx-background-radius: 30px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #00ff99, #0071ff);
+    
+    -fx-effect: dropshadow(gaussian, rgba(0,255,153,0.3), 15, 0, 0, 0);
+    
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-padding: 0;
+}
+
+.volume-control {
+    -fx-background-color: rgba(40, 40, 40, 0.6);
+    -fx-padding: 15px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0); /* placeholder para transición */
+}
+
+.control-btn {
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, 
+        rgba(0, 255, 153, 0.8), 
+        rgba(0, 113, 255, 0.9));
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-font-size: 0.9rem;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-effect: dropshadow( gaussian , rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
