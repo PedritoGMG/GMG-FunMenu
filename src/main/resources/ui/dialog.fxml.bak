@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Diálogo principal -->
+    <Pane fx:id="dialogContainer" styleClass="dialog-container">
+        <Pane styleClass="dialog">
+            
+            <!-- Contenido del diálogo -->
+            <VBox styleClass="dialog-content">
+                <!-- Encabezado -->
+                <HBox alignment="CENTER_LEFT" styleClass="dialog-header">
+                    <Label fx:id="dialogHeaderText" styleClass="dialog-title" text="Confirmación Requerida" HBox.hgrow="ALWAYS" />
+               <AnchorPane HBox.hgrow="ALWAYS" />
+                    <Button styleClass="dialog-close" HBox.hgrow="ALWAYS">
+                        <graphic>
+                            <SVGPath content="M18 6L6 18 M6 6L18 18" stroke="white" strokeWidth="2" />
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <!-- Cuerpo -->
+                <VBox styleClass="dialog-body">
+                    <Label styleClass="dialog-message" text="¿Estás seguro que deseas realizar esta acción? Esta operación no se puede deshacer." />
+                    
+                    <!-- Panel adicional -->
+                    <VBox styleClass="sub-panel">
+                        <Label styleClass="sub-panel-title" text="Opciones Adicionales" />
+                        <TextField promptText="Ingrese un valor opcional" styleClass="text-field" />
+                    </VBox>
+                </VBox>
+                
+                <!-- Pie de página -->
+                <HBox styleClass="dialog-footer">
+                    <Button text="Cancel">
+                  <styleClass>
+                     <String fx:value="btn-cancel" />
+                     <String fx:value="btn" />
+                  </styleClass>
+                    </Button>
+                    <Button text="Confirm">
+                  <styleClass>
+                     <String fx:value="btn-confirm" />
+                     <String fx:value="btn" />
+                  </styleClass>
+                    </Button>
+                </HBox>
+            </VBox>
+        </Pane>
+    </Pane>
+</StackPane>

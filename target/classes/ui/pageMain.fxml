@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -10,6 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -20,7 +24,7 @@
       <String fx:value="shadow" />
    </styleClass>
    <children>
-      <ToggleButton layoutX="427.0" layoutY="263.0" mnemonicParsing="false" text="ToggleButton" />
+      <ToggleButton fx:id="toggleButton" layoutX="408.0" layoutY="256.0" mnemonicParsing="false" style="-fx-font-size: 25;" text="ToggleButton" />
       <Line endX="100.0" layoutX="745.0" layoutY="325.0" startX="-591.0" stroke="WHITE" />
       <HBox alignment="CENTER" layoutX="24.0" layoutY="366.0" prefHeight="225.0" prefWidth="880.0" spacing="15.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="366.0">
          <children>
@@ -56,7 +60,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="7.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="playTTS" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -65,7 +69,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                        <Button fx:id="resumeTTS" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -74,7 +78,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="stopTTS" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -83,11 +87,11 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="addTTS" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/next-b.png" />
+                                    <Image url="@../icons/add-b.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -128,7 +132,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="7.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="playMusic" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -137,7 +141,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                        <Button fx:id="resumeMusic" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -146,7 +150,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="stopMusic" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -155,11 +159,11 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="addMusic" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/next-b.png" />
+                                    <Image url="@../icons/add-b.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -200,7 +204,7 @@
                   </HBox>
                   <HBox alignment="CENTER" spacing="7.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="playAudio" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -209,7 +213,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
+                        <Button fx:id="resumeAudio" mnemonicParsing="false" prefWidth="89.0" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -218,7 +222,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="stopAudio" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -227,11 +231,11 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" styleClass="control-btn">
+                        <Button fx:id="addAudio" mnemonicParsing="false" styleClass="control-btn">
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/next-b.png" />
+                                    <Image url="@../icons/add-b.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -242,5 +246,27 @@
             </VBox>
          </children>
       </HBox>
+      <Text layoutX="349.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Welcome!" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="64.0" />
+         </font>
+         <fill>
+            <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color green="1.0" blue="0.6000000238418579" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color green="0.5686274766921997" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <TextField fx:id="fileText" editable="false" layoutX="325.0" layoutY="203.0" onMouseClicked="#clickSelectFile" prefHeight="36.0" prefWidth="350.0" promptText="Click here to select a file to read..." />
    </children>
 </AnchorPane>

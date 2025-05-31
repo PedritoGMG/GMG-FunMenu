@@ -17,14 +17,16 @@ public class YoutubeAudioDownloader {
         String sectionArg = "*"+startSeconds+"-"+endSeconds;
 
         ProcessBuilder builder = new ProcessBuilder(
-                ytdlpPath,
-                "--extract-audio",
-                "--audio-format", "mp3",
-                "--output", tempAudio.getAbsolutePath(),
-                "--download-sections", sectionArg,
-                "--force-overwrites",
-                videoUrl
-            );
+        	    ytdlpPath,
+        	    "--no-playlist",
+        	    "--extract-audio",
+        	    "--audio-format", "mp3",
+        	    "--output", tempAudio.getAbsolutePath(),
+        	    "--download-sections", sectionArg,
+        	    "--force-overwrites",
+        	    "--playlist-items", "1",
+        	    videoUrl
+        	);
 
         builder.inheritIO(); // Opcional: muestra salida en consola
         Process process = builder.start();
@@ -37,6 +39,12 @@ public class YoutubeAudioDownloader {
         return tempAudio;
     }
     
+    public static boolean isYoutubeURLValid(String url) {
+        if (url == null) return false;
+        String youtubeRegex = "^(https?://)?(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[\\w-]{11}(&.*)?$";
+        return url.matches(youtubeRegex);
+    }
+
     public static double getVideoDuration(String videoUrl) throws IOException, InterruptedException {
         String ytdlpPath = "libs/yt-dlp.exe";
 

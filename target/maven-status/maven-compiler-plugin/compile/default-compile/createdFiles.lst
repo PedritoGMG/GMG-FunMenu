@@ -1,6 +1,7 @@
 core\AudioListener.class
 core\Main.class
 ui\PagePluginsController.class
+ui\CustomDialog.class
 ui\PageSettingsController.class
 core\FileWatcher$1.class
 ui\PageMainController.class

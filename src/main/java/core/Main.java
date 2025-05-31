@@ -1,5 +1,7 @@
 package core;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +14,10 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
 	public static String audioDevice = "CABLE Input";
+	public static int maxDuration = 600;
+	public static String delimiter = " :  ";
+	public static FileWatcher fileWatcher = null;
+	public static File file = null;
 	public static AudioPlayerQueue playerTTS;
 	public static AudioPlayerQueue playerMusic;
 	public static AudioPlayer playerAudio;
@@ -20,7 +26,13 @@ public class Main extends Application {
     	
     	try {
 			playerTTS = new AudioPlayerQueue(audioDevice);
+			playerTTS.getAudioPlayer().setAudioListener(() -> {
+				playerTTS.onAudioFinished();
+			});
 			playerMusic = new AudioPlayerQueue(audioDevice);
+			playerMusic.getAudioPlayer().setAudioListener(() -> {
+				playerMusic.onAudioFinished();
+			});
 			playerAudio = new AudioPlayer(audioDevice);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

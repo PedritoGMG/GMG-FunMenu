@@ -43,7 +43,7 @@ public class FileWatcher {
         this.tailerThread.setDaemon(true);
     }
 
-    public void start() {
+    private void start() {
         this.tailerThread.start();
     }
 

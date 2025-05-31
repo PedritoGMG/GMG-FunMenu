@@ -112,28 +112,45 @@ public class AudioPlayer {
                 byte[] buffer = new byte[4096];
                 int bytesRead;
 
-                while (playing && (bytesRead = din.read(buffer, 0, buffer.length)) != -1) {
-
+                while (playing && din != null && line != null && (bytesRead = din.read(buffer, 0, buffer.length)) != -1) {
                     synchronized (pauseLock) {
                         while (paused) {
                             pauseLock.wait();
                         }
                     }
 
+                    if (!playing) break;
+
                     line.write(buffer, 0, bytesRead);
                     bytesReadTotal += bytesRead;
                 }
 
-                cleanupAfterPlayback();
-
-                if (listener != null) listener.onAudioFinished();
-
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (line != null) {
+                        line.drain();
+                        line.stop();
+                        line.close();
+                        line = null;
+                    }
+                    if (din != null) {
+                        din.close();
+                        din = null;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (listener != null) {
+                    listener.onAudioFinished();
+                }
             }
         });
         playbackThread.start();
     }
+
 
     private void cleanupAfterPlayback() throws Exception {
         line.drain();
@@ -148,25 +165,7 @@ public class AudioPlayer {
 
     private void stopPlayback() {
         playing = false;
-        resume(); // en caso de que esté pausado, para desbloquear hilo
-
-        try {
-            if (playbackThread != null) playbackThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (line != null && line.isOpen()) {
-                line.stop();
-                line.close();
-            }
-            if (din != null) {
-                din.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        resume();
     }
 
     public void pause() {
