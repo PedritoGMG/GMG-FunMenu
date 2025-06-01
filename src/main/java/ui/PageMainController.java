@@ -12,6 +12,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import core.AudioPlayer;
 import core.FileWatcher;
+import core.KeywordTriggerListener;
 import core.Main;
 import core.TTS;
 import core.Toast;
@@ -101,39 +102,22 @@ public class PageMainController implements Initializable{
 				
 				CustomDialog.showDialog("Add TTS to the Queue", "Indicates the type of voice and text to be played: ",
 						stage -> {
+							stage.getScene().getRoot().setDisable(true);
 							String text = inputTTS.getText();
-							if (text != null && !text.trim().isEmpty()) {
-								
-								stage.getScene().getRoot().setDisable(true);
-								
-								Toast.showIn(stage, "Generating voice...", 8000);
-								
-								Task<File> downloadTask = new Task<>() {
-								    @Override
-								    protected File call() throws Exception {
-										return TTS.fetchAudioToFile(text, Integer.valueOf(numberFieldEngine.getText()),
-												Integer.valueOf(numberFieldLang.getText()),
-												Integer.valueOf(numberFieldVoice.getText()));
+							TTS.request(
+								    text,
+								    Integer.parseInt(numberFieldEngine.getText()),
+								    Integer.parseInt(numberFieldLang.getText()),
+								    Integer.parseInt(numberFieldVoice.getText()),
+								    file -> {
+								        Main.playerTTS.enqueue(file);
+								        stage.close();
+								    },
+								    ex -> {
+								        Toast.showIn(stage, "Voice generation fails", 8000);
+								        stage.getScene().getRoot().setDisable(false);
 								    }
-								};
-
-								downloadTask.setOnSucceeded(e -> {
-								    File file = downloadTask.getValue();
-								    Main.playerTTS.enqueue(file);
-								    stage.close();
-								});
-
-								downloadTask.setOnFailed(e -> {
-								    Toast.showIn(stage, "Voice generation fails", 8000);
-								    downloadTask.getException().printStackTrace();
-								    stage.getScene().getRoot().setDisable(false);
-								});
-
-								new Thread(downloadTask).start();
-								
-							} else {
-								Toast.showIn(stage, "Invalid Text", 8000);
-							}
+								);
 						
 						}, vbox -> {
 							HBox hBoxNumbers = new HBox(10, numberFieldEngine, numberFieldLang, numberFieldVoice);
@@ -168,49 +152,42 @@ public class PageMainController implements Initializable{
 					TextField inputYoutubeURL = new TextField();
 					inputYoutubeURL.setPromptText("https://www.youtube.com/watch?v=");
 					btn1.setOnAction(eventBtn -> {
-						try {
-							CustomDialog.showDialog("Add Youtube Music to the Queue",
-									"Put the link of the music you want to add: ", stage -> {
-										String url = inputYoutubeURL.getText();
-										if (YoutubeAudioDownloader.isYoutubeURLValid(url)) {
-											
-											stage.getScene().getRoot().setDisable(true);
-											
-											Toast.showIn(stage, "Downloading...", 8000);
-											
-											Task<File> downloadTask = new Task<>() {
-											    @Override
-											    protected File call() throws Exception {
-											        return YoutubeAudioDownloader.downloadAudioSegment(url, 0, Main.maxDuration);
-											    }
-											};
+					    try {
+					        CustomDialog.showDialog("Add Youtube Music to the Queue",
+					            "Put the link of the music you want to add: ", stage -> {
 
-											downloadTask.setOnSucceeded(e -> {
-											    File file = downloadTask.getValue();
-											    Main.playerMusic.enqueue(file);
-											    stage.close();
-											    
-											    Stage dialogStage = (Stage) btn2.getScene().getWindow();
-												dialogStage.close();
-											});
+					                String url = inputYoutubeURL.getText();
 
-											downloadTask.setOnFailed(e -> {
-											    Toast.showIn(stage, "Download failed", 8000);
-											    downloadTask.getException().printStackTrace();
-											    stage.getScene().getRoot().setDisable(false);
-											});
+					                stage.getScene().getRoot().setDisable(true);
+					                YoutubeAudioDownloader.request(
+					                    url,
+					                    () -> {
+					                    	Toast.showIn(stage, "Invalid Url", 8000);
+					                    	stage.getScene().getRoot().setDisable(false);
+					                    	},
+					                    () -> {
+					                        Toast.showIn(stage, "Downloading...", 8000);
+					                    },
+					                    file -> {
+					                        Main.playerMusic.enqueue(file);
+					                        stage.close();
+					                        Stage dialogStage = (Stage) btn2.getScene().getWindow();
+					                        dialogStage.close();
+					                    },
+					                    ex -> {
+					                        Toast.showIn(stage, "Download failed", 8000);
+					                        System.err.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
+					                        System.err.println("at " + ex.getStackTrace()[0]);
+					                        stage.getScene().getRoot().setDisable(false);
+					                    }
+					                );
 
-											new Thread(downloadTask).start();
-											
-										} else {
-											Toast.showIn(stage, "Invalid Url", 8000);
-										}
-									}, vboxYoutube -> {
-										vboxYoutube.getChildren().addAll(inputYoutubeURL);
-									});
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					            }, vboxYoutube -> {
+					                vboxYoutube.getChildren().addAll(inputYoutubeURL);
+					            });
+					    } catch (IOException e) {
+					        e.printStackTrace();
+					    }
 					});
 
 					btn2.setOnAction(eventBtn -> {
@@ -265,9 +242,9 @@ public class PageMainController implements Initializable{
                 toggleButton.setText("Stop Reading");
                 toggleButton.getStyleClass().remove("button-dark");
                 toggleButton.getStyleClass().add("button-dark2");
-                
+                KeywordTriggerListener keywordTriggerListener = new KeywordTriggerListener();
                 Main.fileWatcher = new FileWatcher(Main.file, line -> {
-                    System.out.println("Nueva línea: " + line);
+                	keywordTriggerListener.onNewLine(line);
                 });
                 
             } else {

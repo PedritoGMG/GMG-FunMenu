@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.function.Consumer;
+
+import javafx.concurrent.Task;
+import javafx.stage.Stage;
 
 public class YoutubeAudioDownloader {
 
@@ -11,7 +15,7 @@ public class YoutubeAudioDownloader {
         String ytdlpPath = "libs/yt-dlp.exe";  // Ajusta según ubicación real
         int endSeconds = startSeconds + durationSeconds;
 
-        File tempAudio = File.createTempFile("yt_audio_", ".mp3");
+        File tempAudio = File.createTempFile("yt_audio_", ".mp3", Main.TEMP_DIR);
         tempAudio.deleteOnExit();
 
         String sectionArg = "*"+startSeconds+"-"+endSeconds;
@@ -40,9 +44,13 @@ public class YoutubeAudioDownloader {
     }
     
     public static boolean isYoutubeURLValid(String url) {
-        if (url == null) return false;
-        String youtubeRegex = "^(https?://)?(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/)[\\w-]{11}(&.*)?$";
-        return url.matches(youtubeRegex);
+    	if (url == null) return false;
+
+        String youtubeVideoRegex = "^(https?://)?(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/|youtube\\.com/shorts/)[\\w-]{11}([?&].*)?$";
+
+        if (url.contains("playlist?list=")) return false;
+
+        return url.matches(youtubeVideoRegex);
     }
 
     public static double getVideoDuration(String videoUrl) throws IOException, InterruptedException {
@@ -51,6 +59,7 @@ public class YoutubeAudioDownloader {
         ProcessBuilder builder = new ProcessBuilder(
             ytdlpPath,
             "--dump-json",
+            "--no-playlist",
             videoUrl
         );
 
@@ -83,4 +92,66 @@ public class YoutubeAudioDownloader {
 
         return Double.valueOf(durStr);
     }
+    
+	public static void request(String url) {
+		YoutubeAudioDownloader.request(url, () -> {
+		}, () -> {
+		}, file -> {
+			Main.playerMusic.enqueue(file);
+		}, ex -> {
+		});
+	}
+    
+    public static void request(
+            String url,
+            Runnable onInvalidUrl,
+            Runnable onBeforeDownload,
+            Consumer<File> onSuccess,
+            Consumer<Throwable> onFail
+        ) {
+            if (!YoutubeAudioDownloader.isYoutubeURLValid(url)) {
+                onInvalidUrl.run();
+                return;
+            }
+
+            Task<Double> durationTask = new Task<>() {
+                @Override
+                protected Double call() throws Exception {
+                    return YoutubeAudioDownloader.getVideoDuration(url);
+                }
+            };
+
+            durationTask.setOnSucceeded(e -> {
+                Double duration = durationTask.getValue();
+                if (duration >= Main.maxDuration) {
+                    onFail.accept(new Exception("Video too long"));
+                    return;
+                }
+
+                if (onBeforeDownload != null) onBeforeDownload.run();
+
+                Task<File> downloadTask = new Task<>() {
+                    @Override
+                    protected File call() throws Exception {
+                        return YoutubeAudioDownloader.downloadAudioSegment(url, 0, Main.maxDuration);
+                    }
+                };
+
+                downloadTask.setOnSucceeded(ev -> {
+                    onSuccess.accept(downloadTask.getValue());
+                });
+
+                downloadTask.setOnFailed(ev -> {
+                    onFail.accept(downloadTask.getException());
+                });
+
+                new Thread(downloadTask).start();
+            });
+
+            durationTask.setOnFailed(e -> {
+                onFail.accept(durationTask.getException());
+            });
+
+            new Thread(durationTask).start();
+        }
 }

@@ -1,7 +1,11 @@
 package core;
 
 import javax.sound.sampled.*;
+import javax.sound.sampled.spi.AudioFileReader;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 public class AudioPlayer {
 
@@ -157,6 +161,14 @@ public class AudioPlayer {
         line.stop();
         line.close();
         din.close();
+    }
+    public static boolean isAudioFileSupported(final File file) {
+    	try {
+            AudioSystem.getAudioInputStream(file);
+            return true;
+        } catch (UnsupportedAudioFileException | IOException e) {
+            return false;
+        }
     }
 
     public void stop() {

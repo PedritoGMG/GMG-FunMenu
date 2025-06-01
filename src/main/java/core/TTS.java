@@ -1,6 +1,7 @@
 package core;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.function.Consumer;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -47,7 +49,7 @@ public class TTS {
     }
     
     private static File downloadFileFromUrl(String urlString, String prefix, String suffix) throws Exception {
-        File tempFile = File.createTempFile(prefix, suffix);
+        File tempFile = File.createTempFile(prefix, suffix, Main.TEMP_DIR);
         tempFile.deleteOnExit();
 
         try (InputStream in = new URL(urlString).openStream();
@@ -61,6 +63,42 @@ public class TTS {
 
         return tempFile;
     }
+    
+	public static void request(String text) {
+		request(text, ENGINE, LANG, VOICE, file -> {
+			Main.playerTTS.enqueue(file);
+		}, ex -> {
+			System.err.println(ex.getMessage());
+		});
+	}
+	
+	public static void request(String text, int engine, int lang, int voice) {
+		request(text, engine, lang, voice, file -> {
+			Main.playerTTS.enqueue(file);
+		}, ex -> {
+			System.err.println(ex.getMessage());
+		});
+	}
+    
+	public static void request(String text, int engine, int lang, int voice, Consumer<File> onSuccess,
+			Consumer<Throwable> onFail) {
+		if (text == null || text.trim().isEmpty()) {
+			onFail.accept(new IllegalArgumentException("Text is empty"));
+			return;
+		}
+
+		Task<File> downloadTask = new Task<>() {
+			@Override
+			protected File call() throws Exception {
+				return TTS.fetchAudioToFile(text, engine, lang, voice);
+			}
+		};
+
+		downloadTask.setOnSucceeded(e -> onSuccess.accept(downloadTask.getValue()));
+		downloadTask.setOnFailed(e -> onFail.accept(downloadTask.getException()));
+
+		new Thread(downloadTask).start();
+	}
 
     
 }

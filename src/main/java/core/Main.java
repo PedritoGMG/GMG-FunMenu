@@ -18,10 +18,18 @@ public class Main extends Application {
 	public static String delimiter = " :  ";
 	public static FileWatcher fileWatcher = null;
 	public static File file = null;
+	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
+	static {
+	    if (!TEMP_DIR.exists()) {
+	        TEMP_DIR.mkdirs();
+	    }
+	}
+
+	
 	public static AudioPlayerQueue playerTTS;
 	public static AudioPlayerQueue playerMusic;
 	public static AudioPlayer playerAudio;
-
+	
     public static void main(String[] args) {
     	
     	try {
