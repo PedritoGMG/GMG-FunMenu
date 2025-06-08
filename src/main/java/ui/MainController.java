@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javax.sound.sampled.LineUnavailableException;
 
 import core.AudioPlayer;
+import core.Main;
 import core.TTS;
 import core.Toast;
 import core.YoutubeAudioDownloader;
@@ -59,8 +60,11 @@ public class MainController implements Initializable{
     
     @FXML
     private void close() {
-    	Platform.exit();
+        Main.OnExit();
+        Platform.exit();
+        System.exit(0);
     }
+
     @FXML
     private void minimize() {
     	Stage stage = (Stage) topBar.getScene().getWindow();

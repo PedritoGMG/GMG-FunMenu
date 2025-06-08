@@ -5,6 +5,8 @@ import javax.sound.sampled.spi.AudioFileReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AudioPlayer {
@@ -35,7 +37,12 @@ public class AudioPlayer {
         mixer = AudioSystem.getMixer(mixerInfo);
     }
 
-    public void playMp3(File mp3File) throws Exception {
+    public void play(File mp3File) throws Exception {
+    	
+    	if (!(AudioPlayer.isAudioFileSupported(mp3File))) {
+    		mp3File = convertToWav(mp3File);
+    	}
+    	
         stopPlayback();
 
         this.audioFile = mp3File;
@@ -61,6 +68,52 @@ public class AudioPlayer {
         bytesReadTotal = 0;
 
         startPlaybackThread();
+    }
+    
+    public static File convertToWav(File input) throws IOException, InterruptedException {
+        String ffmpegPath = "libs/ffmpeg.exe";
+        String inputPath = input.getAbsolutePath();
+
+        String baseName = input.getName().replaceAll("\\.[^.]+$", "");
+        File parentDir = input.getParentFile();
+        File outputWav = new File(parentDir, baseName + "_temp_" + System.nanoTime() + ".wav");
+
+        outputWav.deleteOnExit();
+
+        ProcessBuilder pb = new ProcessBuilder(
+            ffmpegPath, "-y",
+            "-i", inputPath,
+            "-ar", "44100",
+            "-ac", "2",
+            outputWav.getAbsolutePath()
+        );
+
+        Process process = pb.inheritIO().start();
+        int exitCode = process.waitFor();
+
+        if (exitCode != 0) {
+            throw new RuntimeException("Error al convertir el audio a WAV");
+        }
+
+        return outputWav;
+    }
+
+    
+    public static String[] GetSupportedAudioFormatsArray() {
+    	AudioFileFormat.Type[] types = AudioSystem.getAudioFileTypes();
+    	String[] extensions = new String[types.length];
+    	for (int i = 0; i < types.length; i++) {
+    	    extensions[i] = "*." + types[i].getExtension().toLowerCase();
+    	}
+    	return extensions;
+    }
+    
+    public static List<String> GetSupportedAudioExtensionsList() {
+    	List<String> supportedAudioFormats = new ArrayList<>();
+    	for (AudioFileFormat.Type type : AudioSystem.getAudioFileTypes()) {
+    	    supportedAudioFormats.add(type.getExtension());
+    	}
+    	return supportedAudioFormats;
     }
 
     public void seek(float seconds) throws Exception {

@@ -18,8 +18,6 @@ public class AudioPlayerQueue implements AudioListener {
     }
 
     public synchronized boolean enqueue(File mp3File) {
-    	if (!(AudioPlayer.isAudioFileSupported(mp3File))) return false;
-    	
         if (playQueue.size() >= maxQueueSize) {
             return false;
         }
@@ -35,7 +33,7 @@ public class AudioPlayerQueue implements AudioListener {
         if (next != null) {
             isPlaying = true;
             try {
-                player.playMp3(next);
+                player.play(next);
             } catch (Exception e) {
                 e.printStackTrace();
                 playNext();

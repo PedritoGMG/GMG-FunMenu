@@ -42,6 +42,11 @@ public class Main extends Application {
 				playerMusic.onAudioFinished();
 			});
 			playerAudio = new AudioPlayer(audioDevice);
+			
+			//ShutDown Hook
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				OnExit();
+	        }));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -63,6 +68,30 @@ public class Main extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         
         stage.setScene(scene);
+		stage.setOnCloseRequest(event -> OnExit());
         stage.show();
     }
+    
+    public static void deleteTempFiles() {
+        File folder = Main.TEMP_DIR;
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File archivo : files) {
+                    if (archivo.isFile()) {
+                        archivo.delete();
+                    }
+                }
+            }
+        }
+    }
+    
+    public static void OnExit() {
+    	playerTTS.stopAndClear();
+		playerMusic.stopAndClear();
+		playerAudio.stop();
+		
+		deleteTempFiles();
+	}
+
 }

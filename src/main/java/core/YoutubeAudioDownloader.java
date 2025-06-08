@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class YoutubeAudioDownloader {
 
     public static File downloadAudioSegment(String videoUrl, int startSeconds, int durationSeconds) throws IOException, InterruptedException {
-        String ytdlpPath = "libs/yt-dlp.exe";  // Ajusta según ubicación real
+        String ytdlpPath = "libs/yt-dlp.exe";
         int endSeconds = startSeconds + durationSeconds;
 
         File tempAudio = File.createTempFile("yt_audio_", ".mp3", Main.TEMP_DIR);
@@ -32,7 +32,7 @@ public class YoutubeAudioDownloader {
         	    videoUrl
         	);
 
-        builder.inheritIO(); // Opcional: muestra salida en consola
+        builder.inheritIO();
         Process process = builder.start();
         int exitCode = process.waitFor();
 

@@ -147,7 +147,7 @@ public class PageMainController implements Initializable{
 				CustomDialog.showDialog("Add Music to the Queue", "Select what type of addition you want to make: ", null, vbox -> {
 
 					Button btn1 = new Button("Youtube URL");
-					Button btn2 = new Button("MP3 File");
+					Button btn2 = new Button("Audio File");
 					
 					TextField inputYoutubeURL = new TextField();
 					inputYoutubeURL.setPromptText("https://www.youtube.com/watch?v=");
@@ -191,7 +191,7 @@ public class PageMainController implements Initializable{
 					});
 
 					btn2.setOnAction(eventBtn -> {
-						File file = selectMP3File((Stage) addMusic.getScene().getWindow());
+						File file = selectAudioFile((Stage) addMusic.getScene().getWindow());
 
 						if (file != null) {
 							try {
@@ -222,11 +222,11 @@ public class PageMainController implements Initializable{
 		});
         
         addAudio.setOnAction(event -> {
-        	File file = selectMP3File((Stage) addAudio.getScene().getWindow());
+        	File file = selectAudioFile((Stage) addAudio.getScene().getWindow());
 
         	if (file!=null) {
         		try {
-    				Main.playerAudio.playMp3(file);
+    				Main.playerAudio.play(file);
     			} catch (Exception e) {
     				System.err.println(e.getMessage());
     			}
@@ -262,8 +262,8 @@ public class PageMainController implements Initializable{
         
     }
     
-    private File selectMP3File(Stage stage) {
-        return selectFile(stage, "Select an MP3 file", "MP3 Files (*.mp3)", "*.mp3");
+    private File selectAudioFile(Stage stage) {
+    	return selectFile(stage, "Select an Audio File", "Audio Files "+AudioPlayer.GetSupportedAudioExtensionsList(), AudioPlayer.GetSupportedAudioFormatsArray());
     }
     
     private File selectFile(Stage stage, String title, String description, String... extensions) {
