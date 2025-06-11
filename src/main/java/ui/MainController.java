@@ -6,11 +6,11 @@ import java.util.ResourceBundle;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import core.AudioPlayer;
 import core.Main;
-import core.TTS;
-import core.Toast;
-import core.YoutubeAudioDownloader;
+import core.audio.AudioPlayer;
+import core.audio.plugin.TTS;
+import core.audio.plugin.YoutubeAudioDownloader;
+import core.util.Toast;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;

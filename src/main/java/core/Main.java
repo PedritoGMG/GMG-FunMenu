@@ -2,6 +2,11 @@ package core;
 
 import java.io.File;
 
+import core.audio.AudioPlayer;
+import core.audio.AudioPlayerQueue;
+import core.file.ChatLogReader;
+import core.file.FileWatcher;
+import core.file.readers.TF2ChatLogReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +20,9 @@ public class Main extends Application {
 	
 	public static String audioDevice = "CABLE Input";
 	public static int maxDuration = 600;
-	public static String delimiter = " :  ";
+	public static String delimiter = " : ";
 	public static FileWatcher fileWatcher = null;
+	public static ChatLogReader chatLogReader = new TF2ChatLogReader();
 	public static File file = null;
 	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
 	static {

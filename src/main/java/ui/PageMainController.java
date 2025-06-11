@@ -10,13 +10,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import core.AudioPlayer;
-import core.FileWatcher;
-import core.KeywordTriggerListener;
 import core.Main;
-import core.TTS;
-import core.Toast;
-import core.YoutubeAudioDownloader;
+import core.audio.AudioPlayer;
+import core.audio.plugin.TTS;
+import core.audio.plugin.YoutubeAudioDownloader;
+import core.file.FileWatcher;
+import core.file.KeywordTriggerListener;
+import core.util.Toast;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
