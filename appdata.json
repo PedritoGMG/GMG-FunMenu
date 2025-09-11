@@ -1,0 +1,20 @@
+{
+  "username" : "default",
+  "ttsVolume" : 0.865285,
+  "musicVolume" : 0.36597937,
+  "audioVolume" : 0.62886596,
+  "triggers" : [ {
+    "type" : "basic",
+    "name" : "TTS",
+    "enabled" : true
+  }, {
+    "type" : "basic",
+    "name" : "REQUEST",
+    "enabled" : true
+  }, {
+    "type" : "basic",
+    "name" : "TEST",
+    "enabled" : true
+  } ],
+  "blockedUsers" : [ ]
+}

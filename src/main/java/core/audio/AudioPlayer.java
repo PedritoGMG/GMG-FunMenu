@@ -1,5 +1,7 @@
 package core.audio;
 
+import core.data.AppData;
+
 import javax.sound.sampled.*;
 import javax.sound.sampled.spi.AudioFileReader;
 

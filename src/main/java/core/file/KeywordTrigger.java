@@ -13,6 +13,12 @@ public class KeywordTrigger {
         this.enabled = true;
     }
 
+    public KeywordTrigger(String keyword, boolean enabled) {
+        this.keyword = keyword.toUpperCase();
+        this.action = null;
+        this.enabled = enabled;
+    }
+
     public void trigger(String author, String message) {
         action.accept(author, message);
     }

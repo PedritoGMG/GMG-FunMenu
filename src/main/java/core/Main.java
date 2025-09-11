@@ -4,8 +4,14 @@ import java.io.File;
 
 import core.audio.AudioPlayer;
 import core.audio.AudioPlayerQueue;
+import core.data.AppData;
+import core.data.DataManager;
 import core.file.ChatLogReader;
 import core.file.FileWatcher;
+import core.file.KeywordTrigger;
+import core.file.KeywordTriggerListener;
+import core.file.readers.CS2ChatLogReader;
+import core.file.readers.GMODChatLogReader;
 import core.file.readers.TF2ChatLogReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +28,9 @@ public class Main extends Application {
 	public static int maxDuration = 600;
 	public static String delimiter = " : ";
 	public static FileWatcher fileWatcher = null;
-	public static ChatLogReader chatLogReader = new TF2ChatLogReader();
+	public static ChatLogReader chatLogReader = new CS2ChatLogReader();
 	public static File file = null;
+	public static boolean isReading = false;
 	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
 	static {
 	    if (!TEMP_DIR.exists()) {
@@ -37,17 +44,23 @@ public class Main extends Application {
 	public static AudioPlayer playerAudio;
 	
     public static void main(String[] args) {
-    	
+
+		AppData appData = AppData.getInstance();
+		appData.load();
+
     	try {
 			playerTTS = new AudioPlayerQueue(audioDevice);
+			playerTTS.setVolume(appData.getTtsVolume());
 			playerTTS.getAudioPlayer().setAudioListener(() -> {
 				playerTTS.onAudioFinished();
 			});
 			playerMusic = new AudioPlayerQueue(audioDevice);
+			playerMusic.setVolume(appData.getMusicVolume());
 			playerMusic.getAudioPlayer().setAudioListener(() -> {
 				playerMusic.onAudioFinished();
 			});
 			playerAudio = new AudioPlayer(audioDevice);
+			playerAudio.setVolume(appData.getAudioVolume());
 			
 			//ShutDown Hook
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -96,6 +109,8 @@ public class Main extends Application {
     	playerTTS.stopAndClear();
 		playerMusic.stopAndClear();
 		playerAudio.stop();
+
+		DataManager.save(AppData.getInstance());
 		
 		deleteTempFiles();
 	}

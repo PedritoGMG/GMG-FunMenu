@@ -85,33 +85,37 @@ public class MainController implements Initializable{
     
     @FXML
     private void pageMain(ActionEvent actionEvent) throws IOException {
-    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageMain.fxml"));
-        stackPaneMain.getChildren().removeAll();
-        stackPaneMain.getChildren().setAll(fxml);
+        loadPage("pageMain");
     }
     @FXML
     private void pagePlugins(ActionEvent actionEvent) throws IOException {
-    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pagePlugins.fxml"));
-        stackPaneMain.getChildren().removeAll();
-        stackPaneMain.getChildren().setAll(fxml);
+        loadPage("pagePlugins");
     }
     @FXML
     private void pageBindsTriggers(ActionEvent actionEvent) throws IOException {
-    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageBindsTriggers.fxml"));
-        stackPaneMain.getChildren().removeAll();
-        stackPaneMain.getChildren().setAll(fxml);
+        loadPage("pageBindsTriggers");
     }
     @FXML
     private void pageConsole(ActionEvent actionEvent) throws IOException {
-    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageConsole.fxml"));
-        stackPaneMain.getChildren().removeAll();
-        stackPaneMain.getChildren().setAll(fxml);
+        loadPage("pageConsole");
     }
     @FXML
     private void pageSettings(ActionEvent actionEvent) throws IOException {
-    	Parent fxml = FXMLLoader.load(getClass().getResource("/ui/pageSettings.fxml"));
-        stackPaneMain.getChildren().removeAll();
-        stackPaneMain.getChildren().setAll(fxml);
+        loadPage("pageSettings");
+    }
+
+    private void loadPage(String fxmlName) throws IOException {
+        if (!stackPaneMain.getChildren().isEmpty()) {
+            Node current = stackPaneMain.getChildren().get(0);
+            if (fxmlName.equals(current.getUserData()))
+                return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/" + fxmlName + ".fxml"));
+        Parent page = loader.load();
+        page.setUserData(fxmlName);
+
+        stackPaneMain.getChildren().setAll(page);
     }
 	
 }

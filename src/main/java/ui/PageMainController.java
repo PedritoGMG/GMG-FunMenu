@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 import javax.sound.sampled.LineUnavailableException;
 
@@ -14,6 +15,7 @@ import core.Main;
 import core.audio.AudioPlayer;
 import core.audio.plugin.TTS;
 import core.audio.plugin.YoutubeAudioDownloader;
+import core.data.AppData;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
 import core.util.Toast;
@@ -53,9 +55,14 @@ public class PageMainController implements Initializable{
 	
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupSlider(sliderTTS, Main.playerTTS.getAudioPlayer());
-        setupSlider(sliderMusic, Main.playerMusic.getAudioPlayer());
-        setupSlider(sliderAudio, Main.playerAudio);
+		AppData appdata = AppData.getInstance();
+
+		if (Main.file != null)
+			fileText.setText(Main.file.getAbsolutePath());
+
+		setupSlider(sliderTTS, Main.playerTTS.getAudioPlayer(), appdata.getTtsVolume(), appdata::setTtsVolume);
+        setupSlider(sliderMusic, Main.playerMusic.getAudioPlayer(), appdata.getMusicVolume(), appdata::setMusicVolume);
+        setupSlider(sliderAudio, Main.playerAudio, appdata.getAudioVolume(), appdata::setAudioVolume);
         
         List<List<Button>> buttons = List.of(
         		List.of(playTTS, 	resumeTTS, 		stopTTS, 	addTTS), 
@@ -232,33 +239,34 @@ public class PageMainController implements Initializable{
     			}
 			}
         });
-        
-        toggleButton.setText("Start Reading");
-        toggleButton.setSelected(false);
-        toggleButton.setDisable(Main.file==null);
-        toggleButton.getStyleClass().add("button-dark");
-        toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                toggleButton.setText("Stop Reading");
-                toggleButton.getStyleClass().remove("button-dark");
-                toggleButton.getStyleClass().add("button-dark2");
-                KeywordTriggerListener keywordTriggerListener = new KeywordTriggerListener();
-                Main.fileWatcher = new FileWatcher(Main.file, line -> {
-                	keywordTriggerListener.onNewLine(line);
-                });
-                
-            } else {
-                toggleButton.setText("Start Reading");
-                toggleButton.getStyleClass().remove("button-dark2");
-                toggleButton.getStyleClass().add("button-dark");
-                
-                if (Main.fileWatcher != null) {
-                	Main.fileWatcher.stop();
-                	Main.fileWatcher = null;
-                }
-                
-            }
-        });
+
+		File currentFile = Main.file;
+
+		toggleButton.setText(Main.isReading ? "Stop Reading" : "Start Reading");
+		toggleButton.setSelected(Main.isReading);
+		toggleButton.setDisable(Main.file == null);
+		toggleButton.getStyleClass().add(Main.isReading ? "button-dark2" : "button-dark");
+		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
+			System.out.println("Toggle Reading: " + newVal);
+			Main.isReading = newVal;
+			if (newVal) {
+				toggleButton.setText("Stop Reading");
+				toggleButton.getStyleClass().remove("button-dark");
+				toggleButton.getStyleClass().add("button-dark2");
+				if (currentFile != null) {
+					KeywordTriggerListener listener = KeywordTriggerListener.getInstance();
+					Main.fileWatcher = new FileWatcher(currentFile, line -> listener.onNewLine(line));
+				}
+			} else {
+				toggleButton.setText("Start Reading");
+				toggleButton.getStyleClass().remove("button-dark2");
+				toggleButton.getStyleClass().add("button-dark");
+				if (Main.fileWatcher != null) {
+					Main.fileWatcher.stop();
+					Main.fileWatcher = null;
+				}
+			}
+		});
         
     }
     
@@ -298,19 +306,23 @@ public class PageMainController implements Initializable{
 		}
     	
     }
-    
-    private void setupSlider(Slider slider, AudioPlayer audioPlayer) {
-        slider.setMin(0);
-        slider.setMax(1);
-        slider.setValue(audioPlayer.getVolume());
-        
-        Platform.runLater(() -> updateSliderTrackStyle(slider));
 
-        slider.valueProperty().addListener((obs, oldVal, newVal) -> {
-        	audioPlayer.setVolume(Float.valueOf(newVal+""));
-        	updateSliderTrackStyle(slider);
-        });
-    }
+	private void setupSlider(Slider slider, AudioPlayer audioPlayer, float initialVolume, Consumer<Float> setAppDataVolume) {
+		audioPlayer.setVolume(initialVolume);
+
+		slider.setMin(0);
+		slider.setMax(1);
+		slider.setValue(initialVolume);
+
+		Platform.runLater(() -> updateSliderTrackStyle(slider));
+
+		slider.valueProperty().addListener((obs, oldVal, newVal) -> {
+			float vol = newVal.floatValue();
+			audioPlayer.setVolume(vol);
+			setAppDataVolume.accept(vol);
+			updateSliderTrackStyle(slider);
+		});
+	}
     
     private void updateSliderTrackStyle(Slider slider) {
         double percentage = (slider.getValue() - slider.getMin()) / (slider.getMax() - slider.getMin());
