@@ -1,8 +1,8 @@
 {
   "username" : "default",
-  "ttsVolume" : 0.865285,
-  "musicVolume" : 0.36597937,
-  "audioVolume" : 0.62886596,
+  "ttsVolume" : 0.8,
+  "musicVolume" : 0.8,
+  "audioVolume" : 0.8,
   "triggers" : [ {
     "type" : "basic",
     "name" : "TTS",
@@ -16,5 +16,6 @@
     "name" : "TEST",
     "enabled" : true
   } ],
-  "blockedUsers" : [ ]
+  "bannedUsers" : [ ],
+  "adminUsers" : [ "✬PedritoGMG✬", "Robo" ]
 }

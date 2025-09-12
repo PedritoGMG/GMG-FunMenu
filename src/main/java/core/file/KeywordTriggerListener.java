@@ -70,6 +70,9 @@ public class KeywordTriggerListener implements LineListener {
         String author = chatMsg.getUser();
         String message = chatMsg.getMessage();
 
+        //Validation
+        if (isUserBanned(author)) return;
+
         String[] words = message.split(" ", 2);
         if (words.length < 2) return;
 
@@ -97,5 +100,10 @@ public class KeywordTriggerListener implements LineListener {
 
     public Map<String, BiConsumer<String, String>> getActions() {
         return actions;
+    }
+
+    public boolean isUserBanned(String name) {
+        return AppData.getInstance().getBannedUsers().stream()
+                .anyMatch(b -> b.equalsIgnoreCase(name));
     }
 }

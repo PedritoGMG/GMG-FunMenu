@@ -182,9 +182,9 @@ public class PageMainController implements Initializable{
 					                        dialogStage.close();
 					                    },
 					                    ex -> {
-					                        Toast.showIn(stage, "Download failed", 8000);
-					                        System.err.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
-					                        System.err.println("at " + ex.getStackTrace()[0]);
+					                        Toast.showIn(stage, "Download failed: "+ex.getMessage(), 8000);
+					                        //System.err.println(ex.getClass().getSimpleName() + ": " + ex.getMessage());
+					                        //System.err.println("at " + ex.getStackTrace()[0]);
 					                        stage.getScene().getRoot().setDisable(false);
 					                    }
 					                );

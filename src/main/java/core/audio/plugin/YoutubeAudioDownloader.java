@@ -38,7 +38,7 @@ public class YoutubeAudioDownloader {
         int exitCode = process.waitFor();
 
         if (exitCode != 0 || !tempAudio.exists()) {
-            throw new RuntimeException("yt-dlp falló o no se creó el archivo");
+            throw new RuntimeException("yt-dlp Failed");
         }
 
         return tempAudio;
@@ -71,7 +71,7 @@ public class YoutubeAudioDownloader {
         process.waitFor();
 
         if (line == null) {
-            throw new RuntimeException("No se pudo obtener información del video");
+            throw new RuntimeException("Video not found");
         }
 
         // La salida es JSON, busca la duración (duration) en segundos
@@ -86,7 +86,7 @@ public class YoutubeAudioDownloader {
         }
 
         if (durStr == null) {
-            throw new RuntimeException("No se encontró duración en la salida de yt-dlp");
+            throw new RuntimeException("Duration not found");
         }
         
         durStr = durStr.replaceAll("[^0-9.]", "");
@@ -125,7 +125,7 @@ public class YoutubeAudioDownloader {
             durationTask.setOnSucceeded(e -> {
                 Double duration = durationTask.getValue();
                 if (duration >= Main.maxDuration) {
-                    onFail.accept(new Exception("Video too long"));
+                    onFail.accept(new Exception(String.format("Too long: %.1f / %.1f min", duration / 60.0, Main.maxDuration / 60.0)));
                     return;
                 }
 

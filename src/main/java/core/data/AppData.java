@@ -16,7 +16,8 @@ public class AppData {
     private float audioVolume = 0.8f;
 
     private ArrayList<TriggerData> triggers = new ArrayList<>();
-    private ArrayList<String> blockedUsers = new ArrayList<>();
+    private ArrayList<String> bannedUsers = new ArrayList<>();
+    private ArrayList<String> adminUsers = new ArrayList<>();
 
     private AppData() {}
 
@@ -34,13 +35,13 @@ public class AppData {
         this.audioVolume = loaded.audioVolume;
 
         this.triggers    = new ArrayList<>(loaded.triggers);
-        this.blockedUsers = new ArrayList<>(loaded.blockedUsers);
+        this.bannedUsers = new ArrayList<>(loaded.bannedUsers);
+        this.adminUsers = new ArrayList<>(loaded.adminUsers);
 
         instance = this;
     }
 
     public ArrayList<TriggerData> getTriggers() { return triggers; }
-    public ArrayList<String> getBlockedUsers() { return blockedUsers; }
 
     public float getTtsVolume() { return ttsVolume; }
     public void setTtsVolume(float ttsVolume) { this.ttsVolume = ttsVolume; }
@@ -65,5 +66,41 @@ public class AppData {
                 .filter(t -> t.getName().equalsIgnoreCase(key))
                 .findFirst()
                 .ifPresent(t -> t.setEnabled(enabled));
+    }
+
+    public List<String> getBannedUsers() {
+        return new ArrayList<>(bannedUsers);
+    }
+
+    public boolean addBan(String name) {
+        return addUniqueIgnoreCase(bannedUsers, name);
+    }
+
+    public boolean removeBan(String name) {
+        return removeIgnoreCase(bannedUsers, name);
+    }
+
+    public List<String> getAdminUsers() {
+        return new ArrayList<>(adminUsers);
+    }
+
+    public boolean addAdmin(String name) {
+        return addUniqueIgnoreCase(adminUsers, name);
+    }
+
+    public boolean removeAdmin(String name) {
+        return removeIgnoreCase(adminUsers, name);
+    }
+
+    private boolean addUniqueIgnoreCase(List<String> list, String name) {
+        if (list.stream().noneMatch(n -> n.equalsIgnoreCase(name))) {
+            list.add(name);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean removeIgnoreCase(List<String> list, String name) {
+        return list.removeIf(n -> n.equalsIgnoreCase(name));
     }
 }
