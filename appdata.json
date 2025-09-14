@@ -1,8 +1,10 @@
 {
-  "username" : "default",
-  "ttsVolume" : 0.8,
-  "musicVolume" : 0.8,
-  "audioVolume" : 0.8,
+  "maxDurationRequest" : 300,
+  "ttsVolume" : 0.2642487,
+  "musicVolume" : 0.76804125,
+  "audioVolume" : 1.0,
+  "maxQueueSizeTTS" : 50,
+  "maxQueueSizeMUSIC" : 25,
   "triggers" : [ {
     "type" : "basic",
     "name" : "TTS",
@@ -16,6 +18,6 @@
     "name" : "TEST",
     "enabled" : true
   } ],
-  "bannedUsers" : [ ],
-  "adminUsers" : [ "✬PedritoGMG✬", "Robo" ]
+  "bannedUsers" : [ "sadsa" ],
+  "adminUsers" : [ "dasdsa" ]
 }

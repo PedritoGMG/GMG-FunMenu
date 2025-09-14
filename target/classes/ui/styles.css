@@ -14,7 +14,6 @@
     -fx-border-color: #3d3d3d;
     -fx-border-width: 1;
     -fx-border-style: solid;
-
 }
 
 .background {
@@ -256,7 +255,7 @@
     -fx-background-radius: 5px;
     -fx-cursor: hand;
     -fx-alignment: center;
-    -fx-font-size: 0.9rem;
+    /*fx-font-size: 0.9rem;*/
     -fx-border-width: 1px;
     -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-effect: dropshadow( gaussian , rgba(0, 0, 0, 0.3), 5, 0, 0, 2);

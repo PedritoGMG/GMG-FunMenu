@@ -14,8 +14,10 @@ core\file\LineListener.class
 core\file\ChatLogReader.class
 ui\PageMainController.class
 core\file\ChatMessage.class
+core\data\GlobalConsoleOutputStream.class
 core\file\FileWatcher$1.class
 core\audio\AudioPlayerQueue.class
+ui\PageSettingsController$1.class
 core\data\DataManager.class
 core\audio\plugin\TTS.class
 core\data\AppData.class
@@ -30,5 +32,6 @@ core\audio\AudioListener.class
 ui\PageBindsTriggersController.class
 core\file\FileWatcher.class
 core\util\Toast.class
+core\data\ConsoleLine.class
 core\audio\plugin\TTS$1.class
 core\file\readers\TF2ChatLogReader.class

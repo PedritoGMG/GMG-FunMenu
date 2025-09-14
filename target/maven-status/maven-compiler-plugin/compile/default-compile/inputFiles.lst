@@ -4,7 +4,9 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\AudioPlayerQue
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\plugin\TTS.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\plugin\YoutubeAudioDownloader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\AppData.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\ConsoleLine.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\DataManager.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\GlobalConsoleOutputStream.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\AbstractChatLogReader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\AudioTriggerData.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\ChatLogReader.java

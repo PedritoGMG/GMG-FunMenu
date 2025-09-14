@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.function.Consumer;
 
 import core.Main;
+import core.data.AppData;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 
@@ -110,6 +111,8 @@ public class YoutubeAudioDownloader {
             Consumer<File> onSuccess,
             Consumer<Throwable> onFail
         ) {
+            AppData appData = AppData.getInstance();
+
             if (!YoutubeAudioDownloader.isYoutubeURLValid(url)) {
                 onInvalidUrl.run();
                 return;
@@ -124,8 +127,8 @@ public class YoutubeAudioDownloader {
 
             durationTask.setOnSucceeded(e -> {
                 Double duration = durationTask.getValue();
-                if (duration >= Main.maxDuration) {
-                    onFail.accept(new Exception(String.format("Too long: %.1f / %.1f min", duration / 60.0, Main.maxDuration / 60.0)));
+                if (duration >= appData.getMaxDurationRequest()) {
+                    onFail.accept(new Exception(String.format("Too long: %.1f / %.1f min", duration / 60.0, appData.getMaxDurationRequest() / 60.0)));
                     return;
                 }
 
@@ -134,7 +137,7 @@ public class YoutubeAudioDownloader {
                 Task<File> downloadTask = new Task<>() {
                     @Override
                     protected File call() throws Exception {
-                        return YoutubeAudioDownloader.downloadAudioSegment(url, 0, Main.maxDuration);
+                        return YoutubeAudioDownloader.downloadAudioSegment(url, 0, appData.getMaxDurationRequest());
                     }
                 };
 

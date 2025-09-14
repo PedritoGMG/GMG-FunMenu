@@ -9,15 +9,23 @@ public class AppData {
     @JsonIgnore
     private static AppData instance;
 
-    private String username = "default";
+    private int maxDurationRequest = 600;
 
     private float ttsVolume = 0.8f;
     private float musicVolume = 0.8f;
     private float audioVolume = 0.8f;
 
+    private int maxQueueSizeTTS = 45;
+    private int maxQueueSizeMUSIC = 45;
+
     private ArrayList<TriggerData> triggers = new ArrayList<>();
     private ArrayList<String> bannedUsers = new ArrayList<>();
     private ArrayList<String> adminUsers = new ArrayList<>();
+
+    @JsonIgnore
+    private final LinkedList<ConsoleLine> consoleLines = new LinkedList<>();
+    @JsonIgnore
+    private final int MAX_LINES = 500;
 
     private AppData() {}
 
@@ -29,10 +37,14 @@ public class AppData {
     public void load() {
         AppData loaded = DataManager.load(this);
 
-        this.username    = loaded.username;
+        this.maxDurationRequest   = loaded.maxDurationRequest;
+
         this.ttsVolume   = loaded.ttsVolume;
         this.musicVolume = loaded.musicVolume;
         this.audioVolume = loaded.audioVolume;
+
+        this.maxQueueSizeTTS = loaded.maxQueueSizeTTS;
+        this.maxQueueSizeMUSIC = loaded.maxQueueSizeMUSIC;
 
         this.triggers    = new ArrayList<>(loaded.triggers);
         this.bannedUsers = new ArrayList<>(loaded.bannedUsers);
@@ -40,6 +52,10 @@ public class AppData {
 
         instance = this;
     }
+
+
+    public int getMaxDurationRequest() { return maxDurationRequest; }
+    public void setMaxDurationRequest(int maxDurationRequest) { this.maxDurationRequest = maxDurationRequest; }
 
     public ArrayList<TriggerData> getTriggers() { return triggers; }
 
@@ -52,8 +68,11 @@ public class AppData {
     public float getAudioVolume() { return audioVolume; }
     public void setAudioVolume(float audioVolume) { this.audioVolume = audioVolume; }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public int getMaxQueueSizeTTS() { return maxQueueSizeTTS; }
+    public void setMaxQueueSizeTTS(int maxQueueSizeTTS) { this.maxQueueSizeTTS = maxQueueSizeTTS; }
+    public int getMaxQueueSizeMUSIC() { return maxQueueSizeMUSIC; }
+    public void setMaxQueueSizeMUSIC(int maxQueueSizeMUSIC) { this.maxQueueSizeMUSIC = maxQueueSizeMUSIC; }
+
 
     public void addTrigger(TriggerData trigger) {
         if (triggers.stream().noneMatch(t -> t.getName().equalsIgnoreCase(trigger.getName()))) {
@@ -102,5 +121,20 @@ public class AppData {
 
     private boolean removeIgnoreCase(List<String> list, String name) {
         return list.removeIf(n -> n.equalsIgnoreCase(name));
+    }
+
+    public synchronized void addConsoleLine(ConsoleLine line) {
+        if (consoleLines.size() >= MAX_LINES) {
+            consoleLines.removeFirst(); // eliminar la línea más antigua
+        }
+        consoleLines.add(line);
+    }
+
+    public synchronized List<ConsoleLine> getConsoleLines() {
+        return new LinkedList<>(consoleLines);
+    }
+
+    public synchronized void clearConsole() {
+        consoleLines.clear();
     }
 }

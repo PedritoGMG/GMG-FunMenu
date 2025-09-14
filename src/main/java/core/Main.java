@@ -1,11 +1,13 @@
 package core;
 
 import java.io.File;
+import java.io.PrintStream;
 
 import core.audio.AudioPlayer;
 import core.audio.AudioPlayerQueue;
 import core.data.AppData;
 import core.data.DataManager;
+import core.data.GlobalConsoleOutputStream;
 import core.file.ChatLogReader;
 import core.file.FileWatcher;
 import core.file.KeywordTrigger;
@@ -25,7 +27,6 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
 	public static String audioDevice = "CABLE Input";
-	public static int maxDuration = 600;
 	public static String delimiter = " : ";
 	public static FileWatcher fileWatcher = null;
 	public static ChatLogReader chatLogReader = new CS2ChatLogReader();
@@ -45,17 +46,24 @@ public class Main extends Application {
 	
     public static void main(String[] args) {
 
+		PrintStream out = new PrintStream(new GlobalConsoleOutputStream(Color.WHITE), true);
+		PrintStream err = new PrintStream(new GlobalConsoleOutputStream(Color.RED), true);
+		System.setOut(out);
+		System.setErr(err);
+
 		AppData appData = AppData.getInstance();
 		appData.load();
 
     	try {
 			playerTTS = new AudioPlayerQueue(audioDevice);
 			playerTTS.setVolume(appData.getTtsVolume());
+			playerTTS.setMaxQueueSize(appData.getMaxQueueSizeTTS());
 			playerTTS.getAudioPlayer().setAudioListener(() -> {
 				playerTTS.onAudioFinished();
 			});
 			playerMusic = new AudioPlayerQueue(audioDevice);
 			playerMusic.setVolume(appData.getMusicVolume());
+			playerMusic.setMaxQueueSize(appData.getMaxQueueSizeMUSIC());
 			playerMusic.getAudioPlayer().setAudioListener(() -> {
 				playerMusic.onAudioFinished();
 			});

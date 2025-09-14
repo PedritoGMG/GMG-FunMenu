@@ -8,7 +8,7 @@ public class AudioPlayerQueue implements AudioListener {
 
     private final AudioPlayer player;
     private final Queue<File> playQueue = new LinkedList<>();
-    private final int maxQueueSize = 45;
+    private int maxQueueSize = 45;
 
     private boolean isPlaying = false;
 
@@ -65,5 +65,13 @@ public class AudioPlayerQueue implements AudioListener {
 	public boolean isPlaying() {
 		return isPlaying;
 	}
+
+    public int getMaxQueueSize() {
+        return maxQueueSize;
+    }
+
+    public void setMaxQueueSize(int maxQueueSize) {
+        this.maxQueueSize = maxQueueSize;
+    }
 }
 
