@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -11,10 +12,14 @@
       <String fx:value="shadow" />
    </styleClass>
    <children>
-      <TextFlow fx:id="consoleTextFlow" prefHeight="446.0" prefWidth="705.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </TextFlow>
+      <ScrollPane fx:id="consoleScrollPane" fitToHeight="true" fitToWidth="true" layoutX="2.0" layoutY="2.0" prefHeight="566.0" prefWidth="897.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+         <content>
+            <TextFlow fx:id="consoleTextFlow" lineSpacing="5.0" prefHeight="639.0" prefWidth="984.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </TextFlow>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

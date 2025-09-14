@@ -7,10 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -98,6 +100,16 @@ public class PageSettingsController implements Initializable {
 
     private void addUserField(String name, VBox container, Consumer<String> removeAction) {
         Text userField = new Text(name);
+        userField.setWrappingWidth(165);
+        userField.setLayoutY(300);
+        userField.setSmooth(true);
+        userField.getStyleClass().add("name-text");
+        userField.setOnMouseEntered(e -> {
+            userField.getStyleClass().add("name-text-hover");
+        });
+        userField.setOnMouseExited(e -> {
+            userField.getStyleClass().remove("name-text-hover");
+        });
         userField.setOnMouseClicked(event -> {
             if (removeAction != null) {
                 removeAction.accept(name);

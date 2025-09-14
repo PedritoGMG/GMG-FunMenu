@@ -5,6 +5,7 @@ import core.data.ConsoleLine;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -20,6 +21,9 @@ public class PageConsoleController implements Initializable {
     @FXML
     private TextFlow consoleTextFlow;
 
+    @FXML
+    private ScrollPane consoleScrollPane;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadConsoleFromAppData();
@@ -33,6 +37,9 @@ public class PageConsoleController implements Initializable {
                 t.setFill(line.getColor());
                 consoleTextFlow.getChildren().add(t);
             }
+
+            consoleScrollPane.layout();
+            consoleScrollPane.setVvalue(1.0);
         });
     }
 }

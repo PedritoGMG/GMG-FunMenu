@@ -312,7 +312,6 @@
 
 
 
-/* Contenedor del diálogo (fondo oscuro) */
 .dialog-container {
     -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-alignment: center;
@@ -320,7 +319,6 @@
     -fx-border-radius: 15;
 }
 
-/* Diálogo principal */
 .dialog {
     -fx-background-color: #1A1A1A;
     -fx-background-radius: 15;
@@ -410,4 +408,133 @@
     -fx-border-width: 1 0 0 0;
     -fx-spacing: 10;
     -fx-alignment: center-right;
+}
+.scroll-pane {
+    -fx-background: #1A1A1A;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+}
+
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: #2B2B2B;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: linear-gradient(to bottom, #00FF99, #0071FF);
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0, 0, 1);
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, #33FFAA, #0091FF);
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #CCCCCC;
+}
+.spinner {
+    -fx-background-color: #1A1A1A;
+    -fx-background-radius: 6;
+    -fx-border-color: linear-gradient(to right, #00FF99, #0071FF);
+    -fx-border-radius: 6;
+    -fx-border-width: 1.5;
+    -fx-padding: 2;
+}
+
+.spinner .text-field {
+    -fx-background-color: #1A1A1A;
+    -fx-text-fill: #E0E0E0;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-prompt-text-fill: #888888;
+    -fx-background-radius: 6;
+    -fx-border-width: 0;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: linear-gradient(to bottom, #00FF99, #0071FF);
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+}
+.spinner .increment-arrow{
+    -fx-rotate: 180;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: rgba(0, 255, 153, 0.2);
+    -fx-border-radius: 25;
+}
+.spinner:focused {
+    -fx-border-color: linear-gradient(to right, #33FFAA, #0091FF);
+    -fx-border-width: 2;
+}
+
+.check-box {
+    -fx-font-size: 14px;
+    -fx-text-fill: #E0E0E0;
+    -fx-padding: 12 24 12 0;
+}
+
+.check-box .box {
+    -fx-background-color: #2B2B2B;
+    -fx-border-color: linear-gradient(to bottom, #0071FF, #00FF99);
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.check-box:hover .box {
+    -fx-background-color: #3A3A3A;
+    -fx-border-color: linear-gradient(to bottom, #00FF99, #0071FF);
+}
+
+.check-box:selected .box {
+    -fx-background-color: linear-gradient(to bottom, #0071FF, #00FF99);
+    -fx-border-color: transparent;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+    -fx-scale-x: 1.35;
+    -fx-scale-y: 1.35;
+}
+
+.name-text {
+    -fx-fill: #dddddd;
+    -fx-font-size: 16px;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+.name-text-hover {
+    -fx-font-weight: bold;
 }
