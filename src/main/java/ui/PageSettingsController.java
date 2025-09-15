@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 public class PageSettingsController implements Initializable {
 
@@ -174,7 +175,7 @@ public class PageSettingsController implements Initializable {
         });
     }
 
-    private void setupIntegerSpinner(Spinner<Integer> spinner, int initialValue, java.util.function.IntConsumer setter, java.util.function.IntConsumer applyToPlayer) {
+    private void setupIntegerSpinner(Spinner<Integer> spinner, int initialValue, IntConsumer setter, IntConsumer applyToPlayer) {
         SpinnerValueFactory.IntegerSpinnerValueFactory factory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, initialValue, 1);
 

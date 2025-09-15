@@ -2,9 +2,6 @@ package ui;
 
 import core.data.AppData;
 import core.data.ConsoleLine;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -15,7 +12,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class PageConsoleController implements Initializable {
@@ -34,6 +30,8 @@ public class PageConsoleController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chkShowRegisteredLines.setSelected(AppData.getInstance().isShowRegisteredLines());
+
+        AppData.getInstance().getConsoleLines().forEach(this::addConsoleLine);
 
         AppData.getInstance().getConsoleLines().addListener((ListChangeListener<ConsoleLine>) change -> {
             while (change.next()) {

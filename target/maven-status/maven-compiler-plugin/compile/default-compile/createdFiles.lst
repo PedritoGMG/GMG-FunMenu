@@ -23,6 +23,7 @@ ui\PageSettingsController$1.class
 core\data\DataManager.class
 core\audio\plugin\TTS.class
 core\data\AppData.class
+core\util\FileSelector.class
 ui\MainController.class
 core\audio\plugin\YoutubeAudioDownloader$2.class
 core\util\MicrophoneManager.class

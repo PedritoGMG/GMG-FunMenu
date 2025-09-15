@@ -20,9 +20,39 @@
     "enabled" : true,
     "adminOnly" : true,
     "audioPath" : null
+  }, {
+    "name" : "PINGAS",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Music\\sounds\\pingas.mp3"
+  }, {
+    "name" : "FART",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 1.mp3"
+  }, {
+    "name" : "FART2",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 2.mp3"
+  }, {
+    "name" : "FART3",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 3.mp3"
+  }, {
+    "name" : "FART4",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 4.mp3"
+  }, {
+    "name" : "BAZINGA",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Bazinga!.mp3"
   } ],
   "bannedUsers" : [ ],
-  "adminUsers" : [ ],
-  "showRegisteredLines" : true,
+  "adminUsers" : [ "✬PedritoGMG✬" ],
+  "showRegisteredLines" : false,
   "max_LINES" : 500
 }

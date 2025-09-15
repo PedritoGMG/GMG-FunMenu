@@ -4,6 +4,7 @@ import java.awt.Dialog;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,6 +19,7 @@ import core.audio.plugin.YoutubeAudioDownloader;
 import core.data.AppData;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
+import core.util.FileSelector;
 import core.util.Toast;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -42,7 +44,7 @@ public class PageMainController implements Initializable{
     private TextField fileText;
 
     @FXML
-    private Button btnEnviarTTS, btnSeleccionarArchivo, btnYT,
+    private Button
     	playTTS, resumeTTS, stopTTS, addTTS,
     	playMusic, resumeMusic, stopMusic, addMusic,
     	playAudio, resumeAudio, stopAudio, addAudio;
@@ -198,7 +200,7 @@ public class PageMainController implements Initializable{
 					});
 
 					btn2.setOnAction(eventBtn -> {
-						File file = selectAudioFile((Stage) addMusic.getScene().getWindow());
+						File file = FileSelector.selectAudioFile((Stage) addMusic.getScene().getWindow());
 
 						if (file != null) {
 							try {
@@ -229,7 +231,7 @@ public class PageMainController implements Initializable{
 		});
         
         addAudio.setOnAction(event -> {
-        	File file = selectAudioFile((Stage) addAudio.getScene().getWindow());
+        	File file = FileSelector.selectAudioFile((Stage) addAudio.getScene().getWindow());
 
         	if (file!=null) {
         		try {
@@ -246,6 +248,7 @@ public class PageMainController implements Initializable{
 		toggleButton.getStyleClass().add(Main.isReading ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
 			Main.isReading = newVal;
+			System.out.println("Reading: " + newVal+ " | File: " + Main.file + " | " + LocalDateTime.now());
 			if (newVal) {
 				toggleButton.setText("Stop Reading");
 				toggleButton.getStyleClass().remove("button-dark");
@@ -265,42 +268,15 @@ public class PageMainController implements Initializable{
 		});
         
     }
-    
-    private File selectAudioFile(Stage stage) {
-    	return selectFile(stage, "Select an Audio File", "Audio Files "+AudioPlayer.GetSupportedAudioExtensionsList(), AudioPlayer.GetSupportedAudioFormatsArray());
-    }
-    
-    private File selectFile(Stage stage, String title, String description, String... extensions) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(title);
-
-        if (extensions != null && extensions.length > 0) {
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(description, extensions);
-            fileChooser.getExtensionFilters().add(extFilter);
-        } else {
-            fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-            );
-        }
-
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null && selectedFile.canRead()) {
-            return selectedFile;
-        }
-
-        return null;
-    }
 
     
     @FXML
     private void clickSelectFile() {
-    	Main.file = selectFile((Stage) fileText.getScene().getWindow(), "Select any file to read", null);
+    	Main.file = FileSelector.selectFile((Stage) fileText.getScene().getWindow(), "Select any file to read", null);
     	if (Main.file!=null) {
     		fileText.setText(Main.file.getAbsolutePath());
     		toggleButton.setDisable(false);
 		}
-    	
     }
 
 	private void setupSlider(Slider slider, AudioPlayer audioPlayer, float initialVolume, Consumer<Float> setAppDataVolume) {

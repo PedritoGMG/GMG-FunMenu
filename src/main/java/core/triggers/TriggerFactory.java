@@ -25,7 +25,8 @@ public class TriggerFactory {
             if (trigger != null) {
                 trigger.setEnabled(dto.enabled());
                 trigger.setAdminOnly(dto.adminOnly());
-            } else if (dto.audioPath() != null) {
+            }
+            if (dto.audioPath() != null) {
                 try {
                     AudioTrigger at = new AudioTrigger(dto.name(), dto.enabled(), dto.adminOnly(),dto.audioPath());
                     register(at);
@@ -40,9 +41,17 @@ public class TriggerFactory {
         TRIGGERS.put(trigger.getName(), trigger);
         AppData.getInstance().addTrigger(trigger.toDTO());
     }
+    public static void unregister(String name) {
+        TRIGGERS.remove(name);
+        AppData.getInstance().getTriggers().removeIf(dto -> dto.name().equalsIgnoreCase(name));
+    }
 
     public static AbstractTrigger getTrigger(String name) {
         return TRIGGERS.get(name.toUpperCase());
+    }
+
+    public static boolean isTriggerAvailable(String name) {
+        return !TRIGGERS.containsKey(name.toUpperCase());
     }
 
     public static Map<String, AbstractTrigger> getAllTriggers() {

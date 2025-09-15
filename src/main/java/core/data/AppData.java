@@ -1,6 +1,7 @@
 package core.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import core.triggers.TriggerDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +28,7 @@ public class AppData {
 
     @JsonIgnore
     private final ObservableList<ConsoleLine> consoleLines = FXCollections.observableArrayList();
-    @JsonIgnore
+    @JsonProperty("max_LINES")
     private final int MAX_LINES = 500;
     private boolean showRegisteredLines = false;
 
