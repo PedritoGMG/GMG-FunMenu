@@ -18,9 +18,8 @@ public class AudioPlayerQueue implements AudioListener {
     }
 
     public synchronized boolean enqueue(File mp3File) {
-        if (playQueue.size() >= maxQueueSize) {
+        if (!canAddToQueue())
             return false;
-        }
         playQueue.offer(mp3File);
         if (!isPlaying) {
             playNext();
@@ -72,6 +71,10 @@ public class AudioPlayerQueue implements AudioListener {
 
     public void setMaxQueueSize(int maxQueueSize) {
         this.maxQueueSize = maxQueueSize;
+    }
+
+    public boolean canAddToQueue() {
+        return playQueue.size() < maxQueueSize;
     }
 }
 

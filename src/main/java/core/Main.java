@@ -10,7 +10,6 @@ import core.data.DataManager;
 import core.data.GlobalConsoleOutputStream;
 import core.file.ChatLogReader;
 import core.file.FileWatcher;
-import core.file.KeywordTrigger;
 import core.file.KeywordTriggerListener;
 import core.file.readers.CS2ChatLogReader;
 import core.file.readers.GMODChatLogReader;
@@ -53,6 +52,8 @@ public class Main extends Application {
 
 		AppData appData = AppData.getInstance();
 		appData.load();
+
+		KeywordTriggerListener.getInstance();
 
     	try {
 			playerTTS = new AudioPlayerQueue(audioDevice);

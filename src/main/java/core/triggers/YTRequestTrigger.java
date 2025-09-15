@@ -1,0 +1,19 @@
+package core.triggers;
+
+import core.audio.plugin.TTS;
+import core.audio.plugin.YoutubeAudioDownloader;
+
+public class YTRequestTrigger extends AbstractTrigger{
+    public YTRequestTrigger() {
+        this(true, false);
+    }
+
+    public YTRequestTrigger(boolean enabled, boolean adminOnly) {
+        super("REQUEST", "Request a YouTube audio by URL", enabled, adminOnly);
+    }
+
+    @Override
+    public void execute(String author, String message) {
+        YoutubeAudioDownloader.request(message);
+    }
+}

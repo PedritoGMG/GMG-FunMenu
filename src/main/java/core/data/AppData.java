@@ -1,7 +1,8 @@
 package core.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import core.file.TriggerData;
+import core.triggers.TriggerDTO;
+
 import java.util.*;
 
 public class AppData {
@@ -18,7 +19,7 @@ public class AppData {
     private int maxQueueSizeTTS = 45;
     private int maxQueueSizeMUSIC = 45;
 
-    private ArrayList<TriggerData> triggers = new ArrayList<>();
+    private ArrayList<TriggerDTO> triggers = new ArrayList<>();
     private ArrayList<String> bannedUsers = new ArrayList<>();
     private ArrayList<String> adminUsers = new ArrayList<>();
 
@@ -57,7 +58,7 @@ public class AppData {
     public int getMaxDurationRequest() { return maxDurationRequest; }
     public void setMaxDurationRequest(int maxDurationRequest) { this.maxDurationRequest = maxDurationRequest; }
 
-    public ArrayList<TriggerData> getTriggers() { return triggers; }
+    public ArrayList<TriggerDTO> getTriggers() { return triggers; }
 
     public float getTtsVolume() { return ttsVolume; }
     public void setTtsVolume(float ttsVolume) { this.ttsVolume = ttsVolume; }
@@ -74,17 +75,26 @@ public class AppData {
     public void setMaxQueueSizeMUSIC(int maxQueueSizeMUSIC) { this.maxQueueSizeMUSIC = maxQueueSizeMUSIC; }
 
 
-    public void addTrigger(TriggerData trigger) {
-        if (triggers.stream().noneMatch(t -> t.getName().equalsIgnoreCase(trigger.getName()))) {
-            triggers.add(trigger);
+    public void addTrigger(TriggerDTO dto) {
+        if (triggers.stream().noneMatch(t -> t.name().equalsIgnoreCase(dto.name()))) {
+            triggers.add(dto);
         }
     }
 
     public void setTriggerEnabled(String key, boolean enabled) {
         triggers.stream()
-                .filter(t -> t.getName().equalsIgnoreCase(key))
+                .filter(t -> t.name().equalsIgnoreCase(key))
                 .findFirst()
-                .ifPresent(t -> t.setEnabled(enabled));
+                .ifPresent(t -> triggers.set(triggers.indexOf(t),
+                        new TriggerDTO(t.name(), enabled, t.adminOnly(), t.audioPath())));
+    }
+
+    public void setTriggerOnlyAdmin(String key, boolean onlyAdmin) {
+        triggers.stream()
+                .filter(t -> t.name().equalsIgnoreCase(key))
+                .findFirst()
+                .ifPresent(t -> triggers.set(triggers.indexOf(t),
+                        new TriggerDTO(t.name(), t.enabled(), onlyAdmin, t.audioPath())));
     }
 
     public List<String> getBannedUsers() {

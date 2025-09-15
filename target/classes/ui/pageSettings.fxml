@@ -23,7 +23,7 @@
          <children>
             <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="305.0" prefWidth="244.0" spacing="5.0" styleClass="fancy-panel">
                <children>
-                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" style="-fx-background-color: #1A1A1A;" vbarPolicy="ALWAYS">
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" vbarPolicy="ALWAYS">
                      <content>
                         <VBox fx:id="adminContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0">
                            <padding>
@@ -53,7 +53,7 @@
             <Line endX="100.0" endY="-48.414215087890625" layoutX="177.0" layoutY="322.0" startX="100.0" startY="-277.0" stroke="#ffffffbf" strokeWidth="2.0" />
             <VBox alignment="BOTTOM_LEFT" layoutX="297.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="305.0" prefWidth="244.0" spacing="5.0" styleClass="fancy-panel">
                <children>
-                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" style="-fx-background-color: #1A1A1A;" vbarPolicy="ALWAYS">
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="425.0" vbarPolicy="ALWAYS">
                      <content>
                         <VBox fx:id="banContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0">
                            <padding>

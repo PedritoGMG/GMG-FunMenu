@@ -1,23 +1,26 @@
 {
   "maxDurationRequest" : 300,
-  "ttsVolume" : 0.2642487,
-  "musicVolume" : 0.76804125,
-  "audioVolume" : 1.0,
-  "maxQueueSizeTTS" : 50,
-  "maxQueueSizeMUSIC" : 25,
+  "ttsVolume" : 0.8,
+  "musicVolume" : 0.8,
+  "audioVolume" : 0.8,
+  "maxQueueSizeTTS" : 45,
+  "maxQueueSizeMUSIC" : 20,
   "triggers" : [ {
-    "type" : "basic",
     "name" : "TTS",
-    "enabled" : true
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : null
   }, {
-    "type" : "basic",
     "name" : "REQUEST",
-    "enabled" : true
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : null
   }, {
-    "type" : "basic",
     "name" : "TEST",
-    "enabled" : true
+    "enabled" : true,
+    "adminOnly" : true,
+    "audioPath" : null
   } ],
-  "bannedUsers" : [ "Delta04", "Epsilon05", "Zeta06", "Eta07", "Theta08", "Iota09", "Kappa10", "Lambda11", "Mu12", "Nu13", "Xi14", "Omicron15", "Pi16", "Rho17", "Sigma18", "Tau19", "Upsilon20", "Phi21", "Chi22", "Psi23", "Omega24", "Nova25", "Orion26", "Lyra27", "Vega28", "Sirius29", "Altair30", "Rigel31", "Deneb32", "Aries33", "Taurus34", "Gemini35", "Cancer36", "Leo37", "Virgo38", "Libra39", "Scorpio40", "Sagittarius41", "Capricorn42", "Aquarius43", "Pisces44", "Hydra45", "Phoenix46", "Draco47", "Cygnus48", "Pegasus49", "Andromeda50", "Perseus51", "Cassiopeia52", "Cepheus53", "Auriga54", "Corona55", "Delphinus56", "Equuleus57", "Hercules58", "Lacerta59", "Monoceros60", "Octans61", "Pavo62", "Reticulum63", "Serpens64", "Triangulum65", "Volans66", "Vulpecula67", "CanisMajor68", "CanisMinor69", "UrsaMajor70", "UrsaMinor71", "Crux72", "Centaurus73", "Carina74", "Dorado76", "Fornax78", "Grus79", "Indus80", "asdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ],
-  "adminUsers" : [ ]
+  "bannedUsers" : [ ],
+  "adminUsers" : [ "✬PedritoGMG✬" ]
 }

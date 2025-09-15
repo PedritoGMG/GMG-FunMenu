@@ -1,5 +1,6 @@
 package ui;
 
+import core.Main;
 import core.data.AppData;
 import core.util.Toast;
 import javafx.fxml.FXML;
@@ -34,8 +35,12 @@ public class PageSettingsController implements Initializable {
         appData.getBannedUsers().forEach(this::addBanField);
 
         setupDurationSpinner();
-        setupIntegerSpinner(ttsLimit, appData.getMaxQueueSizeTTS(), appData::setMaxQueueSizeTTS);
-        setupIntegerSpinner(musicLimit, appData.getMaxQueueSizeMUSIC(), appData::setMaxQueueSizeMUSIC);
+        setupIntegerSpinner(ttsLimit, appData.getMaxQueueSizeTTS(),
+                appData::setMaxQueueSizeTTS,
+                Main.playerTTS::setMaxQueueSize);
+        setupIntegerSpinner(musicLimit, appData.getMaxQueueSizeMUSIC(),
+                appData::setMaxQueueSizeMUSIC,
+                Main.playerMusic::setMaxQueueSize);
     }
 
     private void showAddUserDialog(String title, String message, Function<String, Boolean> addAction, Consumer<String> addFieldAction) throws IOException {
@@ -169,7 +174,7 @@ public class PageSettingsController implements Initializable {
         });
     }
 
-    private void setupIntegerSpinner(Spinner<Integer> spinner, int initialValue, java.util.function.IntConsumer setter) {
+    private void setupIntegerSpinner(Spinner<Integer> spinner, int initialValue, java.util.function.IntConsumer setter, java.util.function.IntConsumer applyToPlayer) {
         SpinnerValueFactory.IntegerSpinnerValueFactory factory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, initialValue, 1);
 
@@ -181,6 +186,9 @@ public class PageSettingsController implements Initializable {
             if (!newText.matches("\\d*")) editor.setText(oldText);
         });
 
-        factory.valueProperty().addListener((obs, oldValue, newValue) -> setter.accept(newValue));
+        factory.valueProperty().addListener((obs, oldValue, newValue) -> {
+            setter.accept(newValue);
+            applyToPlayer.accept(newValue);
+        });
     }
 }

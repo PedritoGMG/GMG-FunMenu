@@ -12,7 +12,7 @@
       <String fx:value="shadow" />
    </styleClass>
    <children>
-      <ScrollPane fx:id="consoleScrollPane" fitToHeight="true" fitToWidth="true" layoutX="2.0" layoutY="2.0" prefHeight="566.0" prefWidth="897.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+      <ScrollPane fx:id="consoleScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="566.0" prefWidth="897.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
          <content>
             <TextFlow fx:id="consoleTextFlow" lineSpacing="5.0" prefHeight="639.0" prefWidth="984.0">
                <padding>
