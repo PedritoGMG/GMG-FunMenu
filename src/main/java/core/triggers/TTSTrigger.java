@@ -14,6 +14,8 @@ public class TTSTrigger extends AbstractTrigger  {
 
     @Override
     public void execute(String author, String message) {
+        if (missingArguments(message))
+            return;
         int engine = 0, lang = 0, voice = 0;
 
         if (message.startsWith("#")) {

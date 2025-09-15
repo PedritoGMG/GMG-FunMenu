@@ -2,18 +2,20 @@ package ui;
 
 import core.data.AppData;
 import core.data.ConsoleLine;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.paint.Color;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class PageConsoleController implements Initializable {
@@ -24,22 +26,45 @@ public class PageConsoleController implements Initializable {
     @FXML
     private ScrollPane consoleScrollPane;
 
+    @FXML
+    private CheckBox chkShowRegisteredLines;
+
+    private int lastLineIndex = 0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadConsoleFromAppData();
+        chkShowRegisteredLines.setSelected(AppData.getInstance().isShowRegisteredLines());
+
+        AppData.getInstance().getConsoleLines().addListener((ListChangeListener<ConsoleLine>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (ConsoleLine line : change.getAddedSubList()) {
+                        addConsoleLine(line);
+                    }
+                }
+            }
+        });
     }
 
-    private void loadConsoleFromAppData() {
+    private void addConsoleLine(ConsoleLine line) {
         Platform.runLater(() -> {
-            consoleTextFlow.getChildren().clear();
-            for (ConsoleLine line : AppData.getInstance().getConsoleLines()) {
-                Text t = new Text(line.getText());
-                t.setFill(line.getColor());
-                consoleTextFlow.getChildren().add(t);
+            Text t = new Text(line.getText());
+            t.setFill(line.getColor());
+            consoleTextFlow.getChildren().add(t);
+
+            int max_lines = AppData.getInstance().getMAX_LINES();
+
+            if (consoleTextFlow.getChildren().size() > max_lines) {
+                consoleTextFlow.getChildren().remove(0, consoleTextFlow.getChildren().size() - max_lines);
             }
 
             consoleScrollPane.layout();
             consoleScrollPane.setVvalue(1.0);
         });
+    }
+
+    @FXML
+    private void onShowRegisteredLinesChanged() {
+        AppData.getInstance().setShowRegisteredLines(chkShowRegisteredLines.isSelected());
     }
 }

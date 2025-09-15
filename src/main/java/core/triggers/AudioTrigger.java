@@ -1,5 +1,9 @@
 package core.triggers;
 
+import core.Main;
+import javafx.stage.Stage;
+
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -29,8 +33,15 @@ public class AudioTrigger extends AbstractTrigger {
 
     @Override
     public void execute(String author, String message) {
-        // lógica para reproducir audio
-        System.out.println("Playing audio: " + audioPath);
+        File file = new File(audioPath);
+
+        if (file.exists() && file.isFile()) {
+            try {
+                Main.playerAudio.play(file);
+            } catch (Exception e) {
+                //
+            }
+        }
     }
 
     public TriggerDTO toDTO() {

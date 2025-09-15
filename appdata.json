@@ -1,10 +1,10 @@
 {
-  "maxDurationRequest" : 300,
+  "maxDurationRequest" : 600,
   "ttsVolume" : 0.8,
   "musicVolume" : 0.8,
   "audioVolume" : 0.8,
   "maxQueueSizeTTS" : 45,
-  "maxQueueSizeMUSIC" : 20,
+  "maxQueueSizeMUSIC" : 45,
   "triggers" : [ {
     "name" : "TTS",
     "enabled" : true,
@@ -22,5 +22,7 @@
     "audioPath" : null
   } ],
   "bannedUsers" : [ ],
-  "adminUsers" : [ "✬PedritoGMG✬" ]
+  "adminUsers" : [ ],
+  "showRegisteredLines" : true,
+  "max_LINES" : 500
 }

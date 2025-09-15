@@ -12,6 +12,6 @@ public class TestTrigger extends AbstractTrigger {
 
     @Override
     public void execute(String author, String message) {
-        System.out.println("User: " + author + "\nMessage: " + message);
+        System.out.println("User: " + author + " Message: " + message);
     }
 }

@@ -14,6 +14,8 @@ public class YTRequestTrigger extends AbstractTrigger{
 
     @Override
     public void execute(String author, String message) {
+        if (missingArguments(message))
+            return;
         YoutubeAudioDownloader.request(message);
     }
 }

@@ -2,6 +2,8 @@ package core.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import core.triggers.TriggerDTO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.*;
 
@@ -24,9 +26,10 @@ public class AppData {
     private ArrayList<String> adminUsers = new ArrayList<>();
 
     @JsonIgnore
-    private final LinkedList<ConsoleLine> consoleLines = new LinkedList<>();
+    private final ObservableList<ConsoleLine> consoleLines = FXCollections.observableArrayList();
     @JsonIgnore
     private final int MAX_LINES = 500;
+    private boolean showRegisteredLines = false;
 
     private AppData() {}
 
@@ -35,10 +38,12 @@ public class AppData {
         return instance;
     }
 
+
     public void load() {
         AppData loaded = DataManager.load(this);
 
-        this.maxDurationRequest   = loaded.maxDurationRequest;
+        this.showRegisteredLines    = loaded.showRegisteredLines;
+        this.maxDurationRequest     = loaded.maxDurationRequest;
 
         this.ttsVolume   = loaded.ttsVolume;
         this.musicVolume = loaded.musicVolume;
@@ -47,9 +52,9 @@ public class AppData {
         this.maxQueueSizeTTS = loaded.maxQueueSizeTTS;
         this.maxQueueSizeMUSIC = loaded.maxQueueSizeMUSIC;
 
-        this.triggers    = new ArrayList<>(loaded.triggers);
-        this.bannedUsers = new ArrayList<>(loaded.bannedUsers);
-        this.adminUsers = new ArrayList<>(loaded.adminUsers);
+        this.triggers       = new ArrayList<>(loaded.triggers);
+        this.bannedUsers    = new ArrayList<>(loaded.bannedUsers);
+        this.adminUsers     = new ArrayList<>(loaded.adminUsers);
 
         instance = this;
     }
@@ -135,16 +140,20 @@ public class AppData {
 
     public synchronized void addConsoleLine(ConsoleLine line) {
         if (consoleLines.size() >= MAX_LINES) {
-            consoleLines.removeFirst(); // eliminar la línea más antigua
+            consoleLines.removeFirst();
         }
         consoleLines.add(line);
     }
 
-    public synchronized List<ConsoleLine> getConsoleLines() {
-        return new LinkedList<>(consoleLines);
+    public ObservableList<ConsoleLine> getConsoleLines() {
+        return consoleLines;
     }
 
     public synchronized void clearConsole() {
         consoleLines.clear();
     }
+
+    public int getMAX_LINES() {return MAX_LINES;}
+    public boolean isShowRegisteredLines() {return showRegisteredLines;}
+    public void setShowRegisteredLines(boolean showRegisteredLines) {this.showRegisteredLines = showRegisteredLines;}
 }

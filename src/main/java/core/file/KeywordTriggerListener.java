@@ -35,6 +35,9 @@ public class KeywordTriggerListener implements LineListener {
 
     @Override
     public void onNewLine(String line) {
+        if (AppData.getInstance().isShowRegisteredLines())
+            System.out.println(line);
+
         line = line.trim();
         Optional<ChatMessage> optionalMsg = Main.chatLogReader.parseChat(line);
         if (optionalMsg.isEmpty()) return;
@@ -46,20 +49,17 @@ public class KeywordTriggerListener implements LineListener {
         if (isUserBanned(author)) return;
 
         String[] words = message.split(" ", 2);
-        if (words.length < 2) return;
-
         String possibleKeyword = words[0].toUpperCase();
-        message = words[1];
+        String arguments = (words.length > 1) ? words[1] : "";
 
         String[] command = possibleKeyword.split(PREFIX, 2);
         if (command.length < 2) return;
         possibleKeyword = command[1];
 
-        String finalPossibleKeyword = possibleKeyword;
-        AbstractTrigger trigger = TriggerFactory.getTrigger(finalPossibleKeyword);
+        AbstractTrigger trigger = TriggerFactory.getTrigger(possibleKeyword);
         if (trigger == null || !trigger.canExecute(author)) return;
 
-        trigger.execute(author, message);
+        trigger.execute(author, arguments);
     }
 
     public void addTrigger(AbstractTrigger trigger) {

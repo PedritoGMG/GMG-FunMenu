@@ -240,22 +240,18 @@ public class PageMainController implements Initializable{
 			}
         });
 
-		File currentFile = Main.file;
-
 		toggleButton.setText(Main.isReading ? "Stop Reading" : "Start Reading");
 		toggleButton.setSelected(Main.isReading);
 		toggleButton.setDisable(Main.file == null);
 		toggleButton.getStyleClass().add(Main.isReading ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			System.out.println("Toggle Reading: " + newVal);
 			Main.isReading = newVal;
 			if (newVal) {
 				toggleButton.setText("Stop Reading");
 				toggleButton.getStyleClass().remove("button-dark");
 				toggleButton.getStyleClass().add("button-dark2");
-				if (currentFile != null) {
-					KeywordTriggerListener listener = KeywordTriggerListener.getInstance();
-					Main.fileWatcher = new FileWatcher(currentFile, line -> listener.onNewLine(line));
+				if (Main.file != null) {
+					Main.fileWatcher = new FileWatcher(Main.file, line -> KeywordTriggerListener.getInstance().onNewLine(line));
 				}
 			} else {
 				toggleButton.setText("Start Reading");

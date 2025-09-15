@@ -42,6 +42,10 @@ public abstract class AbstractTrigger {
         return true;
     }
 
+    protected boolean missingArguments(String message) {
+        return message == null || message.trim().isEmpty();
+    }
+
     public TriggerDTO toDTO() {
         return new TriggerDTO(this.name, this.enabled, this.adminOnly, null);
     }
