@@ -7,6 +7,7 @@ import core.triggers.AudioTrigger;
 import core.triggers.TriggerDTO;
 import core.triggers.TriggerFactory;
 import core.util.FileSelector;
+import core.util.HoverAnimator;
 import core.util.Toast;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +30,9 @@ public class PagePluginsController implements Initializable {
     @FXML
     private VBox checkBoxContainerCommands, checkBoxContainerSounds;
 
+    @FXML
+    private Button addSoundKey;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         AppData appData = AppData.getInstance();
@@ -36,6 +40,8 @@ public class PagePluginsController implements Initializable {
                 .stream()
                 .sorted((a, b) -> a.name().compareTo(b.name()))
                 .toList();
+
+        HoverAnimator.applySimpleHover(addSoundKey);
 
         triggers.forEach(dto -> {
             AbstractTrigger trigger = TriggerFactory.getTrigger(dto.name());

@@ -11,13 +11,16 @@ import core.audio.AudioPlayer;
 import core.audio.plugin.TTS;
 import core.audio.plugin.YoutubeAudioDownloader;
 import core.util.Toast;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,7 +36,9 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class MainController implements Initializable{
-	
+
+    private Timeline currentAnimation = null;
+    private String pendingPage = null;
 	private double xOffset = 0;
     private double yOffset = 0;
 
@@ -105,17 +110,82 @@ public class MainController implements Initializable{
     }
 
     private void loadPage(String fxmlName) throws IOException {
-        if (!stackPaneMain.getChildren().isEmpty()) {
-            Node current = stackPaneMain.getChildren().get(0);
-            if (fxmlName.equals(current.getUserData()))
+        String currentShown = (String) stackPaneMain.getUserData();
+        if (fxmlName.equals(currentShown) || fxmlName.equals(pendingPage)) return;
+
+        pendingPage = fxmlName;
+
+        stopCurrentAnimationAndClean();
+
+        Parent newPage = new FXMLLoader(getClass().getResource("/ui/" + fxmlName + ".fxml")).load();
+        prepareNodeForAnimation(newPage);
+
+        Node currentPage = stackPaneMain.getChildren().isEmpty() ? null : stackPaneMain.getChildren().get(0);
+        stackPaneMain.getChildren().add(newPage);
+
+        Duration duration = Duration.millis(180);
+        Timeline enter = createEnterTimeline(newPage, duration);
+
+        enter.setOnFinished(e -> {
+            if (!fxmlName.equals(pendingPage)) {
+                currentAnimation = null;
                 return;
+            }
+            if (currentPage != null) stackPaneMain.getChildren().remove(currentPage);
+            newPage.setCache(false);
+            if (currentPage != null) currentPage.setCache(false);
+
+            stackPaneMain.setUserData(fxmlName);
+            pendingPage = null;
+            currentAnimation = null;
+        });
+
+        currentAnimation = enter;
+        enter.play();
+    }
+
+    private void stopCurrentAnimationAndClean() {
+        if (currentAnimation != null) {
+            currentAnimation.stop();
+            currentAnimation = null;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/" + fxmlName + ".fxml"));
-        Parent page = loader.load();
-        page.setUserData(fxmlName);
-
-        stackPaneMain.getChildren().setAll(page);
+        while (stackPaneMain.getChildren().size() > 1) {
+            stackPaneMain.getChildren().remove(0);
+        }
+        if (!stackPaneMain.getChildren().isEmpty()) {
+            Node visible = stackPaneMain.getChildren().get(0);
+            visible.setOpacity(1);
+            visible.setTranslateX(0);
+            visible.setScaleX(1);
+            visible.setScaleY(1);
+            visible.setCache(false);
+        }
     }
-	
+
+    private void prepareNodeForAnimation(Parent node) {
+        node.applyCss();
+        node.layout();
+        double width = stackPaneMain.getWidth();
+        if (width <= 0 && stackPaneMain.getScene() != null) width = stackPaneMain.getScene().getWidth();
+        if (width <= 0) width = 800;
+
+        node.setTranslateX(width * 0.12);
+        node.setOpacity(0);
+        node.setCache(true);
+        node.setCacheHint(CacheHint.SPEED);
+    }
+
+    private Timeline createEnterTimeline(Node node, Duration dur) {
+        return new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, Interpolator.EASE_BOTH),
+                        new KeyValue(node.translateXProperty(), node.getTranslateX(), Interpolator.EASE_BOTH)
+                ),
+                new KeyFrame(dur,
+                        new KeyValue(node.opacityProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(node.translateXProperty(), 0, Interpolator.EASE_BOTH)
+                )
+        );
+    }
 }

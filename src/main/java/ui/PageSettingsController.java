@@ -2,6 +2,7 @@ package ui;
 
 import core.Main;
 import core.data.AppData;
+import core.util.HoverAnimator;
 import core.util.Toast;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,9 +14,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -29,9 +30,15 @@ public class PageSettingsController implements Initializable {
     @FXML
     private Spinner<Integer> requestDuration, ttsLimit, musicLimit;
 
+    @FXML
+    private Button addAdmin, addBan;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AppData appData = AppData.getInstance();
+
+        List.of(addAdmin, addBan).forEach(HoverAnimator::applySimpleHover);
+
         appData.getAdminUsers().forEach(this::addAdminField);
         appData.getBannedUsers().forEach(this::addBanField);
 

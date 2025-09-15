@@ -20,6 +20,7 @@ import core.data.AppData;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
 import core.util.FileSelector;
+import core.util.HoverAnimator;
 import core.util.Toast;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -27,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -77,6 +79,8 @@ public class PageMainController implements Initializable{
         		Main.playerMusic.getAudioPlayer(),
         		Main.playerAudio
         		);
+
+		buttons.forEach(list -> list.forEach(HoverAnimator::apply));
         
         for (int i = 0; i < audioPlayers.size(); i++) {
         	AudioPlayer audioPlayer = audioPlayers.get(i);
@@ -286,7 +290,14 @@ public class PageMainController implements Initializable{
 		slider.setMax(1);
 		slider.setValue(initialVolume);
 
-		Platform.runLater(() -> updateSliderTrackStyle(slider));
+		Platform.runLater(() -> {
+			updateSliderTrackStyle(slider);
+
+			Node thumb = slider.lookup(".thumb");
+			if (thumb != null) {
+				HoverAnimator.applyThumbHover(thumb);
+			}
+		});
 
 		slider.valueProperty().addListener((obs, oldVal, newVal) -> {
 			float vol = newVal.floatValue();

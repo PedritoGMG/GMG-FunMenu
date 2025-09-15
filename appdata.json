@@ -1,7 +1,7 @@
 {
   "maxDurationRequest" : 600,
-  "ttsVolume" : 0.8,
-  "musicVolume" : 0.8,
+  "ttsVolume" : 0.78445596,
+  "musicVolume" : 0.685567,
   "audioVolume" : 0.8,
   "maxQueueSizeTTS" : 45,
   "maxQueueSizeMUSIC" : 45,

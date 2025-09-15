@@ -5,6 +5,7 @@ core\audio\AudioPlayer.class
 core\triggers\AudioTrigger.class
 core\Main.class
 ui\PagePluginsController.class
+core\util\HoverAnimator.class
 core\file\AbstractChatLogReader.class
 ui\CustomDialog.class
 core\triggers\AbstractTrigger.class

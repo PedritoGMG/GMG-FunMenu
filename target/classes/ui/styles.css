@@ -1,7 +1,7 @@
 .root {
     -fx-font-family: "Arial";
     -fx-background-color: #1A1A1A;
-    -fx-background-radius: 15; /* redondea bordes */
+    -fx-background-radius: 15;
     -fx-border-radius: 15;
     -fx-border-color: linear-gradient(to bottom, #0071FF, #00FF99);
     -fx-border-width: 2;
@@ -229,7 +229,7 @@
     -fx-background-radius: 10px;
     -fx-border-color: rgba(255, 255, 255, 0.08);
     -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0); /* placeholder para transición */
+    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);
 }
 .fancy-panel {
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,
