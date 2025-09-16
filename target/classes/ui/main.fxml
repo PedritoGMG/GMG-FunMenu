@@ -30,7 +30,7 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <Button mnemonicParsing="false" onAction="#pageMain" styleClass="button-menu" text="Main" textAlignment="RIGHT">
+                        <Button fx:id="btnMain" mnemonicParsing="false" onAction="#pageMain" styleClass="button-menu" text="Main" textAlignment="RIGHT">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
                                  <image>
@@ -39,7 +39,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#pagePlugins" styleClass="button-menu" text="Plugins">
+                        <Button fx:id="btnCommands" mnemonicParsing="false" onAction="#pageCommands" styleClass="button-menu" text="Commands">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
                                  <image>
@@ -48,7 +48,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#pageBindsTriggers" styleClass="button-menu" text="Binds &amp; Triggers">
+                        <Button fx:id="btnBinds" mnemonicParsing="false" onAction="#pageBinds" styleClass="button-menu" text="Binds">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
                                  <image>
@@ -57,7 +57,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#pageConsole" styleClass="button-menu" text="Console">
+                        <Button fx:id="btnConsole" mnemonicParsing="false" onAction="#pageConsole" styleClass="button-menu" text="Console">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
                                  <image>
@@ -66,7 +66,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#pageSettings" styleClass="button-menu" text="Settings">
+                        <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#pageSettings" styleClass="button-menu" text="Settings">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="menu_icon">
                                  <image>

@@ -2,7 +2,9 @@ package ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sound.sampled.LineUnavailableException;
 
@@ -10,6 +12,7 @@ import core.Main;
 import core.audio.AudioPlayer;
 import core.audio.plugin.TTS;
 import core.audio.plugin.YoutubeAudioDownloader;
+import core.util.HoverAnimator;
 import core.util.Toast;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -43,7 +46,8 @@ public class MainController implements Initializable{
     private double yOffset = 0;
 
     @FXML
-    private Button closeBtn, minimizeBtn;
+    private Button closeBtn, minimizeBtn,
+            btnMain, btnCommands, btnBinds, btnConsole, btnSettings;
     
     @FXML
     private AnchorPane topBar;
@@ -51,9 +55,13 @@ public class MainController implements Initializable{
     @FXML
     private StackPane stackPaneMain;
 
+    private List<Button> menuButtons;
+    private AtomicBoolean hoverActive = new AtomicBoolean(false);
 
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+        menuButtons = List.of(btnMain, btnCommands, btnBinds, btnConsole, btnSettings);
+        menuButtons.forEach(HoverAnimator::apply);
 		try {
 			pageMain(null);
 			Toast.showIn(stackPaneMain, "Hola buenos dias", 8000);
@@ -90,23 +98,40 @@ public class MainController implements Initializable{
     
     @FXML
     private void pageMain(ActionEvent actionEvent) throws IOException {
+        selectButton(btnMain, menuButtons);
         loadPage("pageMain");
     }
     @FXML
-    private void pagePlugins(ActionEvent actionEvent) throws IOException {
-        loadPage("pagePlugins");
+    private void pageCommands(ActionEvent actionEvent) throws IOException {
+        selectButton(btnCommands, menuButtons);
+        loadPage("pageCommands");
     }
     @FXML
-    private void pageBindsTriggers(ActionEvent actionEvent) throws IOException {
-        loadPage("pageBindsTriggers");
+    private void pageBinds(ActionEvent actionEvent) throws IOException {
+        selectButton(btnBinds, menuButtons);
+        loadPage("pageBinds");
     }
     @FXML
     private void pageConsole(ActionEvent actionEvent) throws IOException {
+        selectButton(btnConsole, menuButtons);
         loadPage("pageConsole");
     }
     @FXML
     private void pageSettings(ActionEvent actionEvent) throws IOException {
+        selectButton(btnSettings, menuButtons);
         loadPage("pageSettings");
+    }
+
+    private void selectButton(Button selectedButton, List<Button> allMenuButtons) {
+        for (Button button : allMenuButtons) {
+            if (button == selectedButton) {
+                if (!button.getStyleClass().contains("button-menu-selected")) {
+                    button.getStyleClass().add("button-menu-selected");
+                }
+            } else {
+                button.getStyleClass().remove("button-menu-selected");
+            }
+        }
     }
 
     private void loadPage(String fxmlName) throws IOException {

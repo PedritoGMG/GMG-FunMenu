@@ -4,7 +4,6 @@ core\file\readers\GMODChatLogReader.class
 core\audio\AudioPlayer.class
 core\triggers\AudioTrigger.class
 core\Main.class
-ui\PagePluginsController.class
 core\util\HoverAnimator.class
 core\file\AbstractChatLogReader.class
 ui\CustomDialog.class
@@ -17,6 +16,7 @@ core\file\ChatLogReader.class
 ui\PageMainController.class
 core\file\ChatMessage.class
 core\triggers\YTRequestTrigger.class
+ui\PageCommandsController.class
 core\data\GlobalConsoleOutputStream.class
 core\file\FileWatcher$1.class
 core\audio\AudioPlayerQueue.class
@@ -27,6 +27,7 @@ core\data\AppData.class
 core\util\FileSelector.class
 ui\MainController.class
 core\audio\plugin\YoutubeAudioDownloader$2.class
+ui\PageBindsController.class
 core\util\MicrophoneManager.class
 core\audio\plugin\YoutubeAudioDownloader.class
 core\triggers\TTSTrigger.class
@@ -35,7 +36,6 @@ ui\PageConsoleController.class
 core\file\KeywordTriggerListener.class
 core\audio\AudioListener.class
 core\triggers\TriggerDTO.class
-ui\PageBindsTriggersController.class
 core\file\FileWatcher.class
 core\util\Toast.class
 core\data\ConsoleLine.class

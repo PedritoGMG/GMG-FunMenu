@@ -80,30 +80,40 @@
 }
 
 .button-menu {
-    -fx-background-color: linear-gradient(to bottom, #404040, #2F2F2F);
-    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to bottom, #3E3E3E, #1F1F1F);
+    
+    -fx-text-fill: #EDEDED;
     -fx-font-weight: bold;
     -fx-font-size: 20px;
-    -fx-padding: 10px 20px;
+
+    -fx-padding: 10px 24px;
     -fx-background-radius: 30px;
     -fx-border-radius: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.3, 0, 4);
+
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 12, 0.4, 0, 3);
+
     -fx-cursor: hand;
     -fx-pref-width: 200px;
     -fx-pref-height: 45px;
+
     -fx-border-color: transparent;
-    -fx-border-width: 0;
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: LEFT;
-    -fx-graphic-text-gap: 10px;
-}
-.button-menu:hover {
-    -fx-background-color: linear-gradient(to bottom, #5A5A5A, #3E3E3E);
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.25), 12, 0.4, 0, 6);
+    -fx-graphic-text-gap: 12px;
 }
 .button-menu:pressed {
-    -fx-background-color: #1F1F1F;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 6, 0.2, 0, 2);
+    -fx-background-color: linear-gradient(to bottom, #111111, #1C1C1C);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4, 0.2, 0, 1);
+    -fx-translate-y: 1px;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+.button-menu-selected {
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 200, 0.5), 8, 0.3, 0, 2);
+    -fx-border-color: #00FFC8;
+    -fx-background-color: linear-gradient(to bottom, #4A4A4A, #2A2A2A);
+    -fx-border-width: 2px;
+    -fx-font-weight: bolder;
 }
 
 .button-primary {
