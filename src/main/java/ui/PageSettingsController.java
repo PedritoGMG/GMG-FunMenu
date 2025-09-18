@@ -2,20 +2,30 @@ package ui;
 
 import core.Main;
 import core.data.AppData;
+import core.game.Game;
+import core.game.GameFactory;
+import core.util.FileSelector;
 import core.util.HoverAnimator;
+import core.util.SteamUtils;
 import core.util.Toast;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -33,9 +43,20 @@ public class PageSettingsController implements Initializable {
     @FXML
     private Button addAdmin, addBan;
 
+    @FXML
+    private ComboBox<Game> gameSelectorCB;
+
+    @FXML
+    private ComboBox<String> gameTypeCB;
+
+    @FXML
+    private TextField customInstallDir;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AppData appData = AppData.getInstance();
+
+        setupGameSelector(appData);
 
         List.of(addAdmin, addBan).forEach(HoverAnimator::applySimpleHover);
 
@@ -101,6 +122,20 @@ public class PageSettingsController implements Initializable {
                 AppData.getInstance()::addBan,
                 this::addBanField
         );
+    }
+
+    @FXML
+    private void onSelectCustomInstallDir() {
+        if (!"Custom/Mod".equals(gameTypeCB.getValue())) return;
+
+        Path selected = FileSelector.selectDirectory((Stage) customInstallDir.getScene().getWindow(),
+                "Select Game Directory",
+                AppData.getInstance().getInstallDir());
+
+        if (selected != null) {
+            AppData.getInstance().setInstallDir(selected);
+            customInstallDir.setText(selected.toString());
+        }
     }
 
     private void addAdminField(String name) {
@@ -198,5 +233,108 @@ public class PageSettingsController implements Initializable {
             setter.accept(newValue);
             applyToPlayer.accept(newValue);
         });
+    }
+
+    private void setupGameSelector(AppData appData) {
+
+        gameTypeCB.getItems().addAll("Game", "Custom/Mod");
+        gameTypeCB.setValue(appData.getGameType() != null ? appData.getGameType() : "Game");
+
+        gameTypeCB.valueProperty().addListener((obs, oldVal, newVal) -> {
+            boolean isCustom = "Custom/Mod".equals(newVal);
+            customInstallDir.setDisable(!isCustom);
+            AppData appDt = AppData.getInstance();
+            appDt.setGameType(newVal);
+
+            if (isCustom) {
+                customInstallDir.setText(appData.getInstallDir() != null ? appData.getInstallDir().toString() : "");
+            } else {
+                Game selectedGame = gameSelectorCB.getSelectionModel().getSelectedItem();
+                if (selectedGame != null) {
+                    appDt.setGameSelector(selectedGame);
+                    appDt.setInstallDir(selectedGame.getInstallDir());
+                    appDt.setLogFile(selectedGame.getLogFile());
+                    customInstallDir.setText(selectedGame.getInstallDir() != null ? selectedGame.getInstallDir().toString() : "");
+                }
+            }
+        });
+
+        if (appData.getInstallDir() != null && "Custom/Mod".equals(appData.getGameType())) {
+            customInstallDir.setText(appData.getInstallDir().toString());
+        }
+        customInstallDir.setDisable(!"Custom/Mod".equals(gameTypeCB.getValue()));
+
+        customInstallDir.textProperty().addListener((obs, oldVal, newVal) -> {
+            Platform.runLater(() -> customInstallDir.positionCaret(customInstallDir.getText().length()));
+            if ("Custom/Mod".equals(gameTypeCB.getValue()) && !newVal.isBlank()) {
+                Path path = Path.of(newVal);
+                AppData.getInstance().setInstallDir(path);
+            }
+        });
+
+        gameSelectorCB.getItems().addAll(GameFactory.getAllGamesSorted());
+
+        gameSelectorCB.valueProperty().addListener((obs, oldGame, newGame) -> {
+            if (newGame != null) {
+                AppData appDt = AppData.getInstance();
+                appDt.setGameSelector(newGame);
+                if ("Game".equals(gameTypeCB.getValue())) {
+                    appDt.setInstallDir(newGame.getInstallDir());
+                    appDt.setLogFile(newGame.getLogFile());
+                    customInstallDir.setText(newGame.getInstallDir() != null ? newGame.getInstallDir().toString() : "");
+                }
+            }
+        });
+
+        gameSelectorCB.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Game item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    setDisable(false);
+                } else {
+                    setText(item.getName());
+                    if (item.getInstallDir() != null) {
+                        SteamUtils.getSmallestGameIcon(item.getAppId()).ifPresent(path -> {
+                            Image img = new Image(path.toUri().toString(), 32, 32, true, true);
+                            setGraphic(new ImageView(img));
+                        });
+                    } else {
+                        setGraphic(null);
+                    }
+                    setDisable(item.getInstallDir() == null);
+                }
+            }
+        });
+
+        gameSelectorCB.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Game item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item.getName());
+                    if (item.getInstallDir() != null) {
+                        SteamUtils.getSmallestGameIcon(item.getAppId()).ifPresent(path -> {
+                            Image img = new Image(path.toUri().toString(), 32, 32, true, true);
+                            setGraphic(new ImageView(img));
+                        });
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+
+        Game baseGame = appData.getGameSelector();
+        if (baseGame != null) {
+            gameSelectorCB.getSelectionModel().select(baseGame);
+        }
+
+        customInstallDir.setDisable(!"Custom/Mod".equals(appData.getGameType()));
     }
 }

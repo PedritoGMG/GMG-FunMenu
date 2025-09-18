@@ -2,10 +2,16 @@ package core.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import core.game.Game;
+import core.game.GameFactory;
 import core.triggers.TriggerDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
+import java.nio.file.Path;
 import java.util.*;
 
 public class AppData {
@@ -32,6 +38,14 @@ public class AppData {
     private final int MAX_LINES = 500;
     private boolean showRegisteredLines = false;
 
+    @JsonIgnore
+    private Game selectedGame;
+    private String selectedGameName;
+    private String gameType;
+    private Path installDir;
+    private Path logFile;
+
+
     private AppData() {}
 
     public static AppData getInstance() {
@@ -56,6 +70,25 @@ public class AppData {
         this.triggers       = new ArrayList<>(loaded.triggers);
         this.bannedUsers    = new ArrayList<>(loaded.bannedUsers);
         this.adminUsers     = new ArrayList<>(loaded.adminUsers);
+
+        this.selectedGameName = loaded.selectedGameName;
+        this.gameType = loaded.gameType;
+        this.installDir = loaded.installDir;
+        this.logFile = loaded.logFile;
+
+        if (selectedGameName != null && "Game".equals(gameType)) {
+            Game selectedGame = GameFactory.getGame(selectedGameName);
+            if (selectedGame != null) {
+                this.selectedGame = selectedGame;
+                this.installDir = selectedGame.getInstallDir();
+                this.logFile = selectedGame.getLogFile();
+            }
+        } else if ("Custom/Mod".equals(gameType) && installDir != null && selectedGame != null) {
+            Game selectedGame = GameFactory.getGame(selectedGameName);
+            if (selectedGame != null) {
+                this.selectedGame = selectedGame;
+            }
+        }
 
         instance = this;
     }
@@ -157,4 +190,29 @@ public class AppData {
     public int getMAX_LINES() {return MAX_LINES;}
     public boolean isShowRegisteredLines() {return showRegisteredLines;}
     public void setShowRegisteredLines(boolean showRegisteredLines) {this.showRegisteredLines = showRegisteredLines;}
+
+    @JsonIgnore
+    public Game getGameSelector() {
+        if (selectedGame == null && selectedGameName != null) {
+            selectedGame = GameFactory.getGame(selectedGameName);
+        }
+        return selectedGame;
+    }
+
+    public void setGameSelector(Game game) {
+        this.selectedGame = game;
+        this.selectedGameName = (game != null) ? game.getName() : null;
+    }
+
+    public String getSelectedGameName() { return selectedGameName; }
+    public void setSelectedGameName(String selectedGameName) { this.selectedGameName = selectedGameName; }
+
+    public String getGameType() { return gameType; }
+    public void setGameType(String gameType) { this.gameType = gameType; }
+
+    public Path getInstallDir() { return installDir; }
+    public void setInstallDir(Path installDir) { this.installDir = installDir; }
+
+    public Path getLogFile() { return logFile; }
+    public void setLogFile(Path logFile) { this.logFile = logFile; }
 }

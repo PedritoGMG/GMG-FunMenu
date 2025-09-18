@@ -14,6 +14,8 @@ import core.Main;
 import core.audio.plugin.TTS;
 import core.audio.plugin.YoutubeAudioDownloader;
 import core.data.AppData;
+import core.game.Game;
+import core.game.capable.ChatCapable;
 import core.triggers.AbstractTrigger;
 import core.triggers.TriggerFactory;
 
@@ -38,8 +40,12 @@ public class KeywordTriggerListener implements LineListener {
         if (AppData.getInstance().isShowRegisteredLines())
             System.out.println(line);
 
+        Game game = AppData.getInstance().getGameSelector();
+        Optional<ChatMessage> optionalMsg = Optional.empty();
+
+
         line = line.trim();
-        Optional<ChatMessage> optionalMsg = Main.chatLogReader.parseChat(line);
+        if (game instanceof ChatCapable chatGame) optionalMsg = chatGame.parseChat(line);
         if (optionalMsg.isEmpty()) return;
 
         ChatMessage chatMsg = optionalMsg.get();

@@ -61,8 +61,15 @@ public class PageMainController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
 		AppData appdata = AppData.getInstance();
 
-		if (Main.file != null)
-			fileText.setText(Main.file.getAbsolutePath());
+		if (appdata.getLogFile() != null) fileText.setText(appdata.getLogFile().toString());
+
+		boolean isCustom = "Custom/Mod".equals(appdata.getGameType());
+		fileText.setDisable(!isCustom);
+		fileText.textProperty().addListener((obs, oldVal, newVal) -> {
+			if (isCustom && newVal != null && !newVal.isBlank()) {
+				appdata.setLogFile(new File(newVal).toPath());
+			}
+		});
 
 		setupSlider(sliderTTS, Main.playerTTS.getAudioPlayer(), appdata.getTtsVolume(), appdata::setTtsVolume);
         setupSlider(sliderMusic, Main.playerMusic.getAudioPlayer(), appdata.getMusicVolume(), appdata::setMusicVolume);
@@ -248,17 +255,17 @@ public class PageMainController implements Initializable{
 
 		toggleButton.setText(Main.isReading ? "Stop Reading" : "Start Reading");
 		toggleButton.setSelected(Main.isReading);
-		toggleButton.setDisable(Main.file == null);
+		toggleButton.setDisable(AppData.getInstance().getLogFile() == null);
 		toggleButton.getStyleClass().add(Main.isReading ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
 			Main.isReading = newVal;
-			System.out.println("Reading: " + newVal+ " | File: " + Main.file + " | " + LocalDateTime.now());
+			System.out.println("Reading: " + newVal+ " | File: " + AppData.getInstance().getLogFile() + " | " + LocalDateTime.now());
 			if (newVal) {
 				toggleButton.setText("Stop Reading");
 				toggleButton.getStyleClass().remove("button-dark");
 				toggleButton.getStyleClass().add("button-dark2");
-				if (Main.file != null) {
-					Main.fileWatcher = new FileWatcher(Main.file, line -> KeywordTriggerListener.getInstance().onNewLine(line));
+				if (AppData.getInstance().getLogFile() != null) {
+					Main.fileWatcher = new FileWatcher(AppData.getInstance().getLogFile().toFile(), line -> KeywordTriggerListener.getInstance().onNewLine(line));
 				}
 			} else {
 				toggleButton.setText("Start Reading");
@@ -276,9 +283,12 @@ public class PageMainController implements Initializable{
     
     @FXML
     private void clickSelectFile() {
-    	Main.file = FileSelector.selectFile((Stage) fileText.getScene().getWindow(), "Select any file to read", null);
-    	if (Main.file!=null) {
-    		fileText.setText(Main.file.getAbsolutePath());
+		AppData appData = AppData.getInstance();
+		File file = FileSelector.selectFile((Stage) fileText.getScene().getWindow(), "Select any file to read", null);
+		if (file == null) return;
+		appData.setLogFile(file.toPath());
+    	if (appData.getLogFile()!=null) {
+    		fileText.setText(file.getAbsolutePath().toString());
     		toggleButton.setDisable(false);
 		}
     }

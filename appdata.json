@@ -1,7 +1,7 @@
 {
   "maxDurationRequest" : 600,
-  "ttsVolume" : 0.7533679,
-  "musicVolume" : 0.685567,
+  "ttsVolume" : 0.8051814,
+  "musicVolume" : 0.8,
   "audioVolume" : 0.8,
   "maxQueueSizeTTS" : 45,
   "maxQueueSizeMUSIC" : 45,
@@ -20,39 +20,13 @@
     "enabled" : true,
     "adminOnly" : true,
     "audioPath" : null
-  }, {
-    "name" : "PINGAS",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Music\\sounds\\pingas.mp3"
-  }, {
-    "name" : "FART",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 1.mp3"
-  }, {
-    "name" : "FART2",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 2.mp3"
-  }, {
-    "name" : "FART3",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 3.mp3"
-  }, {
-    "name" : "FART4",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 4.mp3"
-  }, {
-    "name" : "BAZINGA",
-    "enabled" : true,
-    "adminOnly" : false,
-    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Bazinga!.mp3"
   } ],
   "bannedUsers" : [ ],
-  "adminUsers" : [ "✬PedritoGMG✬" ],
+  "adminUsers" : [ ],
   "showRegisteredLines" : false,
+  "selectedGameName" : "Team Fortress 2",
+  "gameType" : "Custom/Mod",
+  "installDir" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/",
+  "logFile" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/tf/console.log",
   "max_LINES" : 500
 }

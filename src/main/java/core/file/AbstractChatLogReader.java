@@ -1,10 +1,12 @@
 package core.file;
 
+import core.game.capable.ChatCapable;
+
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AbstractChatLogReader implements ChatLogReader {
+public abstract class AbstractChatLogReader implements ChatCapable {
     protected abstract Pattern getPattern();
 
     @Override

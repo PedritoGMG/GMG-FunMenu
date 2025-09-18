@@ -8,7 +8,6 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\ConsoleLine.jav
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\DataManager.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\GlobalConsoleOutputStream.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\AbstractChatLogReader.java
-C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\ChatLogReader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\ChatMessage.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\FileWatcher.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\KeywordTriggerListener.java
@@ -17,6 +16,14 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\readers\CS2Chat
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\readers\DeadlockChatLogReader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\readers\GMODChatLogReader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\file\readers\TF2ChatLogReader.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\capable\ChatCapable.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\capable\ConsoleCapable.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\capable\PatchCapable.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\CS2Game.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\Game.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\GameFactory.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\GameInfo.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\TF2Game.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\Main.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AbstractTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AudioTrigger.java
@@ -25,9 +32,12 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TriggerDTO.
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TriggerFactory.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TTSTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\YTRequestTrigger.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\ConsoleSenderUtil.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\FileSelector.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\HoverAnimator.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\MicrophoneManager.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\PatcherUtil.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\SteamUtils.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\util\Toast.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\ui\CustomDialog.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\ui\MainController.java

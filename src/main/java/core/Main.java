@@ -8,12 +8,13 @@ import core.audio.AudioPlayerQueue;
 import core.data.AppData;
 import core.data.DataManager;
 import core.data.GlobalConsoleOutputStream;
-import core.file.ChatLogReader;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
 import core.file.readers.CS2ChatLogReader;
 import core.file.readers.GMODChatLogReader;
 import core.file.readers.TF2ChatLogReader;
+import core.game.GameFactory;
+import core.game.capable.ChatCapable;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,10 +27,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
 	public static String audioDevice = "CABLE Input";
-	public static String delimiter = " : ";
 	public static FileWatcher fileWatcher = null;
-	public static ChatLogReader chatLogReader = new CS2ChatLogReader();
-	public static File file = null;
 	public static boolean isReading = false;
 	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
 	static {
@@ -47,8 +45,10 @@ public class Main extends Application {
 
 		PrintStream out = new PrintStream(new GlobalConsoleOutputStream(Color.WHITE), true);
 		PrintStream err = new PrintStream(new GlobalConsoleOutputStream(Color.RED), true);
-		System.setOut(out);
-		System.setErr(err);
+		//System.setOut(out);
+		//System.setErr(err);
+
+		GameFactory.getAllGames();
 
 		AppData appData = AppData.getInstance();
 		appData.load();
