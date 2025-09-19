@@ -30,6 +30,8 @@ public class MicrophoneManager {
                 }
             }
         }
+
+        System.out.println("Available Microphones:" + microphones);
     }
     
     public Map<String, TargetDataLine> getMicrophones() {

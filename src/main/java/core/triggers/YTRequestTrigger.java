@@ -9,7 +9,7 @@ public class YTRequestTrigger extends AbstractTrigger{
     }
 
     public YTRequestTrigger(boolean enabled, boolean adminOnly) {
-        super("REQUEST", "Request a YouTube audio by URL", enabled, adminOnly);
+        super("REQUEST", "Request a YouTube audio by URL. Usage: REQUEST <YouTube URL>\"", enabled, adminOnly);
     }
 
     @Override

@@ -12,6 +12,9 @@ public class GameFactory {
     static {
         registerGame(new TF2Game(getInstallDir("440").orElse(null)));
         registerGame(new CS2Game(getInstallDir("730").orElse(null)));
+        registerGame(new L4D2Game(getInstallDir("550").orElse(null)));
+        registerGame(new GMODGame(getInstallDir("4000").orElse(null)));
+        registerGame(new DeadlockGame(getInstallDir("1422450").orElse(null)));
     }
 
     private static Optional<Path> getInstallDir(String appId) {

@@ -658,3 +658,41 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 3);
 }
 
+.alert {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,
+        rgba(0, 255, 153, 0.25),
+        rgba(0, 113, 255, 0.25));
+    -fx-border-color: linear-gradient(to right, #00FF99, #0071FF);
+    -fx-text-fill: #E0E0E0;
+    -fx-padding: 4px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);
+}
+
+.hyperlink {
+    -fx-text-fill: #00BFFF;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 1, 0, 0, 1);
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #1E90FF;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0, 0, 1);
+}
+
+.hyperlink:pressed {
+    -fx-text-fill: #87CEFA;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);
+}
+
+.hyperlink:focused {
+    -fx-text-fill: #00BFFF;
+}
+
+.hyperlink:visited {
+    -fx-text-fill: #ADFF2F;
+}

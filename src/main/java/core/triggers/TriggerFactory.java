@@ -11,6 +11,9 @@ public class TriggerFactory {
     private static final Map<String, AbstractTrigger> TRIGGERS = new HashMap<>();
 
     static {
+        register(new AboutTrigger());
+        register(new CommandsTrigger());
+        register(new HelpTrigger());
         register(new TTSTrigger());
         register(new YTRequestTrigger());
         register(new TestTrigger());

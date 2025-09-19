@@ -7,11 +7,15 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -137,33 +141,60 @@
             <Line endX="100.0" endY="-48.414215087890625" startX="459.0" startY="-48.4141845703125" stroke="#ffffffbf" strokeWidth="2.0" />
          </children>
       </VBox>
-      <VBox layoutX="241.0" layoutY="74.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" styleClass="volume-control">
+      <VBox alignment="CENTER" layoutX="241.0" layoutY="15.0" prefHeight="120.0" prefWidth="519.0" spacing="5.0" styleClass="volume-control">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Game Configuration!" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+               <fill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color green="1.0" blue="0.6000000238418579" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color green="0.5686274766921997" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+            </Text>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="487.0" spacing="15.0">
                <children>
-                  <VBox spacing="5.0">
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Type of Game:" wrappingWidth="236.0">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Text>
-                        <ComboBox fx:id="gameTypeCB" maxWidth="1.7976931348623157E308" promptText="-- Select game type --" />
+                        <ComboBox fx:id="gameTypeCB" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" promptText="-- Select game type --">
+                           <tooltip>
+                              <Tooltip autoHide="true" contentDisplay="TOP" text="Empty Tooltip" />
+                           </tooltip></ComboBox>
                      </children>
                   </VBox>
-                  <VBox spacing="5.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="115.0" prefWidth="236.0" spacing="5.0">
                      <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Base:" wrappingWidth="236.0">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Text>
-                        <ComboBox fx:id="gameSelectorCB" maxWidth="1.7976931348623157E308" promptText="-- Select base game --" />
+                        <ComboBox fx:id="gameSelectorCB" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" promptText="-- Select base game --" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="76.0" prefWidth="486.0" spacing="5.0">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="76.0" prefWidth="486.0" spacing="5.0">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Folder:" wrappingWidth="236.0">
                      <font>
@@ -175,5 +206,14 @@
             </VBox>
          </children>
       </VBox>
+      <Button fx:id="btnHelp" layoutX="707.0" layoutY="26.0" mnemonicParsing="false" onAction="#OnHelp" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/question-b.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

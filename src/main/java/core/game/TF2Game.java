@@ -23,7 +23,7 @@ public class TF2Game extends Game implements ChatCapable, ConsoleCapable, PatchC
         super(
                 "Team Fortress 2",
                 "440",
-                "Enable the console and create autoexec.cfg with the commands.",
+                "Make sure to click \"Start Reading\" (At least the first time) before launching the game, and set the following launch parameters: ",
                 installDir,
                 "-condebug -conclearlog +exec autoexec.cfg",
                 installDir != null ? installDir.resolve("tf/console.log") : null

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import core.game.Game;
 import core.game.GameFactory;
+import core.game.GameType;
 import core.triggers.TriggerDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,9 +42,11 @@ public class AppData {
     @JsonIgnore
     private Game selectedGame;
     private String selectedGameName;
-    private String gameType;
+    private GameType gameType;
     private Path installDir;
     private Path logFile;
+
+    private boolean skipGameSetupDialog = false;
 
 
     private AppData() {}
@@ -76,14 +79,16 @@ public class AppData {
         this.installDir = loaded.installDir;
         this.logFile = loaded.logFile;
 
-        if (selectedGameName != null && "Game".equals(gameType)) {
+        this.skipGameSetupDialog = loaded.skipGameSetupDialog;
+
+        if (selectedGameName != null && GameType.OFFICIAL.equals(gameType)) {
             Game selectedGame = GameFactory.getGame(selectedGameName);
             if (selectedGame != null) {
                 this.selectedGame = selectedGame;
                 this.installDir = selectedGame.getInstallDir();
                 this.logFile = selectedGame.getLogFile();
             }
-        } else if ("Custom/Mod".equals(gameType) && installDir != null && selectedGame != null) {
+        } else if (GameType.CUSTOM.equals(gameType) && installDir != null && selectedGame != null) {
             Game selectedGame = GameFactory.getGame(selectedGameName);
             if (selectedGame != null) {
                 this.selectedGame = selectedGame;
@@ -207,12 +212,15 @@ public class AppData {
     public String getSelectedGameName() { return selectedGameName; }
     public void setSelectedGameName(String selectedGameName) { this.selectedGameName = selectedGameName; }
 
-    public String getGameType() { return gameType; }
-    public void setGameType(String gameType) { this.gameType = gameType; }
+    public GameType getGameType() { return gameType; }
+    public void setGameType(GameType gameType) { this.gameType = gameType; }
 
     public Path getInstallDir() { return installDir; }
     public void setInstallDir(Path installDir) { this.installDir = installDir; }
 
     public Path getLogFile() { return logFile; }
     public void setLogFile(Path logFile) { this.logFile = logFile; }
+
+    public boolean isSkipGameSetupDialog() {return skipGameSetupDialog;}
+    public void setSkipGameSetupDialog(boolean skipGameSetupDialog) {this.skipGameSetupDialog = skipGameSetupDialog;}
 }

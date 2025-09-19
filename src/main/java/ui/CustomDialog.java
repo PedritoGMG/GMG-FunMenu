@@ -104,6 +104,7 @@ public class CustomDialog {
 	        });
 	    } else {
 	        controller.btnDialogConfirm.setVisible(false);
+			controller.btnDialogConfirm.setManaged(false);
 	    }
 
 	    if (contenidoExtra != null) {

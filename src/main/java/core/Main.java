@@ -10,12 +10,10 @@ import core.data.DataManager;
 import core.data.GlobalConsoleOutputStream;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
-import core.file.readers.CS2ChatLogReader;
-import core.file.readers.GMODChatLogReader;
-import core.file.readers.TF2ChatLogReader;
 import core.game.GameFactory;
-import core.game.capable.ChatCapable;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,10 +23,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Main extends Application {
-	
+
+	public static String micDevice = "CABLE Output";
 	public static String audioDevice = "CABLE Input";
 	public static FileWatcher fileWatcher = null;
-	public static boolean isReading = false;
+	public static final BooleanProperty isReading = new SimpleBooleanProperty(false);
 	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
 	static {
 	    if (!TEMP_DIR.exists()) {
@@ -124,4 +123,11 @@ public class Main extends Application {
 		deleteTempFiles();
 	}
 
+	public static boolean isReading() {
+		return isReading.get();
+	}
+
+	public static void setReading(boolean value) {
+		isReading.set(value);
+	}
 }

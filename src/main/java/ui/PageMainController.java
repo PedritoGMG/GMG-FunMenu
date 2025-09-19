@@ -1,16 +1,12 @@
 package ui;
 
-import java.awt.Dialog;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-
-import javax.sound.sampled.LineUnavailableException;
 
 import core.Main;
 import core.audio.AudioPlayer;
@@ -19,28 +15,29 @@ import core.audio.plugin.YoutubeAudioDownloader;
 import core.data.AppData;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
+import core.game.Game;
+import core.game.GameType;
+import core.game.capable.PatchCapable;
 import core.util.FileSelector;
 import core.util.HoverAnimator;
 import core.util.Toast;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class PageMainController implements Initializable{
+public class PageMainController implements Initializable {
 	
     @FXML
     private TextField fileText;
@@ -56,15 +53,36 @@ public class PageMainController implements Initializable{
     
     @FXML
     private Slider sliderTTS, sliderMusic, sliderAudio;
+
+	@FXML
+	private Canvas audioCanvas;
+
+	private static MicrophoneCapture micCapture = null;
 	
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+		if (micCapture == null) {
+			micCapture = new MicrophoneCapture(audioCanvas);
+			micCapture.start();
+		} else {
+			micCapture.setCanvas(audioCanvas);
+		}
+		micCapture.resetBars();
+
 		AppData appdata = AppData.getInstance();
 
 		if (appdata.getLogFile() != null) fileText.setText(appdata.getLogFile().toString());
 
-		boolean isCustom = "Custom/Mod".equals(appdata.getGameType());
-		fileText.setDisable(!isCustom);
+		fileText.disableProperty().bind(
+				Main.isReading.or(
+						Bindings.createBooleanBinding(
+								() -> !GameType.CUSTOM.equals(AppData.getInstance().getGameType()),
+								Main.isReading
+						)
+				)
+		);
+
+		boolean isCustom = GameType.CUSTOM.equals(appdata.getGameType());
 		fileText.textProperty().addListener((obs, oldVal, newVal) -> {
 			if (isCustom && newVal != null && !newVal.isBlank()) {
 				appdata.setLogFile(new File(newVal).toPath());
@@ -253,18 +271,21 @@ public class PageMainController implements Initializable{
 			}
         });
 
-		toggleButton.setText(Main.isReading ? "Stop Reading" : "Start Reading");
-		toggleButton.setSelected(Main.isReading);
+		toggleButton.setText(Main.isReading() ? "Stop Reading" : "Start Reading");
+		toggleButton.setSelected(Main.isReading());
 		toggleButton.setDisable(AppData.getInstance().getLogFile() == null);
-		toggleButton.getStyleClass().add(Main.isReading ? "button-dark2" : "button-dark");
+		toggleButton.getStyleClass().add(Main.isReading() ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
-			Main.isReading = newVal;
-			System.out.println("Reading: " + newVal+ " | File: " + AppData.getInstance().getLogFile() + " | " + LocalDateTime.now());
-			if (newVal) {
+			Main.setReading(newVal);
+			System.out.println("Reading: " + newVal + " | File: " + AppData.getInstance().getLogFile() + " | " + LocalDateTime.now());
+			if (Main.isReading()) {
 				toggleButton.setText("Stop Reading");
 				toggleButton.getStyleClass().remove("button-dark");
 				toggleButton.getStyleClass().add("button-dark2");
 				if (AppData.getInstance().getLogFile() != null) {
+					Game game = AppData.getInstance().getGameSelector();
+					if (game instanceof PatchCapable)
+						((PatchCapable) game).patchGameFiles();
 					Main.fileWatcher = new FileWatcher(AppData.getInstance().getLogFile().toFile(), line -> KeywordTriggerListener.getInstance().onNewLine(line));
 				}
 			} else {

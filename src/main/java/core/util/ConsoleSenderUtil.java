@@ -18,6 +18,15 @@ public class ConsoleSenderUtil {
     public ConsoleSenderUtil(Path cfgFolder, String tempCfgName) {
         this.cfgFile = cfgFolder.resolve(tempCfgName);
 
+        try {
+            if (!Files.exists(cfgFile)) {
+                Files.createDirectories(cfgFolder);
+                Files.createFile(cfgFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Thread reader = new Thread(this::readerLoop);
         reader.setDaemon(true);
         reader.start();

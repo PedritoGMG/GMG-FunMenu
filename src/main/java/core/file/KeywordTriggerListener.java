@@ -22,7 +22,7 @@ import core.triggers.TriggerFactory;
 public class KeywordTriggerListener implements LineListener {
 
     private static KeywordTriggerListener instance;
-    private static final String PREFIX = "FM!";
+    public static final String PREFIX = "FM!";
 
     private KeywordTriggerListener() {
         TriggerFactory.loadTriggersFromAppData();

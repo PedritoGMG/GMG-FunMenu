@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
@@ -24,7 +25,38 @@
       <String fx:value="shadow" />
    </styleClass>
    <children>
-      <ToggleButton fx:id="toggleButton" layoutX="408.0" layoutY="256.0" mnemonicParsing="false" style="-fx-font-size: 25;" text="ToggleButton" />
+      <VBox alignment="CENTER" layoutX="55.0" layoutY="3.9375" spacing="10.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Welcome!" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+               <fill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color green="1.0" blue="0.6000000238418579" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color green="0.5686274766921997" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Text>
+            <Canvas fx:id="audioCanvas" height="150.0" width="890.0" />
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <TextField fx:id="fileText" editable="false" onMouseClicked="#clickSelectFile" prefHeight="36.0" prefWidth="350.0" promptText="Click here to select a file to read..." />
+                  <ToggleButton fx:id="toggleButton" mnemonicParsing="false" style="-fx-font-size: 25;" text="ToggleButton" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
       <Line endX="100.0" layoutX="745.0" layoutY="325.0" startX="-591.0" stroke="WHITE" />
       <HBox alignment="CENTER" layoutX="24.0" layoutY="366.0" prefHeight="225.0" prefWidth="880.0" spacing="15.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="366.0">
          <children>
@@ -246,27 +278,5 @@
             </VBox>
          </children>
       </HBox>
-      <Text layoutX="349.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="Welcome!" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="64.0" />
-         </font>
-         <fill>
-            <LinearGradient cycleMethod="REFLECT" endX="0.4218009478672986" endY="0.8009478672985781" startX="0.3412322274881517" startY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color green="1.0" blue="0.6000000238418579" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color green="0.5686274766921997" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
-      </Text>
-      <TextField fx:id="fileText" editable="false" layoutX="325.0" layoutY="203.0" onMouseClicked="#clickSelectFile" prefHeight="36.0" prefWidth="350.0" promptText="Click here to select a file to read..." />
    </children>
 </AnchorPane>
