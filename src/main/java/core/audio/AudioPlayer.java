@@ -180,7 +180,10 @@ public class AudioPlayer {
 
                     if (!playing) break;
 
-                    line.write(buffer, 0, bytesRead);
+                    SourceDataLine l = line;
+                    if (l == null) break;
+
+                    l.write(buffer, 0, bytesRead);
                     bytesReadTotal += bytesRead;
                 }
 
@@ -188,15 +191,17 @@ public class AudioPlayer {
                 e.printStackTrace();
             } finally {
                 try {
-                    if (line != null) {
-                        line.drain();
-                        line.stop();
-                        line.close();
-                        line = null;
-                    }
-                    if (din != null) {
-                        din.close();
-                        din = null;
+                    synchronized (this) {
+                        if (line != null) {
+                            line.drain();
+                            line.stop();
+                            line.close();
+                            line = null;
+                        }
+                        if (din != null) {
+                            din.close();
+                            din = null;
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,8 +1,8 @@
 {
   "maxDurationRequest" : 600,
   "ttsVolume" : 0.8,
-  "musicVolume" : 0.685567,
-  "audioVolume" : 0.8,
+  "musicVolume" : 0.8556701,
+  "audioVolume" : 1.0,
   "maxQueueSizeTTS" : 45,
   "maxQueueSizeMUSIC" : 45,
   "triggers" : [ {
@@ -40,14 +40,49 @@
     "enabled" : true,
     "adminOnly" : false,
     "audioPath" : "C:\\Users\\pedri\\Music\\sounds\\pingas.mp3"
+  }, {
+    "name" : "FART",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 1.mp3"
+  }, {
+    "name" : "FART2",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 2.mp3"
+  }, {
+    "name" : "FART3",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 3.mp3"
+  }, {
+    "name" : "FART4",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 4.mp3"
+  }, {
+    "name" : "FART5",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 5.mp3"
+  }, {
+    "name" : "FART6",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 6.mp3"
+  }, {
+    "name" : "FART7",
+    "enabled" : true,
+    "adminOnly" : false,
+    "audioPath" : "C:\\Users\\pedri\\Documents\\MEGAsync Downloads\\Cloud Drive\\kitty0706 rips\\Vaas Yanovich\\Fart 7.mp3"
   } ],
   "bannedUsers" : [ ],
   "adminUsers" : [ ],
-  "showRegisteredLines" : true,
+  "showRegisteredLines" : false,
   "selectedGameName" : "Team Fortress 2",
-  "gameType" : "Official Game",
-  "installDir" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/",
-  "logFile" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/tf/console.log",
+  "gameType" : "Custom/Mod",
+  "installDir" : "file:///C:/Program%20Files%20(x86)/Steam/steamapps/sourcemods/open_fortress/",
+  "logFile" : "file:///C:/Program%20Files%20(x86)/Steam/steamapps/sourcemods/open_fortress/console.log",
   "skipGameSetupDialog" : true,
   "max_LINES" : 500
 }
