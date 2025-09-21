@@ -1,6 +1,8 @@
 package core.triggers;
 
-public class TestTrigger extends AbstractTrigger {
+import core.triggers.labels.RequiresMessage;
+
+public class TestTrigger extends AbstractTrigger implements RequiresMessage {
 
     public TestTrigger() {
         this(true, true);

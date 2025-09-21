@@ -80,12 +80,8 @@
                </children></AnchorPane>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <ImageView fitHeight="118.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow">
-                     <image>
-                        <Image url="@../../../../../../Desktop/pedrito.jpg" />
-                     </image>
-                  </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="✬PedritoGMG✬">
+                  <ImageView fitHeight="118.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow" />
+                  <Text fx:id="versionText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shadow" text="VERSION">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>

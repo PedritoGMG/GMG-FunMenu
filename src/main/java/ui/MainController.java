@@ -33,10 +33,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import java.util.Properties;
 
 public class MainController implements Initializable{
 
@@ -55,6 +57,9 @@ public class MainController implements Initializable{
     @FXML
     private StackPane stackPaneMain;
 
+    @FXML
+    private Text versionText;
+
     private List<Button> menuButtons;
     private AtomicBoolean hoverActive = new AtomicBoolean(false);
 
@@ -62,9 +67,17 @@ public class MainController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
         menuButtons = List.of(btnMain, btnCommands, btnBinds, btnConsole, btnSettings);
         menuButtons.forEach(HoverAnimator::apply);
-		try {
+
+        Properties props = new Properties();
+        try {
+            props.load(getClass().getResourceAsStream("/application.properties"));
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+        }
+        versionText.setText("Version: " + props.getProperty("app.version", "unknown"));
+
+        try {
 			pageMain(null);
-			Toast.showIn(stackPaneMain, "Hola buenos dias", 8000);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

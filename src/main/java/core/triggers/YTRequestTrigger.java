@@ -2,8 +2,9 @@ package core.triggers;
 
 import core.audio.plugin.TTS;
 import core.audio.plugin.YoutubeAudioDownloader;
+import core.triggers.labels.RequiresMessage;
 
-public class YTRequestTrigger extends AbstractTrigger{
+public class YTRequestTrigger extends AbstractTrigger implements RequiresMessage {
     public YTRequestTrigger() {
         this(true, false);
     }

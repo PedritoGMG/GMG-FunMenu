@@ -3,8 +3,9 @@ package core.triggers;
 import core.data.AppData;
 import core.game.Game;
 import core.game.capable.ConsoleCapable;
+import core.triggers.labels.RequiresMessage;
 
-class HelpTrigger extends AbstractTrigger {
+class HelpTrigger extends AbstractTrigger implements RequiresMessage {
 
     public HelpTrigger() {
         this(true, false);

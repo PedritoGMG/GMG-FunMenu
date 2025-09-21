@@ -1,4 +1,5 @@
 core\triggers\TestTrigger.class
+core\audio\AudioPlayerType.class
 ui\PageBindsController$1.class
 core\file\AbstractChatLogReader.class
 core\triggers\AbstractTrigger.class
@@ -9,9 +10,11 @@ ui\PageSettingsController$4.class
 core\game\capable\ChatCapable.class
 core\game\L4D2Game$1.class
 core\triggers\AboutTrigger.class
+core\triggers\labels\MessageIsAudioPlayerType.class
 core\file\ChatMessage.class
 core\data\GlobalConsoleOutputStream.class
 core\audio\AudioPlayerQueue.class
+core\triggers\labels\NoMessageRequired.class
 core\data\AppData.class
 core\util\FileSelector.class
 core\game\GameType.class
@@ -24,17 +27,21 @@ ui\MicrophoneCapture$1.class
 core\game\L4D2Game.class
 core\util\ConsoleSenderUtil.class
 ui\PageSettingsController$5.class
+core\triggers\labels\MessageIsFile.class
 core\game\capable\PatchCapable.class
 core\audio\AudioPlayer.class
+core\triggers\PauseTrigger.class
 core\triggers\AudioTrigger.class
 core\Main.class
 core\util\SteamUtils.class
 ui\PageSettingsController$3.class
+core\triggers\labels\RequiresMessage.class
 core\util\PatcherUtil.class
 core\util\HoverAnimator.class
 core\game\GameInfo.class
 ui\CustomDialog.class
 core\game\TF2Game.class
+core\triggers\PlayTrigger.class
 ui\PageSettingsController.class
 core\keybindings\KeyBinding.class
 core\game\capable\ConsoleCapable.class
@@ -44,6 +51,7 @@ core\game\TF2Game$1.class
 ui\PageMainController.class
 core\triggers\YTRequestTrigger.class
 ui\PageCommandsController.class
+core\triggers\SkipTrigger.class
 core\file\FileWatcher$1.class
 core\triggers\CommandsTrigger.class
 ui\MicrophoneCapture.class

@@ -4,8 +4,9 @@ import core.data.AppData;
 import core.game.Game;
 import core.game.capable.ConsoleCapable;
 import core.game.capable.PatchCapable;
+import core.triggers.labels.NoMessageRequired;
 
-public class AboutTrigger extends AbstractTrigger {
+public class AboutTrigger extends AbstractTrigger implements NoMessageRequired {
 
     public AboutTrigger() {
         this(true, false);

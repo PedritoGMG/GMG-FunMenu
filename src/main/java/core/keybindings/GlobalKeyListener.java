@@ -7,21 +7,32 @@ import core.data.AppData;
 import core.triggers.AbstractTrigger;
 import core.triggers.TriggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class GlobalKeyListener implements NativeKeyListener {
+
+    private final Set<String> currentlyPressed = new HashSet<>();
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
         String pressedKey = NativeKeyEvent.getKeyText(e.getKeyCode());
+        currentlyPressed.add(pressedKey);
 
         for (KeyBinding bind : AppData.getInstance().getBinds()) {
-            if (bind.isEnabled() && bind.getKey().equalsIgnoreCase(pressedKey)) {
+            if (!bind.isEnabled()) continue;
+
+            if (currentlyPressed.containsAll(bind.getKeys())) {
                 executeBind(bind);
             }
         }
     }
 
     @Override
-    public void nativeKeyReleased(NativeKeyEvent e) { }
+    public void nativeKeyReleased(NativeKeyEvent e) {
+        String releasedKey = NativeKeyEvent.getKeyText(e.getKeyCode());
+        currentlyPressed.remove(releasedKey);
+    }
 
     @Override
     public void nativeKeyTyped(NativeKeyEvent e) { }

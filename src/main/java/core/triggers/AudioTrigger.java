@@ -1,13 +1,14 @@
 package core.triggers;
 
 import core.Main;
+import core.triggers.labels.NoMessageRequired;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AudioTrigger extends AbstractTrigger {
+public class AudioTrigger extends AbstractTrigger implements NoMessageRequired {
 
     private final String audioPath;
 

@@ -662,7 +662,7 @@
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,
         rgba(0, 255, 153, 0.25),
         rgba(0, 113, 255, 0.25));
-    -fx-border-color: linear-gradient(to right, #00FF99, #0071FF);
+  /*  -fx-border-color: linear-gradient(to right, #00FF99, #0071FF);*/
     -fx-text-fill: #E0E0E0;
     -fx-padding: 4px;
     -fx-border-radius: 4px;
@@ -695,4 +695,67 @@
 
 .hyperlink:visited {
     -fx-text-fill: #ADFF2F;
+}
+
+.table-view {
+    -fx-background: #1A1A1A;
+    -fx-background-color: #1A1A1A;
+    -fx-border-color: transparent;
+
+    -fx-table-cell-border-color: transparent;
+    -fx-control-inner-background: #1A1A1A;
+    -fx-control-inner-background-alt: #222222;
+    -fx-selection-bar-non-focused: rgba(0,255,153,0.25);
+    -fx-text-background-color: #E0E0E0;
+
+    -fx-faint-focus-color: transparent;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-background-insets: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #2B2B2B, #1F1F1F);
+    -fx-background-radius: 5 5 0 0;
+}
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #3d3d3d transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E0E0E0;
+    -fx-alignment: CENTER;
+    -fx-padding: 8 12;
+}
+.table-cell {
+    -fx-alignment: CENTER;
+}
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E0E0E0;
+    -fx-font-size: 13px;
+    -fx-padding: 4 10;
+}
+.table-row-cell:odd {
+    -fx-background-color: #222222;
+}
+.table-row-cell:hover {
+    -fx-background-color: linear-gradient(to right, rgba(0, 255, 153, 0.15), rgba(0, 113, 255, 0.15));
+}
+.table-row-cell:selected {
+    -fx-background-color: linear-gradient(to left, rgba(0, 255, 153, 0.5), rgba(0, 113, 255, 0.5));
+    -fx-text-fill: #dfdfdf;
+    -fx-font-weight: bold;
+}
+
+.table-view .scroll-bar:vertical .thumb,
+.table-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: linear-gradient(to bottom, #00FF99, #0071FF);
+    -fx-background-radius: 4;
+}
+.table-view .scroll-bar:vertical .thumb:hover,
+.table-view .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, #33FFAA, #0091FF);
 }

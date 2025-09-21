@@ -2,9 +2,8 @@ package core.triggers;
 
 import core.data.AppData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TriggerFactory {
 
@@ -17,6 +16,9 @@ public class TriggerFactory {
         register(new TTSTrigger());
         register(new YTRequestTrigger());
         register(new TestTrigger());
+        register(new PlayTrigger());
+        register(new SkipTrigger());
+        register(new PauseTrigger());
     }
 
     public static void loadTriggersFromAppData() {
@@ -59,5 +61,14 @@ public class TriggerFactory {
 
     public static Map<String, AbstractTrigger> getAllTriggers() {
         return TRIGGERS;
+    }
+
+    public static List<AbstractTrigger> getOrderedTriggers() {
+        return TRIGGERS.values().stream()
+                .sorted(
+                        Comparator.<AbstractTrigger, Integer>comparing(t -> t instanceof AudioTrigger ? 1 : 0)
+                                .thenComparing(t -> t.getName().toUpperCase())
+                )
+                .collect(Collectors.toList());
     }
 }

@@ -1,14 +1,19 @@
 package ui;
 
+import core.audio.AudioPlayerType;
 import core.data.AppData;
 import core.keybindings.KeyBinding;
-import core.triggers.AudioTrigger;
+import core.triggers.AbstractTrigger;
 import core.triggers.TriggerFactory;
+import core.triggers.labels.MessageIsAudioPlayerType;
+import core.triggers.labels.MessageIsFile;
+import core.triggers.labels.NoMessageRequired;
+import core.triggers.labels.RequiresMessage;
 import core.util.FileSelector;
 import core.util.HoverAnimator;
-import core.util.Toast;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,9 +29,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PageBindsController implements Initializable {
 
@@ -68,9 +72,19 @@ public class PageBindsController implements Initializable {
         });
         enabledColumn.setCellFactory(CheckBoxTableCell.forTableColumn(enabledColumn));
 
-        keyColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
+        keyColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getKeyDisplay())
+        );
         keyColumn.setCellFactory(col -> new TableCell<>() {
             private final Button button = new Button();
+            {
+                HoverAnimator.apply(button);
+                button.getStyleClass().addAll("control-btn", "btn");
+                button.setPrefWidth(130);
+                button.setPrefHeight(36);
+                button.setMinWidth(130);
+                button.setMinHeight(36);
+            }
 
             @Override
             protected void updateItem(String key, boolean empty) {
@@ -101,34 +115,120 @@ public class PageBindsController implements Initializable {
                 if (empty || actionType == null) {
                     setGraphic(null);
                 } else {
-                    comboBox.setItems(FXCollections.observableArrayList(TriggerFactory.getAllTriggers().keySet()));
+                    List<String> triggerNames = TriggerFactory.getOrderedTriggers()
+                            .stream()
+                            .map(AbstractTrigger::getName)
+                            .toList();
+                    comboBox.setItems(FXCollections.observableArrayList(triggerNames));
                     comboBox.setValue(actionType);
+
                     comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
                         KeyBinding bind = getTableView().getItems().get(getIndex());
-                        bind.setActionType(newVal);
-                        AppData.getInstance().setBinds(new ArrayList<>(bindsObservable));
+                        if (bind != null) {
+                            bind.setActionType(newVal);
+                            AppData.getInstance().setBinds(new ArrayList<>(bindsObservable));
+
+                            getTableView().refresh();
+                        }
                     });
+
                     setGraphic(comboBox);
                 }
             }
         });
 
+
         contextColumn.setCellValueFactory(new PropertyValueFactory<>("context"));
-        contextColumn.setCellFactory(col -> new TableCell<>() {
+        contextColumn.setCellFactory(col -> new TableCell<KeyBinding, String>() {
+
             private final TextField textField = new TextField();
+            private final ComboBox<AudioPlayerType> comboBox = new ComboBox<>();
+
+            {
+                comboBox.prefWidthProperty().bind(contextColumn.widthProperty());
+                textField.setPromptText("Add some context...");
+                textField.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+                    if (!newFocus) saveValue();
+                });
+                textField.setOnAction(e -> saveValue());
+            }
+
+            private void saveValue() {
+                KeyBinding bind = getTableView().getItems().get(getIndex());
+                if (bind != null) {
+                    bind.setContext(textField.getText());
+                    AppData.getInstance().setBinds(new ArrayList<>(getTableView().getItems()));
+                }
+            }
 
             @Override
-            protected void updateItem(String context, boolean empty) {
-                super.updateItem(context, empty);
-                if (empty || context == null) {
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null) {
                     setGraphic(null);
-                } else {
-                    textField.setText(context);
-                    textField.textProperty().addListener((obs, oldVal, newVal) -> {
-                        KeyBinding bind = getTableView().getItems().get(getIndex());
-                        bind.setContext(newVal);
-                        AppData.getInstance().setBinds(new ArrayList<>(bindsObservable));
+                    return;
+                }
+
+                KeyBinding bind = getTableView().getItems().get(getIndex());
+                if (bind == null) return;
+
+                AbstractTrigger trigger = TriggerFactory.getTrigger(bind.getActionType());
+                if (trigger == null) {
+                    textField.setDisable(true);
+                    setGraphic(textField);
+                    return;
+                }
+
+                // PRIORIDAD: ComboBox > File > TextField > Disabled
+                if (trigger instanceof MessageIsAudioPlayerType) {
+                    comboBox.getItems().setAll(AudioPlayerType.values());
+                    AudioPlayerType selectedType = null;
+                    if (item != null && !item.isEmpty()) {
+                        try {
+                            selectedType = AudioPlayerType.valueOf(item.trim().toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            selectedType = null;
+                        }
+                    }
+                    comboBox.setValue(selectedType);
+                    comboBox.setOnAction(e -> {
+                        KeyBinding k = getTableView().getItems().get(getIndex());
+                        if (k != null && comboBox.getValue() != null) {
+                            k.setContext(comboBox.getValue().name());
+                            AppData.getInstance().setBinds(new ArrayList<>(getTableView().getItems()));
+                        }
                     });
+                    setGraphic(comboBox);
+
+                } else if (trigger instanceof MessageIsFile) {
+                    textField.setDisable(false);
+                    textField.setText(item);
+                    textField.setOnMouseClicked(e -> {
+                        File selectedFile = FileSelector.selectAudioFile((Stage) textField.getScene().getWindow());
+                        if (selectedFile != null) {
+                            textField.setText(selectedFile.getAbsolutePath());
+                            bind.setContext(selectedFile.getAbsolutePath());
+                            AppData.getInstance().setBinds(new ArrayList<>(getTableView().getItems()));
+                        }
+                    });
+                    setGraphic(textField);
+
+                } else if (trigger instanceof RequiresMessage) {
+                    textField.setText(item);
+                    textField.setDisable(false);
+                    textField.setOnMouseClicked(null);
+                    setGraphic(textField);
+
+                } else if (trigger instanceof NoMessageRequired) {
+                    textField.clear();
+                    saveValue();
+                    textField.setDisable(true);
+                    setGraphic(textField);
+
+                } else {
+                    textField.setText(item);
+                    textField.setDisable(false);
                     setGraphic(textField);
                 }
             }
@@ -137,7 +237,7 @@ public class PageBindsController implements Initializable {
 
     @FXML
     public void onAddBind() {
-        KeyBinding newBind = new KeyBinding("NewKey", "NewAction", "Context", true);
+        KeyBinding newBind = new KeyBinding(List.of("Set Key"), "NewAction", "", true);
         bindsObservable.add(newBind);
         AppData.getInstance().setBinds(new ArrayList<>(bindsObservable));
     }
@@ -161,7 +261,7 @@ public class PageBindsController implements Initializable {
                         itemsContainer.setAlignment(Pos.TOP_LEFT);
 
                         for (KeyBinding kb : selectedItems) {
-                            Label label = new Label(kb.getKey() + " - " + kb.getActionType() + " - " + kb.getContext());
+                            Label label = new Label(kb.getKeyDisplay() + " - " + kb.getActionType() + " - " + kb.getContext());
                             label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
                             label.setPadding(new Insets(2));
                             itemsContainer.getChildren().add(label);
@@ -179,11 +279,16 @@ public class PageBindsController implements Initializable {
     }
 
     private void onAssignKey(KeyBinding bind) throws IOException {
-        final String[] selectedKey = {bind.getKey()};
+        Set<String> currentPressed = new HashSet<>();
+        AtomicReference<TextField> keyField = new AtomicReference<>(new TextField());
 
-        CustomDialog.showDialog("Assign Key", "Press the key you want to assign",
+        CustomDialog.showDialog("Assign Key", "Press the key combination you want",
                 stage -> {
-                    bind.setKey(selectedKey[0]);
+                    String text = keyField.get().getText();
+                    if (text != null && !text.isEmpty()) {
+                        List<String> keys = List.of(text.split("\\+"));
+                        bind.setKeys(new ArrayList<>(keys));
+                    }
                     bindsTable.refresh();
                     AppData.getInstance().setBinds(new ArrayList<>(bindsObservable));
                     stage.close();
@@ -193,23 +298,24 @@ public class PageBindsController implements Initializable {
                     vbox.setPadding(new Insets(15));
                     vbox.setAlignment(Pos.CENTER);
 
-                    TextField keyField = new TextField(bind.getKey());
-                    keyField.setAlignment(Pos.CENTER);
-                    keyField.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-                    keyField.setEditable(false);
+                    keyField.set(new TextField(bind.getKeyDisplay()));
+                    keyField.get().setAlignment(Pos.CENTER);
+                    keyField.get().setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                    keyField.get().setEditable(false);
 
-                    vbox.getChildren().add(keyField);
+                    vbox.getChildren().add(keyField.get());
 
-                    final String[] tempKey = { bind.getKey() };
 
-                    keyField.setOnKeyPressed(event -> {
-                        tempKey[0] = event.getCode().getName();
-                        selectedKey[0] = tempKey[0];
-                        keyField.setText(selectedKey[0]);
+                    keyField.get().setOnKeyPressed(event -> {
+                        currentPressed.add(event.getCode().getName());
+                        keyField.get().setText(String.join("+", currentPressed));
+                    });
+                    keyField.get().setOnKeyReleased(event -> {
+                        currentPressed.remove(event.getCode().getName());
                     });
 
-                    keyField.setOnMouseClicked(e -> keyField.requestFocus());
-                    keyField.requestFocus();
+                    keyField.get().setOnMouseClicked(e -> keyField.get().requestFocus());
+                    keyField.get().requestFocus();
                 });
     }
 }

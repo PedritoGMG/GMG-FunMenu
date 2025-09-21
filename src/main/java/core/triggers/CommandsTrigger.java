@@ -4,6 +4,7 @@ import core.data.AppData;
 import core.file.KeywordTriggerListener;
 import core.game.Game;
 import core.game.capable.ConsoleCapable;
+import core.triggers.labels.NoMessageRequired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-class CommandsTrigger extends AbstractTrigger {
+class CommandsTrigger extends AbstractTrigger implements NoMessageRequired {
 
     public CommandsTrigger() {this(true, false);}
 

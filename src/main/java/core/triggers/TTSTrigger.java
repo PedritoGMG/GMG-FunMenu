@@ -1,8 +1,9 @@
 package core.triggers;
 
 import core.audio.plugin.TTS;
+import core.triggers.labels.RequiresMessage;
 
-public class TTSTrigger extends AbstractTrigger  {
+public class TTSTrigger extends AbstractTrigger implements RequiresMessage {
 
     public TTSTrigger() {
         this(true, false);

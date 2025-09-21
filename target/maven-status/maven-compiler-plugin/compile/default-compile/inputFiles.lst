@@ -1,6 +1,7 @@
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\AudioListener.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\AudioPlayer.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\AudioPlayerQueue.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\AudioPlayerType.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\plugin\TTS.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\audio\plugin\YoutubeAudioDownloader.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\data\AppData.java
@@ -32,6 +33,13 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AbstractTri
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AudioTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\CommandsTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\HelpTrigger.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\labels\MessageIsAudioPlayerType.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\labels\MessageIsFile.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\labels\NoMessageRequired.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\labels\RequiresMessage.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\PauseTrigger.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\PlayTrigger.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\SkipTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TestTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TriggerDTO.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\TriggerFactory.java
