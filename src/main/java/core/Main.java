@@ -3,6 +3,8 @@ package core;
 import java.io.File;
 import java.io.PrintStream;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
 import core.audio.AudioPlayer;
 import core.audio.AudioPlayerQueue;
 import core.data.AppData;
@@ -11,6 +13,7 @@ import core.data.GlobalConsoleOutputStream;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
 import core.game.GameFactory;
+import core.keybindings.GlobalKeyListener;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -53,6 +56,7 @@ public class Main extends Application {
 		appData.load();
 
 		KeywordTriggerListener.getInstance();
+		GlobalKeyListener.register();
 
     	try {
 			playerTTS = new AudioPlayerQueue(audioDevice);
@@ -121,6 +125,15 @@ public class Main extends Application {
 		DataManager.save(AppData.getInstance());
 		
 		deleteTempFiles();
+
+		try {
+			if (GlobalScreen.isNativeHookRegistered()) {
+				GlobalScreen.unregisterNativeHook();
+				System.out.println("Native hook unregistered successfully");
+			}
+		} catch (NativeHookException ex) {
+			System.err.println("Error unregistering native hook: " + ex.getMessage());
+		}
 	}
 
 	public static boolean isReading() {

@@ -1,7 +1,7 @@
 {
   "maxDurationRequest" : 600,
   "ttsVolume" : 0.8,
-  "musicVolume" : 0.8556701,
+  "musicVolume" : 0.09793814,
   "audioVolume" : 1.0,
   "maxQueueSizeTTS" : 45,
   "maxQueueSizeMUSIC" : 45,
@@ -78,7 +78,13 @@
   } ],
   "bannedUsers" : [ ],
   "adminUsers" : [ ],
-  "showRegisteredLines" : false,
+  "binds" : [ {
+    "key" : "E",
+    "actionType" : "FART6",
+    "context" : "Context",
+    "enabled" : true
+  } ],
+  "showRegisteredLines" : true,
   "selectedGameName" : "Team Fortress 2",
   "gameType" : "Custom/Mod",
   "installDir" : "file:///C:/Program%20Files%20(x86)/Steam/steamapps/sourcemods/open_fortress/",

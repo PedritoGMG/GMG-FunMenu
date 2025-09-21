@@ -256,12 +256,18 @@ public class AudioPlayer {
     }
 
     public void setVolume(float volume) {
-    	currentVolume = Math.max(0f, Math.min(1f, volume));
+        currentVolume = Math.max(0f, Math.min(1f, volume));
         if (volumeControl != null) {
             float min = volumeControl.getMinimum();
             float max = volumeControl.getMaximum();
-            float gain = min + (max - min) * currentVolume;
-            volumeControl.setValue(gain);
+            float dB;
+            if (currentVolume == 0f) {
+                dB = min;
+            } else {
+                dB = (float) (20.0 * Math.log10(currentVolume));
+                dB = Math.max(min, Math.min(max, dB));
+            }
+            volumeControl.setValue(dB);
         }
     }
 

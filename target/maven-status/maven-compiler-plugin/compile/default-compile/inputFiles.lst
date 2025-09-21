@@ -24,6 +24,8 @@ C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\GameType.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\GMODGame.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\L4D2Game.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\game\TF2Game.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\keybindings\GlobalKeyListener.java
+C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\keybindings\KeyBinding.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\Main.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AboutTrigger.java
 C:\Users\pedri\IdeaProjects\PGMG-FunMenu\src\main\java\core\triggers\AbstractTrigger.java

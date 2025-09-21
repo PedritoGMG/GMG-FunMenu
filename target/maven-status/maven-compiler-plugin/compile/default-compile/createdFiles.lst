@@ -1,7 +1,10 @@
 core\triggers\TestTrigger.class
+ui\PageBindsController$1.class
 core\file\AbstractChatLogReader.class
 core\triggers\AbstractTrigger.class
+core\keybindings\GlobalKeyListener.class
 core\audio\plugin\YoutubeAudioDownloader$1.class
+ui\PageBindsController$4.class
 ui\PageSettingsController$4.class
 core\game\capable\ChatCapable.class
 core\game\L4D2Game$1.class
@@ -33,6 +36,7 @@ core\game\GameInfo.class
 ui\CustomDialog.class
 core\game\TF2Game.class
 ui\PageSettingsController.class
+core\keybindings\KeyBinding.class
 core\game\capable\ConsoleCapable.class
 core\file\LineListener.class
 core\triggers\TriggerFactory.class
@@ -45,6 +49,7 @@ core\triggers\CommandsTrigger.class
 ui\MicrophoneCapture.class
 core\game\CS2Game$1.class
 core\game\DeadlockGame.class
+ui\PageBindsController$3.class
 core\game\GMODGame$1.class
 ui\PageSettingsController$1.class
 core\data\DataManager.class
@@ -61,6 +66,7 @@ core\triggers\TriggerDTO.class
 core\game\Game.class
 core\file\FileWatcher.class
 core\util\Toast.class
+ui\PageBindsController$2.class
 core\data\ConsoleLine.class
 core\game\GameFactory.class
 core\audio\plugin\TTS$1.class

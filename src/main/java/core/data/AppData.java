@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import core.game.Game;
 import core.game.GameFactory;
 import core.game.GameType;
+import core.keybindings.KeyBinding;
 import core.triggers.TriggerDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +33,8 @@ public class AppData {
     private ArrayList<TriggerDTO> triggers = new ArrayList<>();
     private ArrayList<String> bannedUsers = new ArrayList<>();
     private ArrayList<String> adminUsers = new ArrayList<>();
+
+    private ArrayList<KeyBinding> binds = new ArrayList<>();
 
     @JsonIgnore
     private final ObservableList<ConsoleLine> consoleLines = FXCollections.observableArrayList();
@@ -73,6 +76,8 @@ public class AppData {
         this.triggers       = new ArrayList<>(loaded.triggers);
         this.bannedUsers    = new ArrayList<>(loaded.bannedUsers);
         this.adminUsers     = new ArrayList<>(loaded.adminUsers);
+
+        this.binds     = new ArrayList<>(loaded.binds);
 
         this.selectedGameName = loaded.selectedGameName;
         this.gameType = loaded.gameType;
@@ -165,6 +170,9 @@ public class AppData {
         return removeIgnoreCase(adminUsers, name);
     }
 
+    public ArrayList<KeyBinding> getBinds() {return binds;}
+    public void setBinds(ArrayList<KeyBinding> binds) {this.binds = binds;}
+
     private boolean addUniqueIgnoreCase(List<String> list, String name) {
         if (list.stream().noneMatch(n -> n.equalsIgnoreCase(name))) {
             list.add(name);
@@ -179,7 +187,9 @@ public class AppData {
 
     public synchronized void addConsoleLine(ConsoleLine line) {
         if (consoleLines.size() >= MAX_LINES) {
-            consoleLines.removeFirst();
+            if (!consoleLines.isEmpty()) {
+                consoleLines.remove(0);
+            }
         }
         consoleLines.add(line);
     }
