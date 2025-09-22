@@ -1,7 +1,13 @@
 package core;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -15,15 +21,26 @@ import core.file.KeywordTriggerListener;
 import core.game.GameFactory;
 import core.keybindings.GlobalKeyListener;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ui.CustomDialog;
+
+import javax.sound.sampled.Mixer;
+
+import static core.audio.AudioPlayer.getMixerInfoByName;
 
 public class Main extends Application {
 
@@ -87,6 +104,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+		if (!IsThereCompatibleMicrophone()) {
+			dialogDownloadMicrophone();
+			Platform.exit();
+			System.exit(0);
+			return;
+		}
+
         Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml"));
         Scene scene = new Scene(root);
         
@@ -102,8 +127,9 @@ public class Main extends Application {
 		stage.setOnCloseRequest(event -> OnExit());
         stage.show();
     }
-    
-    public static void deleteTempFiles() {
+
+
+	public static void deleteTempFiles() {
         File folder = Main.TEMP_DIR;
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles();
@@ -134,6 +160,45 @@ public class Main extends Application {
 		} catch (NativeHookException ex) {
 			System.err.println("Error unregistering native hook: " + ex.getMessage());
 		}
+	}
+
+	private boolean IsThereCompatibleMicrophone() {
+		Mixer.Info mixerInfo = getMixerInfoByName(audioDevice);
+		return mixerInfo != null;
+	}
+	private void dialogDownloadMicrophone() throws IOException {
+		CustomDialog.showDialog(
+				"No Compatible Microphone",
+				"No compatible microphone was detected (expected: " + audioDevice + ").\n",
+				null,
+				vbox -> {
+					vbox.setSpacing(10);
+					vbox.setPadding(new Insets(15));
+					vbox.setAlignment(Pos.CENTER);
+
+					Label info = new Label(
+									"Please install VB-Audio Virtual Cable \n before opening the application..."
+					);
+					info.setWrapText(true);
+					info.setStyle("-fx-font-size: 14px; -fx-text-alignment: center; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;");
+
+					String url = "https://vb-audio.com/Cable/";
+					Hyperlink link = new Hyperlink(url);
+					link.setOnAction(e -> {
+						if (Desktop.isDesktopSupported()) {
+							try {
+								Desktop.getDesktop().browse(new URI(url));
+							} catch (IOException ex) {
+								//
+							} catch (URISyntaxException ex) {
+								//
+							}
+						}
+					});
+
+					vbox.getChildren().addAll(info, link);
+				}
+		);
 	}
 
 	public static boolean isReading() {
