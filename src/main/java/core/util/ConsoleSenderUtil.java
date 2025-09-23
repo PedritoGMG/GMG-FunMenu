@@ -34,7 +34,7 @@ public class ConsoleSenderUtil {
     }
 
     public void start() {
-        if (running) return;
+        if (running || cfgFile == null) return;
         running = true;
 
         readerThread = new Thread(this::readerLoop);
