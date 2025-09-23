@@ -272,7 +272,6 @@ public class PageMainController implements Initializable {
 
 		toggleButton.setText(Main.isReading() ? "Stop Reading" : "Start Reading");
 		toggleButton.setSelected(Main.isReading());
-		toggleButton.setDisable(appdata.getLogFile() == null);
 		toggleButton.getStyleClass().add(Main.isReading() ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
 			Main.setReading(newVal);
@@ -316,6 +315,12 @@ public class PageMainController implements Initializable {
 				}
 			}
 		});
+		toggleButton.disableProperty().bind(
+				Bindings.createBooleanBinding(
+						() -> appdata.getLogFile() == null
+								|| appdata.getGameSelector() == null
+				)
+		);
         
     }
 
@@ -328,7 +333,6 @@ public class PageMainController implements Initializable {
 		appData.setLogFile(file.toPath());
     	if (appData.getLogFile()!=null) {
     		fileText.setText(file.getAbsolutePath().toString());
-    		toggleButton.setDisable(false);
 		}
     }
 

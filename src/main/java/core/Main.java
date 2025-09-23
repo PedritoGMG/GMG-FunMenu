@@ -64,8 +64,8 @@ public class Main extends Application {
 
 		PrintStream out = new PrintStream(new GlobalConsoleOutputStream(Color.WHITE), true);
 		PrintStream err = new PrintStream(new GlobalConsoleOutputStream(Color.RED), true);
-		//System.setOut(out);
-		//System.setErr(err);
+		System.setOut(out);
+		System.setErr(err);
 
 		GameFactory.getAllGames();
 

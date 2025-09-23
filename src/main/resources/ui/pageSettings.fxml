@@ -201,7 +201,7 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="customInstallDir" onMouseClicked="#onSelectCustomInstallDir" prefHeight="36.0" prefWidth="497.0" promptText="Select game folder, e.g. Steam\steamapps\common\Team Fortress 2\tf" />
+                  <TextField fx:id="customInstallDir" editable="false" onMouseClicked="#onSelectCustomInstallDir" prefHeight="36.0" prefWidth="497.0" promptText="Select the game folder containing the cfg folder (e.g. Team Fortress 2\tf)" />
                </children>
             </VBox>
          </children>
