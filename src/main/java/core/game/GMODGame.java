@@ -1,5 +1,6 @@
 package core.game;
 
+import core.data.AppData;
 import core.file.AbstractChatLogReader;
 import core.file.ChatMessage;
 import core.game.capable.ChatCapable;
@@ -16,7 +17,6 @@ public class GMODGame extends Game implements ChatCapable, ConsoleCapable, Patch
 
     private final Path cfgFolder;
     private final String setupCommands;
-    private final ConsoleSenderUtil consoleSender;
     private final ChatCapable chatReader;
 
     public GMODGame(Path installDir) {
@@ -35,7 +35,6 @@ public class GMODGame extends Game implements ChatCapable, ConsoleCapable, Patch
         if (installDir != null) {
             this.cfgFolder = installDir.resolve("garrysmod/cfg");
             this.setupCommands = "bind scrolllock \"exec funMenu\"";
-            this.consoleSender = new ConsoleSenderUtil(cfgFolder, "funMenu.cfg");
 
             this.chatReader = new AbstractChatLogReader() {
                 private final Pattern PATTERN = Pattern.compile(
@@ -50,7 +49,6 @@ public class GMODGame extends Game implements ChatCapable, ConsoleCapable, Patch
         } else {
             this.cfgFolder = null;
             this.setupCommands = null;
-            this.consoleSender = null;
             this.chatReader = null;
         }
     }
@@ -61,13 +59,13 @@ public class GMODGame extends Game implements ChatCapable, ConsoleCapable, Patch
     }
 
     @Override
-    public void sendSay(String text) { consoleSender.enqueueCommand("say " + text); }
+    public void sendSay(String text) { AppData.getInstance().getConsoleSender().enqueueCommand("say " + text); }
 
     @Override
-    public void sendEcho(String text) { consoleSender.enqueueCommand("echo " + text); }
+    public void sendEcho(String text) { AppData.getInstance().getConsoleSender().enqueueCommand("echo " + text); }
 
     @Override
-    public void sendRaw(String command) { consoleSender.enqueueCommand(command); }
+    public void sendRaw(String command) { AppData.getInstance().getConsoleSender().enqueueCommand(command); }
 
     @Override
     public Path getCfgFolder() { return cfgFolder; }

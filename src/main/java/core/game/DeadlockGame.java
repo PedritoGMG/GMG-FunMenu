@@ -1,5 +1,6 @@
 package core.game;
 
+import core.data.AppData;
 import core.file.AbstractChatLogReader;
 import core.file.ChatMessage;
 import core.game.capable.ChatCapable;
@@ -16,7 +17,6 @@ public class DeadlockGame extends Game implements ChatCapable, ConsoleCapable, P
 
     private final Path cfgFolder;
     private final String setupCommands;
-    private final ConsoleSenderUtil consoleSender;
     private final ChatCapable chatReader;
 
     public DeadlockGame(Path installDir) {
@@ -34,7 +34,6 @@ public class DeadlockGame extends Game implements ChatCapable, ConsoleCapable, P
         if (installDir != null) {
             this.cfgFolder = installDir.resolve("game/citadel/cfg");
             this.setupCommands = "bind scrolllock \"exec funMenu\"";
-            this.consoleSender = new ConsoleSenderUtil(cfgFolder, "funMenu.cfg");
 
             this.chatReader = new AbstractChatLogReader() {
                 private final Pattern PATTERN = Pattern.compile(
@@ -49,7 +48,6 @@ public class DeadlockGame extends Game implements ChatCapable, ConsoleCapable, P
         } else {
             this.cfgFolder = null;
             this.setupCommands = null;
-            this.consoleSender = null;
             this.chatReader = null;
         }
     }
@@ -61,13 +59,13 @@ public class DeadlockGame extends Game implements ChatCapable, ConsoleCapable, P
 
     // The actual "say" on Deadlock just open the chat box
     @Override
-    public void sendSay(String text) { /*consoleSender.enqueueCommand("say " + text);*/ }
+    public void sendSay(String text) { /*AppData.getInstance().getConsoleSender().enqueueCommand("say " + text);*/ }
 
     @Override
-    public void sendEcho(String text) { consoleSender.enqueueCommand("echo " + text); }
+    public void sendEcho(String text) { AppData.getInstance().getConsoleSender().enqueueCommand("echo " + text); }
 
     @Override
-    public void sendRaw(String command) { consoleSender.enqueueCommand(command); }
+    public void sendRaw(String command) { AppData.getInstance().getConsoleSender().enqueueCommand(command); }
 
     @Override
     public Path getCfgFolder() { return cfgFolder; }

@@ -3,6 +3,7 @@ package ui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,9 +19,7 @@ import core.file.KeywordTriggerListener;
 import core.game.Game;
 import core.game.GameType;
 import core.game.capable.PatchCapable;
-import core.util.FileSelector;
-import core.util.HoverAnimator;
-import core.util.Toast;
+import core.util.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -76,7 +75,7 @@ public class PageMainController implements Initializable {
 		fileText.disableProperty().bind(
 				Main.isReading.or(
 						Bindings.createBooleanBinding(
-								() -> !GameType.CUSTOM.equals(AppData.getInstance().getGameType()),
+								() -> !GameType.CUSTOM.equals(appdata.getGameType()),
 								Main.isReading
 						)
 				)
@@ -273,21 +272,36 @@ public class PageMainController implements Initializable {
 
 		toggleButton.setText(Main.isReading() ? "Stop Reading" : "Start Reading");
 		toggleButton.setSelected(Main.isReading());
-		toggleButton.setDisable(AppData.getInstance().getLogFile() == null);
+		toggleButton.setDisable(appdata.getLogFile() == null);
 		toggleButton.getStyleClass().add(Main.isReading() ? "button-dark2" : "button-dark");
 		toggleButton.selectedProperty().addListener((obs, oldVal, newVal) -> {
 			Main.setReading(newVal);
-			System.out.println("Reading: " + newVal + " | File: " + AppData.getInstance().getLogFile() + " | " + LocalDateTime.now());
+			System.out.println("Reading: " + newVal + " | File: " + appdata.getLogFile() + " | " + LocalDateTime.now());
 			if (Main.isReading()) {
 				toggleButton.setText("Stop Reading");
 				toggleButton.getStyleClass().remove("button-dark");
 				toggleButton.getStyleClass().add("button-dark2");
-				if (AppData.getInstance().getLogFile() != null) {
-					Game game = AppData.getInstance().getGameSelector();
-					if (game instanceof PatchCapable)
-						((PatchCapable) game).patchGameFiles();
-					Main.fileWatcher = new FileWatcher(AppData.getInstance().getLogFile().toFile(), line -> KeywordTriggerListener.getInstance().onNewLine(line));
+
+				if (appdata.getLogFile() != null) {
+					Game game = appdata.getGameSelector();
+					if (game instanceof PatchCapable) {
+						PatchCapable patchable = ((PatchCapable) game);
+						if (appdata.getGameType().isOfficial()) {
+							patchable.patchGameFiles();
+							appdata.setConsoleSender(new ConsoleSenderUtil(patchable.getCfgFolder(), "funMenu.cfg"));
+						} else if (appdata.getGameType().isCustom()) {
+							Path cfgFolder = PatchCapable.detectCfgFolder(appdata.getInstallDir());
+							if (cfgFolder != null) {
+								PatcherUtil.apply(cfgFolder, patchable.getSetupCommands());
+								appdata.setConsoleSender(new ConsoleSenderUtil(cfgFolder, "funMenu.cfg"));
+							}
+						}
+					}
+
+					appdata.getConsoleSender().start();
+					Main.fileWatcher = new FileWatcher(appdata.getLogFile().toFile(), line -> KeywordTriggerListener.getInstance().onNewLine(line));
 				}
+
 			} else {
 				toggleButton.setText("Start Reading");
 				toggleButton.getStyleClass().remove("button-dark2");
@@ -295,6 +309,10 @@ public class PageMainController implements Initializable {
 				if (Main.fileWatcher != null) {
 					Main.fileWatcher.stop();
 					Main.fileWatcher = null;
+				}
+				if (appdata.getConsoleSender() != null) {
+					appdata.getConsoleSender().stop();
+					appdata.setConsoleSender(new ConsoleSenderUtil());
 				}
 			}
 		});

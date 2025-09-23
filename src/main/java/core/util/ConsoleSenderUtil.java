@@ -11,9 +11,14 @@ import java.util.Queue;
 
 public class ConsoleSenderUtil {
 
-    private final Queue<String> commandQueue = new LinkedList<>();
-    private final Path cfgFile;
+    private Queue<String> commandQueue = new LinkedList<>();
+    private Path cfgFile;
     private long lastSend = System.currentTimeMillis();
+
+    private Thread readerThread;
+    private volatile boolean running = false;
+
+    public ConsoleSenderUtil() {}
 
     public ConsoleSenderUtil(Path cfgFolder, String tempCfgName) {
         this.cfgFile = cfgFolder.resolve(tempCfgName);
@@ -26,21 +31,38 @@ public class ConsoleSenderUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        Thread reader = new Thread(this::readerLoop);
-        reader.setDaemon(true);
-        reader.start();
+    public void start() {
+        if (running) return;
+        running = true;
+
+        readerThread = new Thread(this::readerLoop);
+        readerThread.setDaemon(true);
+        readerThread.start();
+    }
+
+    public void stop() {
+        running = false;
+        if (readerThread != null) {
+            readerThread.interrupt();
+            readerThread = null;
+        }
     }
 
     private void readerLoop() {
         Robot robot;
         try { robot = new Robot(); } catch (AWTException e) { e.printStackTrace(); return; }
 
-        while (true) {
+        while (running) {
             if (!commandQueue.isEmpty()) {
                 if (System.currentTimeMillis() - lastSend > 800) {
                     String cmnd = commandQueue.poll();
-                    try { Files.writeString(cfgFile, cmnd); } catch (IOException e) { e.printStackTrace(); }
+                    try {
+                        Files.writeString(cfgFile, cmnd);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     robot.keyPress(KeyEvent.VK_SCROLL_LOCK);
                     robot.delay(30);
@@ -48,16 +70,21 @@ public class ConsoleSenderUtil {
 
                     robot.delay(100);
 
-                    try { Files.writeString(cfgFile, ""); } catch (IOException e) { e.printStackTrace(); }
+                    try {
+                        Files.writeString(cfgFile, "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     lastSend = System.currentTimeMillis();
                 }
             }
-            try { Thread.sleep(10); } catch (InterruptedException e) {}
+            try {Thread.sleep(10);} catch (InterruptedException e) {}
         }
     }
 
     public void enqueueCommand(String text) {
+        if (!running) return;
         commandQueue.add(text);
     }
 }

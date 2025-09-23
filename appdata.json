@@ -73,12 +73,17 @@
     "actionType" : "PINGAS",
     "context" : "",
     "enabled" : false
+  }, {
+    "keys" : [ "Shift", "P" ],
+    "actionType" : "ABOUT",
+    "context" : "",
+    "enabled" : false
   } ],
-  "showRegisteredLines" : false,
+  "showRegisteredLines" : true,
   "selectedGameName" : "Team Fortress 2",
-  "gameType" : null,
-  "installDir" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/",
-  "logFile" : "file:///c:/program%20files%20(x86)/steam/steamapps/common/Team%20Fortress%202/tf/console.log",
+  "gameType" : "Custom/Mod",
+  "installDir" : "file:///C:/Program%20Files%20(x86)/Steam/steamapps/sourcemods/open_fortress/",
+  "logFile" : "file:///C:/Program%20Files%20(x86)/Steam/steamapps/sourcemods/open_fortress/console.log",
   "skipGameSetupDialog" : true,
   "max_LINES" : 500
 }

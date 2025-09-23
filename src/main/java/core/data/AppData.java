@@ -7,6 +7,7 @@ import core.game.GameFactory;
 import core.game.GameType;
 import core.keybindings.KeyBinding;
 import core.triggers.TriggerDTO;
+import core.util.ConsoleSenderUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,6 +45,8 @@ public class AppData {
 
     @JsonIgnore
     private Game selectedGame;
+    @JsonIgnore
+    private ConsoleSenderUtil consoleSender = new ConsoleSenderUtil();
     private String selectedGameName;
     private GameType gameType;
     private Path installDir;
@@ -218,6 +221,10 @@ public class AppData {
         this.selectedGame = game;
         this.selectedGameName = (game != null) ? game.getName() : null;
     }
+
+    @JsonIgnore
+    public ConsoleSenderUtil getConsoleSender() {return consoleSender;}
+    public void setConsoleSender(ConsoleSenderUtil consoleSender) {this.consoleSender = consoleSender;}
 
     public String getSelectedGameName() { return selectedGameName; }
     public void setSelectedGameName(String selectedGameName) { this.selectedGameName = selectedGameName; }
