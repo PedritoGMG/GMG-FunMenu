@@ -471,8 +471,9 @@ public class PageMainController implements Initializable {
 					contentVBox.getChildren().add(createSection.apply(
 							"4) Enable Voice Recording in Game",
 							new Pair<>(
-									"In-game, enable the developer console and run:\n+voicerecord\n\n" +
-											"This keeps your microphone open so you don’t have to press the voice key manually.",
+									"In-game, enable the developer console and run:\n" +
+											"+voicerecord   :  Keeps your microphone open.\n" +
+											"voice_loopback 1   :  Lets you hear yourself while speaking.",
 									null
 							)
 					));

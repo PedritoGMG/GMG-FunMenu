@@ -65,6 +65,8 @@ public class KeywordTriggerListener implements LineListener {
         AbstractTrigger trigger = TriggerFactory.getTrigger(possibleKeyword);
         if (trigger == null || !trigger.canExecute(author)) return;
 
+        System.out.println("Trigger matched: " + trigger.getName() + " by " + author + (arguments.isEmpty() ? "" : (" with args); " + arguments)));
+
         trigger.execute(author, arguments);
     }
 
