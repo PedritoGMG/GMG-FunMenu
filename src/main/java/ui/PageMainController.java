@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import core.Main;
@@ -28,13 +29,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class PageMainController implements Initializable {
 	
@@ -45,7 +47,8 @@ public class PageMainController implements Initializable {
     private Button
     	playTTS, resumeTTS, stopTTS, addTTS,
     	playMusic, resumeMusic, stopMusic, addMusic,
-    	playAudio, resumeAudio, stopAudio, addAudio;
+    	playAudio, resumeAudio, stopAudio, addAudio,
+			btnGuide, btnMicrophoneSettings;
     
     @FXML
     private ToggleButton toggleButton;
@@ -69,6 +72,10 @@ public class PageMainController implements Initializable {
 		micCapture.resetBars();
 
 		AppData appdata = AppData.getInstance();
+
+		Platform.runLater(() -> {
+			if (appdata.isFirstTime()) { try {dialogMainGuide();} catch (IOException e) { } appdata.setFirstTime(false); }
+		});
 
 		if (appdata.getLogFile() != null) fileText.setText(appdata.getLogFile().toString());
 
@@ -105,6 +112,7 @@ public class PageMainController implements Initializable {
         		);
 
 		buttons.forEach(list -> list.forEach(HoverAnimator::apply));
+		List.of(btnGuide, btnMicrophoneSettings).forEach(HoverAnimator::applySimpleHover);
         
         for (int i = 0; i < audioPlayers.size(); i++) {
         	AudioPlayer audioPlayer = audioPlayers.get(i);
@@ -336,6 +344,15 @@ public class PageMainController implements Initializable {
 		}
     }
 
+	@FXML
+	private void OnGuide() throws IOException {
+		dialogMainGuide();
+	}
+	@FXML
+	private void OnMicrophoneSettings() {
+		MicrophoneManager.openMicrophoneSettings();
+	}
+
 	private void setupSlider(Slider slider, AudioPlayer audioPlayer, float initialVolume, Consumer<Float> setAppDataVolume) {
 		audioPlayer.setVolume(initialVolume);
 
@@ -378,4 +395,119 @@ public class PageMainController implements Initializable {
             track.setStyle(style);
         }
     }
+
+	private void dialogMainGuide() throws IOException {
+		CustomDialog.showDialog(
+				"First-Time Setup Guide",
+				"Follow these steps to get the application running correctly.",
+				null,
+				parentVBox -> {
+					parentVBox.setPadding(new Insets(15));
+					parentVBox.setAlignment(Pos.CENTER);
+
+					VBox contentVBox = new VBox(20);
+					contentVBox.setPadding(new Insets(15));
+					contentVBox.setAlignment(Pos.TOP_CENTER);
+
+					BiFunction<String, Pair<String, List<Image>>, VBox> createSection = (titleText, contentPair) -> {
+						VBox section = new VBox(10);
+						section.setAlignment(Pos.TOP_CENTER);
+
+						Label title = new Label(titleText);
+						title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;");
+
+						Label content = new Label(contentPair.getKey());
+						content.setWrapText(true);
+						content.setMaxWidth(450);
+						content.setStyle("-fx-font-size: 14px; -fx-text-fill: #C0C0C0;");
+
+						section.getChildren().addAll(title, content);
+
+						if (contentPair.getValue() != null && !contentPair.getValue().isEmpty()) {
+							for (Image img : contentPair.getValue()) {
+								ImageView imageView = new ImageView(img);
+								imageView.setFitWidth(500);
+								imageView.setPreserveRatio(true);
+								section.getChildren().add(imageView);
+							}
+						}
+
+						return section;
+					};
+
+					contentVBox.getChildren().add(createSection.apply(
+							"1) Set the Correct Microphone",
+							new Pair<>(
+									"Most Source engine games don’t let you choose a specific microphone inside the game, " +
+											"so you need to set it as the default input device in your system’s sound settings.\n\n" +
+											"• Open your system’s sound settings.\n" +
+											"• Set the microphone used by the app — CABLE Output — as the default.",
+									List.of(new Image(getClass().getResourceAsStream("/images/microphone_button.png")), new Image(getClass().getResourceAsStream("/images/default_microphone.png")))
+							)
+					));
+
+					contentVBox.getChildren().add(createSection.apply(
+							"2) Select the Game in the App",
+							new Pair<>(
+									"Go to the app’s Settings and choose the game you’ll use it with.\n\n" +
+											"• When you select a game (official or custom/mod), a message will pop up explaining that you must complete a one-time configuration before running the app.\n" +
+											"• For officially supported games, the app will automatically detect the correct file paths.\n" +
+											"• For custom games or mods, manually set:\n" +
+											"   - The game folder (the one containing the cfg folder)\n" +
+											"   - The log file the app will read (usually console.log)",
+									List.of(new Image(getClass().getResourceAsStream("/images/game_config.png")))
+							)
+					));
+
+					contentVBox.getChildren().add(createSection.apply(
+							"3) Start Reading & Launch the Game",
+							new Pair<>(
+									"After setting the paths, click Start Reading in the app and launch the game.\n" +
+											"Tip: The order isn’t critical after the first time, but for initial setup, it’s easiest to start the app first.",
+									null
+							)
+					));
+
+					contentVBox.getChildren().add(createSection.apply(
+							"4) Enable Voice Recording in Game",
+							new Pair<>(
+									"In-game, enable the developer console and run:\n+voicerecord\n\n" +
+											"This keeps your microphone open so you don’t have to press the voice key manually.",
+									null
+							)
+					));
+
+					contentVBox.getChildren().add(createSection.apply(
+							"5) Use Commands",
+							new Pair<>(
+									"Now, when someone types a command like fm!tts, it should work.\n\n" +
+											"• All commands start with fm!, for example:\n" +
+											"   - fm!tts\n" +
+											"   - fm!request\n" +
+											"   - fm!about\n" +
+											"• You can view and customize them anytime in the Commands section of the app.",
+									null
+							)
+					));
+
+					contentVBox.getChildren().add(createSection.apply(
+							"6) Need Help Later?",
+							new Pair<>(
+									"You can always revisit this guide by clicking the ? icon in the app.",
+									List.of(new Image(getClass().getResourceAsStream("/images/guide_button.png")))
+							)
+					));
+
+					ScrollPane scrollPane = new ScrollPane(contentVBox);
+					scrollPane.setFitToWidth(true);
+					scrollPane.setPrefViewportWidth(550);
+					scrollPane.setPrefViewportHeight(600);
+					scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+					parentVBox.getChildren().add(scrollPane);
+				}
+		);
+	}
+
+
 }

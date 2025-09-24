@@ -86,7 +86,7 @@ public class CustomDialog {
 	    scene.setFill(Color.TRANSPARENT);
 	    
 	    dialogStage.getIcons().add(new Image(CustomDialog.class.getResourceAsStream("/icon.png")));
-	    dialogStage.setTitle("Dialog - PGMG-FunPad");
+	    dialogStage.setTitle("Dialog - GMG-FunMenu");
 
 	    dialogStage.initModality(Modality.APPLICATION_MODAL);
 	    dialogStage.initStyle(StageStyle.TRANSPARENT);

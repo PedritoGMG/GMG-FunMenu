@@ -53,6 +53,7 @@ public class AppData {
     private Path logFile;
 
     private boolean skipGameSetupDialog = false;
+    private boolean firstTime = true;
 
 
     private AppData() {}
@@ -88,6 +89,7 @@ public class AppData {
         this.logFile = loaded.logFile;
 
         this.skipGameSetupDialog = loaded.skipGameSetupDialog;
+        this.firstTime = loaded.firstTime;
 
         if (selectedGameName != null && GameType.OFFICIAL.equals(gameType)) {
             Game selectedGame = GameFactory.getGame(selectedGameName);
@@ -240,4 +242,8 @@ public class AppData {
 
     public boolean isSkipGameSetupDialog() {return skipGameSetupDialog;}
     public void setSkipGameSetupDialog(boolean skipGameSetupDialog) {this.skipGameSetupDialog = skipGameSetupDialog;}
+
+    public boolean isFirstTime() {return firstTime;}
+
+    public void setFirstTime(boolean firstTime) {this.firstTime = firstTime;}
 }

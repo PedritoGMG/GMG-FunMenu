@@ -278,5 +278,31 @@
             </VBox>
          </children>
       </HBox>
+      <HBox alignment="CENTER" layoutX="750.0" layoutY="20.0" spacing="25.0" style="-fx-padding: 10;" styleClass="volume-control">
+         <children>
+            <Button fx:id="btnGuide" mnemonicParsing="false" onAction="#OnGuide" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+               <graphic>
+                  <VBox>
+                     <children>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/question-b.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnMicrophoneSettings" mnemonicParsing="false" onAction="#OnMicrophoneSettings" style="-fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 8;" styleClass="control-btn">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/microphone-b.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

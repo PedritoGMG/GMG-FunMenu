@@ -48,7 +48,7 @@ public class Main extends Application {
 	public static String audioDevice = "CABLE Input";
 	public static FileWatcher fileWatcher = null;
 	public static final BooleanProperty isReading = new SimpleBooleanProperty(false);
-	public static final File TEMP_DIR = new File("temp-PGMG_FM-Downloads");
+	public static final File TEMP_DIR = new File("temp-GMG_FM-Downloads");
 	static {
 	    if (!TEMP_DIR.exists()) {
 	        TEMP_DIR.mkdirs();
@@ -117,7 +117,7 @@ public class Main extends Application {
         
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 		
-        stage.setTitle("PGMG-FunPad");
+        stage.setTitle("GMG-FunMenu");
         scene.getStylesheets().add(getClass().getResource("/ui/styles.css").toExternalForm());
         
         scene.setFill(Color.TRANSPARENT);

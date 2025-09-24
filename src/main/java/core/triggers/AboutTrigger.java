@@ -20,8 +20,8 @@ public class AboutTrigger extends AbstractTrigger implements NoMessageRequired {
     public void execute(String author, String message) {
         Game game = AppData.getInstance().getGameSelector();
         if (game instanceof ConsoleCapable) {
-            ((ConsoleCapable) game).sendSay("FunMenu by ✬PedritoGMG✬,");
-            ((ConsoleCapable) game).sendSay("Download at: github.com/PedritoGMG/PGMG-FunMenu");
+            ((ConsoleCapable) game).sendSay("GMG-FunMenu by ✬PedritoGMG✬,");
+            ((ConsoleCapable) game).sendSay("Download at: github.com/PedritoGMG/GMG-FunMenu");
         }
     }
 }
