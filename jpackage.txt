@@ -1,0 +1,1 @@
+jpackage --name "GMG-FunMenu"   --input target/   --main-jar GMG-FunMenu-1.0.0.jar   --main-class core.Main   --runtime-image runtime   --dest installers   --type app-image   --app-version 1.0.0   --icon "src/main/resources/icon.ico"
