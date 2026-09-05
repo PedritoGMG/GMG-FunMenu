@@ -115,22 +115,22 @@ public class Main extends Application {
 			return;
 		}
 
-		checkYoutubeDownloaderUpdate();
-
         Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml"));
         Scene scene = new Scene(root);
-        
+
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
-		
+
         stage.setTitle("GMG-FunMenu");
         scene.getStylesheets().add(getClass().getResource("/ui/styles.css").toExternalForm());
-        
+
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
-        
+
         stage.setScene(scene);
 		stage.setOnCloseRequest(event -> OnExit());
         stage.show();
+
+		checkYoutubeDownloaderUpdateAsync();
     }
 
 
@@ -206,15 +206,32 @@ public class Main extends Application {
 		);
 	}
 
-	private void checkYoutubeDownloaderUpdate() {
-		try {
-			YoutubeAudioDownloader.UpdateInfo updateInfo = YoutubeAudioDownloader.checkForUpdate();
-			if (updateInfo.isUpdateAvailable()) {
-				dialogUpdateYtDlp(updateInfo.currentVersion(), updateInfo.latestVersion());
+	private void checkYoutubeDownloaderUpdateAsync() {
+		Task<YoutubeAudioDownloader.UpdateInfo> checkTask = new Task<>() {
+			@Override
+			protected YoutubeAudioDownloader.UpdateInfo call() throws Exception {
+				return YoutubeAudioDownloader.checkForUpdate();
 			}
-		} catch (Exception e) {
-			System.err.println("Could not check for yt-dlp updates: " + e.getMessage());
-		}
+		};
+
+		checkTask.setOnSucceeded(e -> {
+			YoutubeAudioDownloader.UpdateInfo updateInfo = checkTask.getValue();
+			if (updateInfo.isUpdateAvailable()) {
+				try {
+					dialogUpdateYtDlp(updateInfo.currentVersion(), updateInfo.latestVersion());
+				} catch (IOException ex) {
+					System.err.println("Could not show yt-dlp update dialog: " + ex.getMessage());
+				}
+			}
+		});
+
+		checkTask.setOnFailed(e -> {
+			System.err.println("Could not check for yt-dlp updates: " + checkTask.getException().getMessage());
+		});
+
+		Thread checkThread = new Thread(checkTask);
+		checkThread.setDaemon(true);
+		checkThread.start();
 	}
 
 	private void dialogUpdateYtDlp(String currentVersion, String latestVersion) throws IOException {
