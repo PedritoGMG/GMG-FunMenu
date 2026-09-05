@@ -65,8 +65,17 @@ jobs:
 
       # --- Signed path: only runs once SIGNPATH_API_TOKEN is configured as a repo secret. ---
       # Until then these steps are skipped entirely and the release ships unsigned (see below).
+      # `secrets` can't be referenced directly in `if:` (GitHub rejects the workflow file for
+      # it), so the check happens once here via `env`, and later steps gate on this step's output.
+      - name: Check for SignPath credentials
+        id: signpath
+        shell: bash
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+        run: echo "enabled=$([ -n "$SIGNPATH_API_TOKEN" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
       - name: Upload unsigned exe for signing
-        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        if: steps.signpath.outputs.enabled == 'true'
         id: upload-unsigned
         uses: actions/upload-artifact@v4
         with:
@@ -75,7 +84,7 @@ jobs:
           retention-days: 5
 
       - name: Sign exe with SignPath
-        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        if: steps.signpath.outputs.enabled == 'true'
         uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: "${{ secrets.SIGNPATH_API_TOKEN }}"
@@ -87,7 +96,7 @@ jobs:
           output-artifact-directory: signed
 
       - name: Swap in the signed exe
-        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        if: steps.signpath.outputs.enabled == 'true'
         shell: pwsh
         run: Copy-Item -Force signed\GMG-FunMenu.exe installers\GMG-FunMenu\GMG-FunMenu.exe
       # --- End signed path ---
