@@ -1,0 +1,72 @@
+name: Release
+
+# Push a version tag to cut a release, e.g.:
+#   git tag v1.0.1
+#   git push origin v1.0.1
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Resolve version from tag
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Set project version from tag
+        run: mvn -B org.codehaus.mojo:versions-maven-plugin:2.16.2:set -DnewVersion=${{ steps.version.outputs.version }} -DgenerateBackupPoms=false
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests package
+
+      - name: Resolve built jar name
+        id: jar
+        shell: bash
+        run: |
+          jar_path=$(ls target/*.jar | head -n1)
+          echo "name=$(basename "$jar_path")" >> "$GITHUB_OUTPUT"
+
+      - name: Package app image with jpackage
+        shell: cmd
+        run: >
+          jpackage --name "GMG-FunMenu"
+          --input target
+          --main-jar ${{ steps.jar.outputs.name }}
+          --main-class core.Main
+          --runtime-image runtime
+          --dest installers
+          --type app-image
+          --app-version ${{ steps.version.outputs.version }}
+          --icon src\main\resources\icon.ico
+
+      - name: Bundle external tools (ffmpeg, yt-dlp, JNativeHook)
+        shell: pwsh
+        run: Copy-Item -Recurse -Force libs installers\GMG-FunMenu\libs
+
+      - name: Zip release artifact
+        shell: pwsh
+        run: Compress-Archive -Path installers\GMG-FunMenu\* -DestinationPath "GMG-FunMenu-${{ steps.version.outputs.version }}-win64.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: GMG-FunMenu ${{ github.ref_name }}
+          files: GMG-FunMenu-*-win64.zip
+          generate_release_notes: true
