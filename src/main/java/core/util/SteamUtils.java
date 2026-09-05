@@ -45,7 +45,7 @@ public class SteamUtils {
 
         try {
             String text = Files.readString(libFile);
-            Matcher m = Pattern.compile("\"\\d+\"\\s*\"([^\"]+)\"").matcher(text);
+            Matcher m = Pattern.compile("\"path\"\\s*\"([^\"]+)\"", Pattern.CASE_INSENSITIVE).matcher(text);
             while (m.find()) {
                 Path p = Paths.get(m.group(1)).resolve("steamapps");
                 if (Files.exists(p)) result.add(p);
