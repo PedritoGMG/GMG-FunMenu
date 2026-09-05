@@ -96,31 +96,30 @@ public class YoutubeAudioDownloader {
 
     /**
      * Actually performs the update. Only called after the user has explicitly confirmed.
-     * --no-check-certificates is needed here for the same reason as getLatestVersion (the
-     * bundled Python trust store doesn't recognize the antivirus's certificate either), and is
-     * an acceptable trade-off scoped to this updater call because yt-dlp verifies the
-     * authenticity of what it downloads with its own embedded signature, independent of TLS.
+     * Certificate validation is kept on here (unlike getLatestVersion's curl-based lookup):
+     * yt-dlp's updater only checks a SHA256 against the same connection, not a real signature,
+     * so it has no protection against a tampered download if TLS validation were disabled.
      * The process is always let run to completion and is never killed: yt-dlp downloads to a
      * temp file and swaps it in as its last step, so interrupting it mid-way risks corrupting
      * the binary (verified the hard way while building this).
      */
-    public static boolean updateToLatest() {
-        try {
-            Process process = new ProcessBuilder(YTDLP_PATH, "-U", "--no-check-certificates")
-                    .redirectErrorStream(true)
-                    .start();
+    public static void updateToLatest() throws IOException, InterruptedException {
+        Process process = new ProcessBuilder(YTDLP_PATH, "-U")
+                .redirectErrorStream(true)
+                .start();
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println("[yt-dlp update] " + line);
-                }
+        String lastErrorLine = null;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("[yt-dlp update] " + line);
+                if (line.startsWith("ERROR")) lastErrorLine = line;
             }
+        }
 
-            return process.waitFor() == 0;
-        } catch (IOException | InterruptedException e) {
-            System.err.println("yt-dlp update failed: " + e.getMessage());
-            return false;
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new IOException(lastErrorLine != null ? lastErrorLine : "yt-dlp exited with code " + exitCode);
         }
     }
 

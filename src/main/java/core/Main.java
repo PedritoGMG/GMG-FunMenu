@@ -225,21 +225,15 @@ public class Main extends Application {
 					stage.getScene().getRoot().setDisable(true);
 					Toast.showIn(stage, "Updating yt-dlp, please wait...", 8000);
 
-					Task<Boolean> updateTask = new Task<>() {
+					Task<Void> updateTask = new Task<>() {
 						@Override
-						protected Boolean call() {
-							return YoutubeAudioDownloader.updateToLatest();
+						protected Void call() throws Exception {
+							YoutubeAudioDownloader.updateToLatest();
+							return null;
 						}
 					};
 
-					updateTask.setOnSucceeded(e -> {
-						if (updateTask.getValue()) {
-							stage.close();
-						} else {
-							Toast.showIn(stage, "The update failed. You can try again later.", 8000);
-							stage.getScene().getRoot().setDisable(false);
-						}
-					});
+					updateTask.setOnSucceeded(e -> stage.close());
 
 					updateTask.setOnFailed(e -> {
 						Toast.showIn(stage, "The update failed: " + updateTask.getException().getMessage(), 8000);
