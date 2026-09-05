@@ -76,6 +76,12 @@ Additional commands are available within the program, each with its own descript
 
 ---
 
+## Code Signing & Privacy
+
+Release binaries are code-signed free of charge by the [SignPath Foundation](https://signpath.org) — see [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) for the signing process and team, and [PRIVACY.md](PRIVACY.md) for what data the app stores and what network requests it makes.
+
+---
+
 ## Tips
 
 - Launch the program before the game during initial setup.  
