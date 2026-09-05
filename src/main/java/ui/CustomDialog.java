@@ -51,7 +51,7 @@ public class CustomDialog {
 	public void setMessage(String text) {
 		this.dialogBodyText.setText(text);
     }
-	
+
 	@FXML
 	public void onClose() {
 		dialogStage.close();
@@ -84,7 +84,7 @@ public class CustomDialog {
 	    Scene scene = new Scene(root);
 	    scene.getStylesheets().add(CustomDialog.class.getResource("/ui/styles.css").toExternalForm());
 	    scene.setFill(Color.TRANSPARENT);
-	    
+
 	    dialogStage.getIcons().add(new Image(CustomDialog.class.getResourceAsStream("/icon.png")));
 	    dialogStage.setTitle("Dialog - GMG-FunMenu");
 
@@ -93,10 +93,10 @@ public class CustomDialog {
 
 	    dialogStage.setScene(scene);
 	    controller.setDialogStage(dialogStage);
-	    
+
 	    controller.setTitle(title);
 	    controller.setMessage(message);
-	    
+
 
 	    if (onConfirmar != null) {
 	        controller.btnDialogConfirm.setOnAction(e -> {

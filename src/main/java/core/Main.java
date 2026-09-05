@@ -13,6 +13,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import core.audio.AudioPlayer;
 import core.audio.AudioPlayerQueue;
+import core.audio.plugin.YoutubeAudioDownloader;
 import core.data.AppData;
 import core.data.DataManager;
 import core.data.GlobalConsoleOutputStream;
@@ -20,10 +21,12 @@ import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
 import core.game.GameFactory;
 import core.keybindings.GlobalKeyListener;
+import core.util.Toast;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -112,6 +115,8 @@ public class Main extends Application {
 			return;
 		}
 
+		checkYoutubeDownloaderUpdate();
+
         Parent root = FXMLLoader.load(getClass().getResource("/ui/main.fxml"));
         Scene scene = new Scene(root);
         
@@ -197,6 +202,64 @@ public class Main extends Application {
 					});
 
 					vbox.getChildren().addAll(info, link);
+				}
+		);
+	}
+
+	private void checkYoutubeDownloaderUpdate() {
+		try {
+			YoutubeAudioDownloader.UpdateInfo updateInfo = YoutubeAudioDownloader.checkForUpdate();
+			if (updateInfo.isUpdateAvailable()) {
+				dialogUpdateYtDlp(updateInfo.currentVersion(), updateInfo.latestVersion());
+			}
+		} catch (Exception e) {
+			System.err.println("Could not check for yt-dlp updates: " + e.getMessage());
+		}
+	}
+
+	private void dialogUpdateYtDlp(String currentVersion, String latestVersion) throws IOException {
+		CustomDialog.showDialog(
+				"Youtube Downloader Update Available",
+				"A new version of yt-dlp (the tool used to download Youtube audio) is available.\nIt is recommended to update now to keep Youtube downloads working correctly.",
+				stage -> {
+					stage.getScene().getRoot().setDisable(true);
+					Toast.showIn(stage, "Updating yt-dlp, please wait...", 8000);
+
+					Task<Boolean> updateTask = new Task<>() {
+						@Override
+						protected Boolean call() {
+							return YoutubeAudioDownloader.updateToLatest();
+						}
+					};
+
+					updateTask.setOnSucceeded(e -> {
+						if (updateTask.getValue()) {
+							stage.close();
+						} else {
+							Toast.showIn(stage, "The update failed. You can try again later.", 8000);
+							stage.getScene().getRoot().setDisable(false);
+						}
+					});
+
+					updateTask.setOnFailed(e -> {
+						Toast.showIn(stage, "The update failed: " + updateTask.getException().getMessage(), 8000);
+						stage.getScene().getRoot().setDisable(false);
+					});
+
+					new Thread(updateTask).start();
+				},
+				vbox -> {
+					vbox.setSpacing(10);
+					vbox.setPadding(new Insets(15));
+					vbox.setAlignment(Pos.CENTER);
+
+					Label info = new Label(
+							"Current version: " + currentVersion + "\nLatest version: " + latestVersion
+					);
+					info.setWrapText(true);
+					info.setStyle("-fx-font-size: 14px; -fx-text-alignment: center; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;");
+
+					vbox.getChildren().add(info);
 				}
 		);
 	}
