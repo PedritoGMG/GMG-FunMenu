@@ -5,7 +5,7 @@
 
   <groupId>GMG-FunMenu</groupId>
   <artifactId>GMG-FunMenu</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,13 +16,20 @@
   </properties>
 
   <repositories>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
+    <!--
+      central must come before jitpack.io: com.github.kwhat:jnativehook:2.2.2 exists on both,
+      but JitPack's build of it is missing the bundled native .dll/.so libraries (Maven picks
+      the first repository that has the artifact, so order here matters). Everything that only
+      exists on JitPack (mp3spi, vavi-sound, klab-commons-cli, java-lame) 404s on central and
+      falls through to jitpack.io as before.
+    -->
     <repository>
       <id>central</id>
       <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
     <repository>
       <id>be.0110.repo-releases</id>
