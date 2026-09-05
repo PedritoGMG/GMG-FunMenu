@@ -63,6 +63,35 @@ jobs:
           --app-version ${{ steps.version.outputs.version }}
           --icon src\main\resources\icon.ico
 
+      # --- Signed path: only runs once SIGNPATH_API_TOKEN is configured as a repo secret. ---
+      # Until then these steps are skipped entirely and the release ships unsigned (see below).
+      - name: Upload unsigned exe for signing
+        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        id: upload-unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-exe
+          path: installers\GMG-FunMenu\GMG-FunMenu.exe
+          retention-days: 5
+
+      - name: Sign exe with SignPath
+        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: "${{ secrets.SIGNPATH_API_TOKEN }}"
+          organization-id: "${{ vars.SIGNPATH_ORGANIZATION_ID }}"
+          project-slug: "${{ vars.SIGNPATH_PROJECT_SLUG }}"
+          signing-policy-slug: "${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}"
+          github-artifact-id: "${{ steps.upload-unsigned.outputs.artifact-id }}"
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - name: Swap in the signed exe
+        if: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+        shell: pwsh
+        run: Copy-Item -Force signed\GMG-FunMenu.exe installers\GMG-FunMenu\GMG-FunMenu.exe
+      # --- End signed path ---
+
       - name: Bundle external tools (ffmpeg, yt-dlp, JNativeHook)
         shell: pwsh
         run: Copy-Item -Recurse -Force libs installers\GMG-FunMenu\libs
