@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import core.Main;
 import core.audio.AudioPlayer;
 import core.audio.plugin.TTS;
-import core.audio.plugin.YoutubeAudioDownloader;
+import core.audio.plugin.AudioDownloader;
 import core.data.AppData;
 import core.file.FileWatcher;
 import core.file.KeywordTriggerListener;
@@ -191,20 +191,24 @@ public class PageMainController implements Initializable {
 				
 				CustomDialog.showDialog("Add Music to the Queue", "Select what type of addition you want to make: ", null, vbox -> {
 
-					Button btn1 = new Button("Youtube URL");
+					Button btn1 = new Button("Audio Link / URL");
 					Button btn2 = new Button("Audio File");
-					
-					TextField inputYoutubeURL = new TextField();
-					inputYoutubeURL.setPromptText("https://www.youtube.com/watch?v=");
+
+					TextField inputUrl = new TextField();
+					inputUrl.setPromptText("Paste the audio link here...");
+					inputUrl.setPrefWidth(450);
+
 					btn1.setOnAction(eventBtn -> {
 					    try {
-					        CustomDialog.showDialog("Add Youtube Music to the Queue",
-					            "Put the link of the music you want to add: ", stage -> {
+					        CustomDialog.showDialog("Add Music from URL to the Queue",
+					            "Put the audio link of the music you want to add.\n" +
+					            "Works with YouTube, TikTok, Twitter/X, Facebook, Twitch,\n" +
+					            "SoundCloud, Dailymotion, Bandcamp, and Mixcloud.", stage -> {
 
-					                String url = inputYoutubeURL.getText();
+					                String url = inputUrl.getText();
 
 					                stage.getScene().getRoot().setDisable(true);
-					                YoutubeAudioDownloader.request(
+					                AudioDownloader.request(
 					                    url,
 					                    () -> {
 					                    	Toast.showIn(stage, "Invalid Url", 8000);
@@ -227,8 +231,8 @@ public class PageMainController implements Initializable {
 					                    }
 					                );
 
-					            }, vboxYoutube -> {
-					                vboxYoutube.getChildren().addAll(inputYoutubeURL);
+					            }, vboxUrl -> {
+					                vboxUrl.getChildren().addAll(inputUrl);
 					            });
 					    } catch (IOException e) {
 					        e.printStackTrace();

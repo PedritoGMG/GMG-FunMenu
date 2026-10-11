@@ -41,10 +41,30 @@ The program guides you through the setup, including microphone selection and gam
 ## Commands
 
 - **TTS (`fm!tts`)** – Speak text with multiple voices.  
-- **Play YouTube Music (`fm!request`)** – Download and play videos with optional duration limits.  
+- **Play Music from a Link (`fm!request`)** – Download and play audio from YouTube, SoundCloud, and other supported sites, with optional duration limits.  
 - **Playback Controls** – Stop, clear, or adjust volumes.
 
 Additional commands are available within the program, each with its own description. Commands can be enabled or disabled at any time and some may be restricted to administrators.
+
+---
+
+## Supported Audio Sources
+
+Audio requests are downloaded with [yt-dlp](https://github.com/yt-dlp/yt-dlp). Only the sites below are allowed — each was verified to download a single track/clip (including its duration, for the duration limit check) without needing a logged-in account:
+
+- YouTube (including Shorts)
+- TikTok
+- Twitter / X
+- Facebook
+- Twitch (clips & VODs)
+- SoundCloud
+- Dailymotion
+- Bandcamp
+- Mixcloud
+
+Other sites yt-dlp supports (Instagram, Vimeo, Audiomack, Reddit, etc.) are intentionally not allowed: they either require a logged-in session or don't reliably return a duration, so requests to them are rejected up front instead of failing partway through.
+
+Full-length playlists, albums, and sets are not supported — only single tracks/clips are downloaded.
 
 ---
 
@@ -85,7 +105,7 @@ Release binaries are code-signed free of charge by the [SignPath Foundation](htt
 ## Tips
 
 - Launch the program before the game during initial setup.  
-- Set reasonable YouTube download limits.  
+- Set reasonable audio download duration limits.  
 - Balance TTS, music, and game audio for the best experience.
 
 ---

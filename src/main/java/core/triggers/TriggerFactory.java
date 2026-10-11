@@ -14,7 +14,7 @@ public class TriggerFactory {
         register(new CommandsTrigger());
         register(new HelpTrigger());
         register(new TTSTrigger());
-        register(new YTRequestTrigger());
+        register(new AudioRequestTrigger());
         register(new TestTrigger());
         register(new PlayTrigger());
         register(new SkipTrigger());

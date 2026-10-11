@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.Main;
 import core.audio.plugin.TTS;
-import core.audio.plugin.YoutubeAudioDownloader;
 import core.data.AppData;
 import core.game.Game;
 import core.game.capable.ChatCapable;

@@ -11,7 +11,7 @@ All configuration is stored **only on your own computer**, in `appdata.json` nex
 - Keybindings.
 - The admin and ban lists you configure (Steam usernames you add, read from the game's own chat/console log).
 
-Audio downloaded via the YouTube command is temporarily cached in a `temp-GMG_FM-Downloads` folder next to the application and is not uploaded anywhere.
+Audio downloaded via the audio request command is temporarily cached in a `temp-GMG_FM-Downloads` folder next to the application and is not uploaded anywhere.
 
 ## Network Requests
 
@@ -20,14 +20,14 @@ GMG-FunMenu makes network requests only when required by the feature you're acti
 | Feature | Destination | Data sent |
 |---|---|---|
 | Text-to-speech (`fm!tts`) | `cache-a.oddcast.com` (third-party TTS provider) | The text you asked to be spoken, plus your voice/language selection |
-| YouTube audio requests (`fm!request`) | YouTube, via the bundled `yt-dlp.exe` | The video URL you requested |
+| Audio requests (`fm!request`) | The site the link points to (YouTube, SoundCloud, and others), via the bundled `yt-dlp.exe` | The URL you requested |
 | yt-dlp update check (on startup) | `api.github.com` | Nothing but the request itself (public, unauthenticated) |
 
 No other data — chat logs, usernames, keybindings, or admin/ban lists — ever leaves your machine.
 
 ## Third-Party Tools
 
-GMG-FunMenu bundles unmodified, official third-party executables to provide its functionality: `ffmpeg`, `yt-dlp`, and `JNativeHook`. Each is subject to its own license and, where applicable, its own handling of the specific request it performs on your behalf (e.g., yt-dlp's request to YouTube).
+GMG-FunMenu bundles unmodified, official third-party executables to provide its functionality: `ffmpeg`, `yt-dlp`, and `JNativeHook`. Each is subject to its own license and, where applicable, its own handling of the specific request it performs on your behalf (e.g., yt-dlp's request to the site you linked to).
 
 ## Contact
 

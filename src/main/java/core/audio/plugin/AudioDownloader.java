@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -14,12 +16,20 @@ import core.data.AppData;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 
-public class YoutubeAudioDownloader {
+/**
+ * Downloads audio via yt-dlp, restricted to the sites listed in {@link #ALLOWED_HOST_SUFFIXES}.
+ * yt-dlp itself ships extractors for hundreds of sites, but not all of them work reliably
+ * without a logged-in session (e.g. Vimeo's web client, Instagram's duration metadata,
+ * Audiomack's current extractor) — {@link #ALLOWED_HOST_SUFFIXES} is a curated list of the
+ * ones that were verified to work anonymously. Extend it only after verifying a real URL
+ * from that site downloads successfully without requiring cookies/login.
+ */
+public class AudioDownloader {
 
     private static final String YTDLP_PATH = "libs/yt-dlp.exe";
     private static final String GITHUB_LATEST_RELEASE_URL = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest";
 
-    public static File downloadAudioSegment(String videoUrl, int startSeconds, int durationSeconds) throws IOException, InterruptedException {
+    public static File downloadAudioSegment(String mediaUrl, int startSeconds, int durationSeconds) throws IOException, InterruptedException {
         String ytdlpPath = "libs/yt-dlp.exe";
         int endSeconds = startSeconds + durationSeconds;
 
@@ -37,7 +47,7 @@ public class YoutubeAudioDownloader {
         	    "--download-sections", sectionArg,
         	    "--force-overwrites",
         	    "--playlist-items", "1",
-        	    videoUrl
+        	    mediaUrl
         	);
 
         builder.inheritIO();
@@ -50,7 +60,7 @@ public class YoutubeAudioDownloader {
 
         return tempAudio;
     }
-    
+
     public record UpdateInfo(String currentVersion, String latestVersion) {
         public boolean isUpdateAvailable() {
             return currentVersion != null && latestVersion != null && !currentVersion.equals(latestVersion);
@@ -123,24 +133,70 @@ public class YoutubeAudioDownloader {
         }
     }
 
-    public static boolean isYoutubeURLValid(String url) {
-    	if (url == null) return false;
+    // Hosts verified to let yt-dlp fetch a single track/clip's audio and its duration
+    // without needing a logged-in session. Matches the exact host or any of its subdomains
+    // (e.g. "bandcamp.com" also matches "hopalong.bandcamp.com").
+    private static final String[] ALLOWED_HOST_SUFFIXES = {
+            "youtube.com", "youtu.be",
+            "soundcloud.com",
+            "bandcamp.com",
+            "twitch.tv",
+            "facebook.com", "fb.watch",
+            "tiktok.com",
+            "dailymotion.com", "dai.ly",
+            "mixcloud.com",
+            "twitter.com", "x.com",
+    };
 
-        String youtubeVideoRegex = "^(https?://)?(www\\.)?(youtube\\.com/watch\\?v=|youtu\\.be/|youtube\\.com/shorts/)[\\w-]{11}([?&].*)?$";
+    // Substrings that identify a link as a multi-item collection (playlist, album, channel,
+    // set, etc.) rather than a single track/clip. downloadAudioSegment only ever pulls one
+    // item (--no-playlist --playlist-items 1), so these are rejected up front across the
+    // sites known to use them, instead of silently downloading "item 1" of something else.
+    private static final String[] MULTI_ITEM_MARKERS = {
+            "playlist?list=",   // YouTube playlist
+            "/sets/",            // SoundCloud set
+            "/album/",           // Bandcamp album
+            "/playlists/",       // Mixcloud/SoundCloud playlists
+    };
 
-        if (url.contains("playlist?list=")) return false;
+    public static boolean isSupportedURLValid(String url) {
+        if (url == null) return false;
 
-        return url.matches(youtubeVideoRegex);
+        URI uri;
+        try {
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            return false;
+        }
+
+        String scheme = uri.getScheme();
+        String host = uri.getHost();
+        if (host == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) return false;
+
+        host = host.toLowerCase();
+        boolean hostAllowed = false;
+        for (String suffix : ALLOWED_HOST_SUFFIXES) {
+            if (host.equals(suffix) || host.endsWith("." + suffix)) {
+                hostAllowed = true;
+                break;
+            }
+        }
+        if (!hostAllowed) return false;
+
+        for (String marker : MULTI_ITEM_MARKERS)
+            if (url.contains(marker)) return false;
+
+        return true;
     }
 
-    public static double getVideoDuration(String videoUrl) throws IOException, InterruptedException {
+    public static double getMediaDuration(String mediaUrl) throws IOException, InterruptedException {
         String ytdlpPath = "libs/yt-dlp.exe";
 
         ProcessBuilder builder = new ProcessBuilder(
             ytdlpPath,
             "--dump-json",
             "--no-playlist",
-            videoUrl
+            mediaUrl
         );
 
         Process process = builder.start();
@@ -150,7 +206,7 @@ public class YoutubeAudioDownloader {
         process.waitFor();
 
         if (line == null) {
-            throw new RuntimeException("Video not found");
+            throw new RuntimeException("Media not found");
         }
 
         // La salida es JSON, busca la duración (duration) en segundos
@@ -167,21 +223,21 @@ public class YoutubeAudioDownloader {
         if (durStr == null) {
             throw new RuntimeException("Duration not found");
         }
-        
+
         durStr = durStr.replaceAll("[^0-9.]", "");
 
         return Double.valueOf(durStr);
     }
-    
+
 	public static void request(String url) {
-		YoutubeAudioDownloader.request(url, () -> {
+		AudioDownloader.request(url, () -> {
 		}, () -> {
 		}, file -> {
 			Main.playerMusic.enqueue(file);
 		}, ex -> {
 		});
 	}
-    
+
     public static void request(
             String url,
             Runnable onInvalidUrl,
@@ -191,7 +247,7 @@ public class YoutubeAudioDownloader {
         ) {
             AppData appData = AppData.getInstance();
 
-            if (!YoutubeAudioDownloader.isYoutubeURLValid(url)) {
+            if (!AudioDownloader.isSupportedURLValid(url)) {
                 onInvalidUrl.run();
                 return;
             }
@@ -199,7 +255,7 @@ public class YoutubeAudioDownloader {
             Task<Double> durationTask = new Task<>() {
                 @Override
                 protected Double call() throws Exception {
-                    return YoutubeAudioDownloader.getVideoDuration(url);
+                    return AudioDownloader.getMediaDuration(url);
                 }
             };
 
@@ -215,7 +271,7 @@ public class YoutubeAudioDownloader {
                 Task<File> downloadTask = new Task<>() {
                     @Override
                     protected File call() throws Exception {
-                        return YoutubeAudioDownloader.downloadAudioSegment(url, 0, appData.getMaxDurationRequest());
+                        return AudioDownloader.downloadAudioSegment(url, 0, appData.getMaxDurationRequest());
                     }
                 };
 

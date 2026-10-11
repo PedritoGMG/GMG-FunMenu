@@ -13,7 +13,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import core.audio.AudioPlayer;
 import core.audio.AudioPlayerQueue;
-import core.audio.plugin.YoutubeAudioDownloader;
+import core.audio.plugin.AudioDownloader;
 import core.data.AppData;
 import core.data.DataManager;
 import core.data.GlobalConsoleOutputStream;
@@ -130,7 +130,7 @@ public class Main extends Application {
 		stage.setOnCloseRequest(event -> OnExit());
         stage.show();
 
-		checkYoutubeDownloaderUpdateAsync();
+		checkAudioDownloaderUpdateAsync();
     }
 
 
@@ -206,16 +206,16 @@ public class Main extends Application {
 		);
 	}
 
-	private void checkYoutubeDownloaderUpdateAsync() {
-		Task<YoutubeAudioDownloader.UpdateInfo> checkTask = new Task<>() {
+	private void checkAudioDownloaderUpdateAsync() {
+		Task<AudioDownloader.UpdateInfo> checkTask = new Task<>() {
 			@Override
-			protected YoutubeAudioDownloader.UpdateInfo call() throws Exception {
-				return YoutubeAudioDownloader.checkForUpdate();
+			protected AudioDownloader.UpdateInfo call() throws Exception {
+				return AudioDownloader.checkForUpdate();
 			}
 		};
 
 		checkTask.setOnSucceeded(e -> {
-			YoutubeAudioDownloader.UpdateInfo updateInfo = checkTask.getValue();
+			AudioDownloader.UpdateInfo updateInfo = checkTask.getValue();
 			if (updateInfo.isUpdateAvailable()) {
 				try {
 					dialogUpdateYtDlp(updateInfo.currentVersion(), updateInfo.latestVersion());
@@ -236,8 +236,8 @@ public class Main extends Application {
 
 	private void dialogUpdateYtDlp(String currentVersion, String latestVersion) throws IOException {
 		CustomDialog.showDialog(
-				"Youtube Downloader Update Available",
-				"A new version of yt-dlp (the tool used to download Youtube audio) is available.\nIt is recommended to update now to keep Youtube downloads working correctly.",
+				"Audio Downloader Update Available",
+				"A new version of yt-dlp (the tool used to download audio from YouTube, SoundCloud, and other sites) is available.\nIt is recommended to update now to keep downloads working correctly.",
 				stage -> {
 					stage.getScene().getRoot().setDisable(true);
 					Toast.showIn(stage, "Updating yt-dlp, please wait...", 8000);
@@ -245,7 +245,7 @@ public class Main extends Application {
 					Task<Void> updateTask = new Task<>() {
 						@Override
 						protected Void call() throws Exception {
-							YoutubeAudioDownloader.updateToLatest();
+							AudioDownloader.updateToLatest();
 							return null;
 						}
 					};
